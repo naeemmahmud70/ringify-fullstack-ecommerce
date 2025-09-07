@@ -1,0 +1,60 @@
+{
+  "env": {
+    "es2021": true,
+    "node": true,
+    "browser": false,
+  },
+  "extends": ["next", "next/core-web-vitals", "next/typescript", "prettier"],
+  "plugins": ["prettier", "simple-import-sort", "unused-imports"],
+  "rules": {
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "all",
+        "ignoreRestSiblings": false,
+      },
+    ],
+    "curly": "warn",
+    "prettier/prettier": [
+      2,
+      {
+        "endOfLine": "auto",
+      },
+    ],
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/ban-ts-comment": 0,
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+  },
+  "overrides": [
+    {
+      "files": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+      "rules": {
+        "simple-import-sort/imports": [
+          "error",
+          {
+            "groups": [
+              // `react` first, `next` second, then packages starting with a character
+              ["^react$", "^next", "^[a-z]"],
+              // Packages starting with `@`
+              ["^@"],
+              // Packages starting with `~`
+              ["^~"],
+              // Imports starting with `../`
+              ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+              // Imports starting with `./`
+              ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+              // Style imports
+              ["^.+\\.s?css$"],
+              // Side effect imports
+              ["^\\u0000"],
+            ],
+          },
+        ],
+      },
+    },
+  ],
+}
+
