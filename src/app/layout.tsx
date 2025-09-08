@@ -1,7 +1,9 @@
 import React from "react";
-import "./globals.css";
+
 import Navbar from "@/components/Navbar/Navbar";
 import { AppProviders } from "@/context/AppProviders";
+
+import "./globals.css";
 
 export const metadata = {
   title: "Ringify",

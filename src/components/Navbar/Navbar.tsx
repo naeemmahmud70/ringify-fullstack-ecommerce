@@ -34,22 +34,19 @@ const Navbar = () => {
   type itemT = {
     name: string;
     link: string;
-    target: string;
     id: string;
   };
 
   const navbarItems: itemT[] = [
     {
-      name: "About Us",
-      link: "https://brainalive.ai/about",
-      target: "_blank",
-      id: "about-us",
+      name: "Our Store",
+      link: "/product/smart-rings/ourstore",
+      id: "our-store",
     },
     {
-      name: "Our Store",
-      link: "/product/baai-zen-smart-rings/ourstore",
-      target: "_self",
-      id: "our-store",
+      name: "Blogs",
+      link: "/blog",
+      id: "blogs",
     },
   ];
 
@@ -82,8 +79,6 @@ const Navbar = () => {
     <div className=" text-white absolute top-[-10px] w-full px-2 lg:px-8 z-50 bg-transparent lg:bg-transparent">
       <div className="max-w-7xl mx-auto sm:px-6 md:px-8 lg:px-0 ">
         <div className="relative flex items-center justify-between py-6">
-          {/* Left section with the logo */}
-
           <div className="w-[217px] h-[68px]">
             <Link
               href="/product/baai-zen-smart-rings"
@@ -103,13 +98,11 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Right section with buttons (visible on desktop) */}
           <div className="hidden lg:flex mt-[8px] ml-[125px]">
             <div className="flex items-center space-x-4 xl:space-x-9 ">
               {navbarItems.map((item, index) => (
                 <Link
                   href={item.link}
-                  target={item.target}
                   className="hover:text-gray-300 font-poppins font-light lg:text-[14px] xl:text-xs  "
                   key={index}
                 >
@@ -123,6 +116,7 @@ const Navbar = () => {
               ))}
             </div>
           </div>
+
           <div className="hidden lg:flex lg:gap-3 xl:gap-8 items-center">
             {loggedIn ? (
               <>
@@ -147,7 +141,7 @@ const Navbar = () => {
               </>
             )}
             <Link
-              href="/product/baai-zen-smart-rings/buy-ring"
+              href="/product/smart-rings/buy-ring"
               id="buy-ring"
               className="w-[194px] h-[56px] bg-[#25b021] text-[#ffffff] text-[16px] px-14 py-4 rounded-[88px] font-poppins font-medium leading-[180%] tracking-[0px]"
             >
@@ -158,7 +152,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Hamburger menu (visible on mobile) */}
           <div className="lg:hidden flex gap-3 items-center">
             {routePathname !== "/product/baai-zen-smart-rings/cart-page" && (
               <AddedToCart />
@@ -177,16 +170,14 @@ const Navbar = () => {
             </button>
           </div>
         </div>
-
-        {/* Mobile menu */}
       </div>
+
       {isOpen && (
         <div
           className={`lg:hidden fixed top-0 right-0 bottom-0 w-full bg-black  p-3 transform ${
             isOpen ? "translate-x-0" : "translate-x-full"
           } transition-transform duration-1000 ease-in-out z-50`}
         >
-          {/* Header Section Inside Side Menu */}
           <div className="flex items-center justify-between mb-6">
             <div className="">
               <Link
@@ -207,10 +198,8 @@ const Navbar = () => {
               </Link>
             </div>
 
-            {/* Globe icon (you already have GlobeDropdown) */}
             <div className="lg:hidden flex flex-row gap-5 justify-end items-center">
               <AddedToCart />
-              {/* Close icon to manually close side menu */}
               <button
                 onClick={() => setIsOpen(false)}
                 aria-label="Close Menu"
@@ -261,7 +250,7 @@ const Navbar = () => {
               )}
 
               <Link
-                href="/product/baai-zen-smart-rings/buy-ring"
+                href="/product/smart-rings/buy-ring"
                 onClick={() => setIsOpen(false)}
                 id="buy-ring-navbar"
                 className="w-[194px] h-[56px] pt-3 block text-center text-[16px] font-poppins font-medium bg-green-custom text-white  mt-5 rounded-full leading-[180%]"

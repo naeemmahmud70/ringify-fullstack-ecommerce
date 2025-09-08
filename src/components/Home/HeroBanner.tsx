@@ -2,14 +2,13 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import ImageHero from "../../../public/products/mobile-hero.svg";
-import HeroImage from "../../../public/products/Smart_Ring-Hero_Image.png";
+import HeroImage from "../../../public/home/Ring-Hero_Image.png";
 
 const HeroBanner = () => {
   return (
     <div
-      className="bg-black h-fit min-h-[840px] lg:min-h-[800px] sm:min-h-[800px] xs:min-h-[844px] bg-cover bg-no-repeat flex justify-center"
-      style={{ backgroundImage: "url(/product/products/hero-grid-bg.svg)" }}
+      className="bg-black h-fit min-h-screen  bg-cover bg-no-repeat flex justify-center"
+      style={{ backgroundImage: "url(/home/hero-grid-bg.svg)" }}
     >
       <div className="relative z-10 p-6 lg:p-9 sm:p-6">
         <div className="flex flex-col items-center justify-between gap-3 text-center mt-20 lg:mt-[82px] sm:mt-12 h-[330px]">
@@ -45,25 +44,13 @@ const HeroBanner = () => {
           </div>
         </div>
 
-        {/* Mobile Image - Shows only on mobile (hidden on sm and up) */}
-        <div className="absolute inset-0 -z-10 w-full flex justify-center pointer-events-none mt-[500px] sm:hidden">
-          <Image
-            src={ImageHero}
-            alt="mobile hero"
-            quality={100}
-            priority
-            className="w-full h-auto object-contain"
-          />
-        </div>
-
-        {/* Desktop Image - Shows only on sm and up (hidden on mobile) */}
-        <div className="absolute inset-0 -z-10 w-full justify-center pointer-events-none mt-[370px] hidden sm:flex">
+        <div className="w-full justify-center pointer-events-none">
           <Image
             src={HeroImage}
             alt="desktop hero"
             quality={100}
             priority
-            className="w-[400px] sm:w-[400px] md:w-[600px] lg:w-[1000px] h-auto object-contain -mt-[10px] sm:-mt-8 md:-mt-16 lg:-mt-[150px] -mb-4 sm:-mb-8 md:-mb-12 lg:-mb-20 scale-[2] sm:scale-110 md:scale-115 lg:scale-[1.5]"
+            className="w-full -mt-16"
           />
         </div>
       </div>
