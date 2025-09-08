@@ -19,14 +19,6 @@ const Navbar = () => {
   const routePathname = usePathname();
   const { setCartQuantity } = useCart();
 
-  const handleLogoClick = () => {
-    if (window.location.pathname === "/product/baai-zen-smart-rings") {
-      window.location.reload();
-    } else {
-      router.push("/product/baai-zen-smart-rings");
-    }
-  };
-
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -80,11 +72,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto sm:px-6 md:px-8 lg:px-0 ">
         <div className="relative flex items-center justify-between py-6">
           <div className="w-[217px] h-[68px]">
-            <Link
-              href="/product/baai-zen-smart-rings"
-              className="flex items-center gap-3"
-              onClick={handleLogoClick}
-            >
+            <Link href="/" className="flex items-center gap-3">
               <Image
                 src="/baai-logo.svg"
                 width={38}

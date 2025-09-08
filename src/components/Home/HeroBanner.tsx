@@ -6,10 +6,7 @@ import HeroImage from "../../../public/home/Ring-Hero_Image.png";
 
 const HeroBanner = () => {
   return (
-    <div
-      className="bg-black h-fit min-h-screen  bg-cover bg-no-repeat flex justify-center"
-      style={{ backgroundImage: "url(/home/hero-grid-bg.svg)" }}
-    >
+    <div className="bg-black h-fit min-h-screen bg-[url('/home/hero-grid-bg.svg')]  bg-cover bg-no-repeat flex justify-center">
       <div className="relative z-10 p-6 lg:p-9 sm:p-6">
         <div className="flex flex-col items-center justify-between gap-3 text-center mt-20 lg:mt-[82px] sm:mt-12 h-[330px]">
           <p className="text-white font-light sm:font-medium font-mulish text-[48px] xl:text-[72px] lg:text-[72px] sm:text-[48px] leading-[125%] sm:leading-[125%] tracking-[-0.025em] text-center">

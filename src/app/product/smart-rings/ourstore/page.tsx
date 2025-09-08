@@ -7,38 +7,31 @@ const rings = [
     name: "BAAI Zen Smart Ring | Black",
     description:
       "Track 10+ bio-markers with AI insights, 8 days battery life, 5 ATM waterproof, plus blockchain-secured rewards.",
-    price: "29000",
+    price: "$145",
     type: "black",
   },
   {
     name: "BAAI Zen Smart Ring | Rose gold",
     description:
       "Track 10+ bio-markers with AI insights, 8 days battery life, 5 ATM waterproof, plus blockchain-secured rewards.",
-    price: "29000",
+    price: "$145",
     type: "rosegold",
   },
   {
     name: "BAAI Zen Smart Ring | Silver",
     description:
       "Track 10+ bio-markers with AI insights, 8 days battery life, 5 ATM waterproof, plus blockchain-secured rewards.",
-    price: "29000",
+    price: "$145",
     type: "silver",
   },
 ];
 
 const OurStore: React.FC = () => {
   return (
-    <div className=" bg-black text-white flex flex-col items-center justify-start p-4  gap-3">
+    <div className=" bg-black text-white flex flex-col items-center justify-start p-4 md:p-9  gap-3">
       <div className="relative w-full max-w-[1440px] mx-auto">
-        {/* ✅ Desktop Hero Section */}
         <div className="">
-          <div
-            className="md:flex  max-w-[1240px] mt-[145px] mx-auto rounded-[30px]"
-            style={{
-              backgroundImage: "url(/ourstore/banner.png)",
-              backgroundRepeat: "no-repeat",
-            }}
-          >
+          <div className="md:flex h-fit  max-w-[1240px] mt-[105px] mx-auto rounded-[30px] bg-[url('/ourstore/banner.png')] bg-no-repeat bg-cover bg-center">
             <div className="w-full md:w-10/12 p-4 md:p-6 lg:p-10 flex flex-col justify-between items-start gap-3">
               <h1 className="font-extrabold font-mulish text-[20px] md:text-[30px] leading-[1.5]">
                 BAAI Zen: THE STYLE YOU WANT THE INSIGHTS{" "}
@@ -86,16 +79,14 @@ const OurStore: React.FC = () => {
       </div>
 
       <section>
-        <div className="flex flex-col items-start max-w-[1440px] bg-black w-full mx-auto">
-          {/* Zen Smart Ring Label */}
-          <div className="text-white rounded-[30px] w-[155px] h-[40px] flex items-center justify-center border border-[#25B021] mt-5">
+        <div className="max-w-[1440px] bg-black mx-auto">
+          <div className="text-white rounded-[30px] w-[155px] h-[40px] flex items-center justify-center border border-[#25B021] mt-10">
             <p className="text-[16px] w-[121px] font-normal font-[Poppins] leading-[150%] text-[#25B021] m-0">
               Zen Smart Ring
             </p>
           </div>
 
-          {/* Product Cards */}
-          <div className="flex flex-wrap justify-between items-center gap-3 py-3 mt-1 w-full">
+          <div className="flex flex-wrap justify-center items-center gap-10 py-3 mt-3 w-full">
             {rings.map((ring, index) => (
               <div
                 key={index}
@@ -103,9 +94,9 @@ const OurStore: React.FC = () => {
               >
                 <Image
                   src={
-                    ring.name.includes("Black")
+                    ring.type.includes("black")
                       ? "/ourstore/blackRing.png"
-                      : ring.name.includes("Rose")
+                      : ring.type.includes("rosegold")
                         ? "/ourstore/Rose Gold 3.png"
                         : "/ourstore/silverRing.png"
                   }
@@ -123,7 +114,7 @@ const OurStore: React.FC = () => {
                 <div className="mt-6 flex flex-row sm:items-center sm:justify-between gap-8 sm:gap-0">
                   <div>
                     <p className="font-semibold text-[16px] sm:text-[18px] leading-[22px] tracking-[-0.025em] font-[Poppins] text-start pt-2 sm:text-left">
-                      {Number(ring?.price)}
+                      {ring?.price}
                     </p>
                     <p className="text-[12px] leading-[120%] text-[#8F8F8F] font-normal text-start sm:text-left">
                       (inclusive of all taxes)
