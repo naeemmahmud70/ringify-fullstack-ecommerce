@@ -129,7 +129,7 @@ const Navbar = () => {
               </>
             )}
             <Link
-              href="/product/smart-rings/buy-ring"
+              href="/product/smart-rings/select-rings"
               id="buy-ring"
               className="w-[194px] h-[56px] bg-[#25b021] text-[#ffffff] text-[16px] px-14 py-4 rounded-[88px] font-poppins font-medium leading-[180%] tracking-[0px]"
             >
@@ -238,7 +238,7 @@ const Navbar = () => {
               )}
 
               <Link
-                href="/product/smart-rings/buy-ring"
+                href="/product/smart-rings/select-rings"
                 onClick={() => setIsOpen(false)}
                 id="buy-ring-navbar"
                 className="w-[194px] h-[56px] pt-3 block text-center text-[16px] font-poppins font-medium bg-green-custom text-white  mt-5 rounded-full leading-[180%]"

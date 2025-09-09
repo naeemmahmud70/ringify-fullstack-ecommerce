@@ -32,7 +32,7 @@ const HeroBanner = () => {
 
           <div className="my-1 z-[100] sm:w-[350px] xs:w-[350px] lg:w-[152px] h-[56px] bg-[#25b021] text-white text-[16px] pt-5 px-6 py-3 rounded-full font-poppins font-medium leading-[100%] tracking-wide text-center">
             <Link
-              href="/product/baai-zen-smart-rings/buy-now"
+              href="/product/smart-rings/select-rings"
               id="buy-now"
               className="block w-full h-full relative bottom-[3px] md:bottom-[0px]"
             >

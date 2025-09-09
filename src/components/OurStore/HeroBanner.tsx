@@ -18,7 +18,7 @@ const HeroBanner = () => {
         </p>
 
         <div className="">
-          <Link href="/product/smart-rings/buy-now">
+          <Link href="/product/smart-rings/select-rings">
             <button
               id="buy-now"
               className="w-[188px] h-[48px] px-6 py-2 flex items-center gap-7 rounded-full border border-white text-white font-[Poppins] text-[1rem] uppercase"

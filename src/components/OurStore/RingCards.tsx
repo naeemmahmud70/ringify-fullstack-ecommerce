@@ -45,7 +45,7 @@ const RingCards: React.FC<RingCardsProps> = ({ ring }) => {
           </p>
         </div>
         <Link
-          href={`/product/smart-rings/product-page?ring=${ring.type}`}
+          href={`/product/smart-rings/select-rings?ring=${ring.type}`}
           id="cart-page-ourstore"
           className="ml-auto text-white text-center font-poppins text-[14px] flex justify-center items-center rounded-[62px] bg-[#25B021] hover:[#25B021] w-[113px] h-[36px]"
         >
