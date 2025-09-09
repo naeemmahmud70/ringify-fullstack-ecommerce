@@ -46,9 +46,9 @@ const Sizes: React.FC<SizeProps> = ({
       r => r.size === size && r.color === ringColor
     );
 
+    // Remove only if both size and color match
     if (existsIndex !== -1) {
-      // Remove only if both size and color match
-      setRingSizes(prev => prev.filter((_, i) => i !== existsIndex));
+      setRingSizes(prev => prev.filter((__, i) => i !== existsIndex));
     } else {
       const total = getTotalQuantity();
       if (total + 1 > 15) {
@@ -113,13 +113,7 @@ const Sizes: React.FC<SizeProps> = ({
       <div className="my-5 text-center">
         <p className="text-[14px] text-[#FFFFFFB2] font-poppins font-normal tracking-tight">
           For the perfect fit, we recommend using our{" "}
-          <a
-            href="#"
-            target="_blank"
-            className="text-[#CFFF65]"
-          >
-            E Sizing Guide
-          </a>
+          <span className="text-[#CFFF65]">E Sizing Guide</span>
         </p>
       </div>
 

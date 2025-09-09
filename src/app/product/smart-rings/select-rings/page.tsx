@@ -3,20 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
+import Continue from "@/components/SelectRings/Continue";
+import Finish from "@/components/SelectRings/Finish";
+import ProductsCarousel from "@/components/SelectRings/ProductsCarousel";
+import Sizes from "@/components/SelectRings/Sizes";
+import UseOffer from "@/components/SelectRings/UseOffer";
 import ringImages from "@/data/ringsdata.json";
 import { useModals } from "@/store/modals";
-import { getMonthAfterTwoMonths } from "../../../../../utils/getCurrentDate";
-import ProductsCarousel from "@/components/SelectRings/ProductsCarousel";
-import UseOffer from "@/components/SelectRings/UseOffer";
-import Finish from "@/components/SelectRings/Finish";
-import Sizes from "@/components/SelectRings/Sizes";
-import Continue from "@/components/SelectRings/Continue";
 
-// import BaaiGen from "./BaaiGen";
-// import Continue from "./Continue";
-// import Finish from "./Finish";
-// import ProductsCarousel from "./ProductsCarousel";
-// import Sizes from "./Sizes";
+import { getMonthAfterTwoMonths } from "../../../../../utils/getCurrentDate";
 
 interface selectedRingProps {
   size: string;
@@ -35,7 +30,6 @@ const SelectRing = () => {
   const { setUnlockOfferModal } = useModals();
   const [totalSelected, setTotalSelected] = useState(0);
   const prevTotalRef = useRef<number | null>(null);
-  const hasSeenRealTotal = useRef(false);
 
   const offer1 = process.env.NEXT_PUBLIC_PROMO_OFFER_1 ?? "";
   const offer2 = process.env.NEXT_PUBLIC_PROMO_OFFER_2 ?? "";
@@ -51,7 +45,6 @@ const SelectRing = () => {
   const OfferOneText = `Buy ${offerOneThreshold}, Pay for Just ${offerOneThreshold - offerOneFreeRing}!`;
   const offerTwoText = `Buy ${offerTwoThreshold}, Pay for Just ${offerTwoThreshold - offerTwoFreeRing}!`;
 
-  // console.log("offers", OfferOneText, offerTwoText);
   useEffect(() => {
     const selectedRings = localStorage.getItem("selectedRingDetails");
     if (selectedRings) {
@@ -94,16 +87,7 @@ const SelectRing = () => {
     const total = getTotalQuantity();
     setTotalSelected(total);
 
-    if (!hasSeenRealTotal.current) {
-      prevTotalRef.current = total;
-      if (total > 0) {
-        hasSeenRealTotal.current = true;
-      }
-      return;
-    }
-
     const prevTotal = prevTotalRef.current ?? 0;
-
     if (total > prevTotal) {
       if (total === offerOneThreshold) {
         setUnlockOfferModal(OfferOneText);

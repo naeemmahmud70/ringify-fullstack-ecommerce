@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
 
 import ringImages from "@/data/ringsdata.json";
 
@@ -27,10 +26,8 @@ const Finish: React.FC<RingProps> = ({
       <div className="border-[1px] border-solid border-[#292929] mt-6 mb-8"></div>
       <div className="flex flex-col gap-5">
         {ringImages.map(item => (
-          <Link
-            href="#"
+          <div
             key={item.id}
-            scroll={false}
             id="buy-ring-finish"
             className={`flex justify-between items-center ${ringColor === item.type ? "bg-[#FFFFFF1A] border-[1px] border-[#FFFFFF66]" : "bg-[#F5F5F50D] "}   p-3 md:p-5 rounded-xl cursor-pointer`}
             onClick={() => {
@@ -50,7 +47,7 @@ const Finish: React.FC<RingProps> = ({
                 <Image src={selectIcon} height={30} width={30} alt={item.alt} />
               )}
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     </div>

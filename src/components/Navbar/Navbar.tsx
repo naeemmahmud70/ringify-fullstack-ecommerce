@@ -8,8 +8,9 @@ import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { useCart } from "@/context/CartContext";
 import { useLoginModal } from "@/store/loginModal";
 
-import AddedToCart from "./AddedToCart/AddedToCart";
 import { Button } from "../ui/button";
+
+import AddedToCart from "./AddedToCart/AddedToCart";
 
 const Navbar = () => {
   const { isModalOpen, setIsModalOpen } = useLoginModal();

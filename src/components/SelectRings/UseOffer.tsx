@@ -27,7 +27,6 @@ const UseOffer: React.FC<priceProp> = ({
   offerTwoThreshold,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-
   const { selectedOffer, setSelectedOffer } = useRingOffer();
   const [hasLoadedStorage, setHasLoadedStorage] = useState(false);
 
