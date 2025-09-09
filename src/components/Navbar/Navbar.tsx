@@ -8,7 +8,7 @@ import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { useCart } from "@/context/CartContext";
 import { useLoginModal } from "@/store/loginModal";
 
-import AddedToCart from "../AddedToCart/AddedToCart";
+import AddedToCart from "./AddedToCart/AddedToCart";
 import { Button } from "../ui/button";
 
 const Navbar = () => {
