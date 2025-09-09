@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import { AppProviders } from "@/context/AppProviders";
 
 import "./globals.css";
+import Modals from "@/components/ConditionalModal";
 
 export const metadata = {
   title: "Ringify",
@@ -22,6 +23,7 @@ export default function RootLayout({
           <Navbar />
           {children}
         </AppProviders>
+        <Modals />
       </body>
     </html>
   );

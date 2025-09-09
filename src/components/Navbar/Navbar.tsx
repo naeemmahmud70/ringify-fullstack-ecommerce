@@ -16,6 +16,7 @@ const Navbar = () => {
   const { isModalOpen, setIsModalOpen } = useLoginModal();
   const [isOpen, setIsOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState("");
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const routePathname = usePathname();
   const { setCartQuantity } = useCart();
@@ -44,6 +45,10 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     const loggedInUser = localStorage.getItem("loggedInUser");
     if (loggedInUser) {
       const parsedValue = JSON.parse(loggedInUser);
@@ -67,6 +72,11 @@ const Navbar = () => {
       return () => window.removeEventListener("scroll", handleScroll);
     }
   }, [isOpen]);
+  
+  if (!mounted) {
+    // Avoid rendering mismatched HTML during SSR
+    return null;
+  }
 
   return (
     <div className=" text-white absolute top-[-10px] w-full px-2 lg:px-8 z-50 bg-transparent lg:bg-transparent">
@@ -136,7 +146,7 @@ const Navbar = () => {
             >
               Buy Ring
             </Link>
-            {routePathname !== "/product/baai-zen-smart-rings/cart-page" && (
+            {routePathname !== "/product/smart-rings/cart-page" && (
               <AddedToCart />
             )}
           </div>
@@ -146,17 +156,19 @@ const Navbar = () => {
               <AddedToCart />
             )}
 
-            <button
-              type="button"
-              onClick={toggleMenu}
-              className="text-white hover:text-gray-400 focus:outline-none"
-            >
-              {isOpen ? (
-                <AiOutlineClose size={24} />
-              ) : (
-                <AiOutlineMenu size={24} />
-              )}
-            </button>
+            <div>
+              <button
+                type="button"
+                onClick={toggleMenu}
+                className="text-white hover:text-gray-400 focus:outline-none"
+              >
+                {isOpen ? (
+                  <AiOutlineClose size={24} />
+                ) : (
+                  <AiOutlineMenu size={24} />
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -189,13 +201,15 @@ const Navbar = () => {
 
             <div className="lg:hidden flex flex-row gap-5 justify-end items-center">
               <AddedToCart />
-              <button
-                onClick={() => setIsOpen(false)}
-                aria-label="Close Menu"
-                className="text-[#ffffff]"
-              >
-                <AiOutlineClose size={30} />
-              </button>
+              <div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  aria-label="Close Menu"
+                  className="text-[#ffffff]"
+                >
+                  <AiOutlineClose size={30} />
+                </button>
+              </div>
             </div>
           </div>
           {/* Menu content */}
