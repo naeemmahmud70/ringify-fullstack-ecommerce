@@ -72,7 +72,7 @@ const Navbar = () => {
       return () => window.removeEventListener("scroll", handleScroll);
     }
   }, [isOpen]);
-  
+
   if (!mounted) {
     // Avoid rendering mismatched HTML during SSR
     return null;

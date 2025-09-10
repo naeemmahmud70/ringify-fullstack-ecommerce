@@ -1,10 +1,10 @@
 import React from "react";
 
+import Modals from "@/components/ConditionalModal";
 import Navbar from "@/components/Navbar/Navbar";
 import { AppProviders } from "@/context/AppProviders";
 
 import "./globals.css";
-import Modals from "@/components/ConditionalModal";
 
 export const metadata = {
   title: "Ringify",

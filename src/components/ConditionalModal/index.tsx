@@ -1,7 +1,9 @@
 "use client";
-import { useLoginModal } from "@/store/loginModal";
-import { useModals } from "@/store/modals";
 import React from "react";
+
+// import { useLoginModal } from "@/store/loginModal";
+import { useModals } from "@/store/modals";
+
 import UnlockOfferModal from "../Modals/UnlockOfferModal";
 
 // import { useLoginModal } from "@/store/loginModal";
@@ -12,8 +14,8 @@ import UnlockOfferModal from "../Modals/UnlockOfferModal";
 // import LoginAndSignUp from "../modals/LoginAndSignUp";
 
 const Modals = () => {
-  const { isModalOpen, setIsModalOpen } = useLoginModal();
-  const { addAddressForm, editAddressForm, unlockOfferModal } = useModals();
+  // const { isModalOpen, setIsModalOpen } = useLoginModal();
+  const { unlockOfferModal } = useModals();
   console.log("unlockOfferModal", unlockOfferModal);
   return (
     <div>

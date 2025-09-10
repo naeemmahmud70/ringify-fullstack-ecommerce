@@ -49,7 +49,7 @@ const Continue: React.FC<priceProp> = ({
         "selectedRingDetails",
         JSON.stringify(ringSizesWithPrice)
       );
-      router.push("/product/smart-rings/cart-page");
+      router.push("/product/smart-rings/cart");
     }
   };
 

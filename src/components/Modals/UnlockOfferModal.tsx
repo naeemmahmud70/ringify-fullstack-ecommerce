@@ -1,8 +1,9 @@
 import React from "react";
 import { X } from "lucide-react";
 
-import { Dialog, DialogContent } from "../ui/dialog";
 import { useModals } from "@/store/modals";
+
+import { Dialog, DialogContent } from "../ui/dialog";
 
 const UnlockOfferModal = () => {
   const { unlockOfferModal, setUnlockOfferModal } = useModals();
