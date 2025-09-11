@@ -41,7 +41,7 @@ export interface ringDetailsT {
   quantity: number;
   color: string;
   basePrice?: number;
-  currencySymbol?: string;
+  img: string;
 }
 
 interface SelectedRingState {

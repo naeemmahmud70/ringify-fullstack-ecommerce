@@ -19,7 +19,7 @@ type CartItem = {
   color: string;
   quantity: number;
   basePrice: number;
-  currencySymbol: string;
+  img: string;
 };
 
 type Price = {
@@ -27,35 +27,20 @@ type Price = {
   total: number;
 };
 interface OrderSummaryProps {
-  discount: number;
-  setDiscount: (value: number) => void;
-  loggedIn: string;
-  cartIsEmpty: boolean; // ✅ Add this line
-  price: Price;
-  discountApplied: boolean;
-  setDiscountApplied: (value: boolean) => void;
-  discountCode: string;
-  setDiscountCode: (value: string) => void;
+  ringQuantity: number;
+  basePrice: number;
+  paidRings: number;
+  freeRings: number;
 }
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({
-  discount,
-  loggedIn,
-  setDiscount,
-  discountApplied,
-  setDiscountApplied,
-  discountCode,
-  setDiscountCode,
-  cartIsEmpty,
-  price,
+  ringQuantity,
+  basePrice,
+  paidRings,
+  freeRings,
 }) => {
-  const { isModalOpen, setIsModalOpen } = useLoginModal();
   const pathname = usePathname();
   const router = useRouter();
-  const { SetToastStates } = useToastStore.getState();
-  const [loading, setLoading] = useState(false);
-  const [loggedInUser, setLoggedInUser] = useState(null);
-  const [, setCartItems] = useState<CartItem[]>([]); // Skip the unused variable
   const { selectedOffer, setSelectedOffer } = useRingOffer();
 
   useEffect(() => {
@@ -64,81 +49,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
       setSelectedOffer(offer);
     }
   }, []);
-  useEffect(() => {
-    const data = localStorage.getItem("selectedRingDetails");
-    if (data) {
-      setCartItems(JSON.parse(data));
-    }
-
-    const loggedInUser = localStorage.getItem("loggedInUser");
-    if (loggedInUser) {
-      const parsedValue = JSON.parse(loggedInUser);
-      setLoggedInUser(parsedValue);
-    }
-    const discount = localStorage.getItem("discountDetails");
-    if (discount) {
-      const parsedValue = JSON.parse(discount);
-      setDiscount(parsedValue?.discountPercentage);
-      setDiscountCode(parsedValue?.discountCode);
-      setDiscountApplied(true);
-    }
-  }, [isModalOpen]);
-
-  const handleDiscount = (code: string) => {
-    setDiscountCode(code);
-    setDiscountApplied(false);
-    setDiscount(0);
-    localStorage.removeItem("discountDetails");
-  };
-
-  const handleDiscountVerify = async () => {
-    if (cartIsEmpty) {
-      SetToastStates({
-        message:
-          "Please add items to your cart before applying a discount code.",
-        variant: "error",
-        triggerId: Date.now(),
-      });
-    } else {
-      if (!loggedInUser) {
-        setIsModalOpen(true);
-        return;
-      }
-
-      // try {
-      //   setLoading(true);
-      //   const data = await verifyDiscountCode(discountCode);
-
-      //   if (data?.isValidDiscountCode) {
-      //     handleDiscountDetails(discountCode);
-      //   } else {
-      //     setDiscount(0);
-      //     SetToastStates({
-      //       message: "Invalid discount code!",
-      //       variant: "error",
-      //       triggerId: Date.now(),
-      //     });
-      //   }
-      //   setLoading(false);
-      // } catch (err) {
-      //   setLoading(false);
-
-      // }
-    }
-  };
-
-  const handleDiscountDetails = async (discountCode: string) => {
-    // try {
-    //   const data = await discountCodeDetails(discountCode);
-    //   if (data?.discountPercentage) {
-    //     setDiscount(data.discountPercentage);
-    //     setDiscountApplied(true);
-    //     localStorage.setItem("discountDetails", JSON.stringify(data));
-    //   }
-    // } catch (error: any) {
-    //   console.log("err", error.message);
-    // }
-  };
+  console.log("paid", paidRings);
 
   const handleAddPramas = () => {
     const currentPath = pathname;
@@ -146,17 +57,6 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
     searchParams.set("checkout", "true");
     router.push(`${currentPath}?${searchParams.toString()}`);
   };
-
-  useEffect(() => {
-    if (cartIsEmpty) {
-      setDiscount(0);
-      setDiscountCode("");
-      setDiscountApplied(false);
-      localStorage.removeItem("discountDetails"); // Optional: clear persisted coupon
-    }
-  }, [cartIsEmpty]);
-
-  // console.log("slectedoffer : ", { selectedOffer, totalPrice });
 
   return (
     <div className="w-full lg:w-2/5 space-y-6">
@@ -181,7 +81,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
               </div>
 
               <Button
-                disabled={loading || discountApplied || discountCode.length < 4}
+                // disabled={loading || discountApplied || discountCode.length < 4}
                 style={{ width: "119px", height: "42px" }}
                 className="text-[#FFFFFF] text-[16px] font-poppins  font-medium bg-transparent hover:bg-transparent  rounded-full border border-green-custom inline-block"
               >
@@ -190,52 +90,23 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             </div>
           ) : (
             <div className="flex justify-between items-center w-full max-w-[90%]  mx-auto mb-4  py-1 rounded-xl mt-4 origin-top">
-              <Image
-                width={21}
-                height={21}
-                src="/cartpage/Discount Arrow.svg"
-                alt="Discount Icon"
-                className="w-[21px] h-[21px] justify-self-start"
-              />
-              <input
-                type="text"
-                name="discountCode"
-                readOnly={discountApplied}
-                value={discountCode}
-                maxLength={6}
-                placeholder="Discount Code"
-                className="w-[65%] bg-transparent text-[#FFFFFFB2] text-sm-xs font-poppins gap-8  px-1   outline-none border-0 hover:border-0"
-                onChange={e => handleDiscount(e.target.value)}
-              />
+              <div className="flex gap-3">
+                <Image
+                  width={21}
+                  height={21}
+                  src="/cartpage/Discount Arrow.svg"
+                  alt="Discount Icon"
+                  className="w-[21px] h-[21px] justify-self-start"
+                />
+                <span>Have a discount code?</span>
+              </div>
 
-              {discountApplied && (
-                <Button
-                  onClick={() => {
-                    setDiscountApplied(false);
-                    setDiscount(0); // reset discount
-                    setDiscountCode(""); // clear input
-                    localStorage.removeItem("discountDetails"); // clear stored code
-                  }}
-                  className="bg-transparent hover:bg-transparent mt-1 py-4 border-0 pr-5 border-red-500 scale-[1.15]"
-                >
-                  <Image src={editIcon} alt="edit" />
-                </Button>
-              )}
-
-              {loading ? (
-                <CircularLoader />
-              ) : (
-                <Button
-                  disabled={
-                    loading || discountApplied || discountCode.length < 4
-                  }
-                  onClick={handleDiscountVerify}
-                  style={{ width: "119px", height: "42px" }}
-                  className="text-[#FFFFFF] text-[16px] font-poppins  font-medium bg-transparent hover:bg-transparent  rounded-full border border-green-custom inline-block"
-                >
-                  {discountApplied ? <span>Applied</span> : <span>Apply</span>}
-                </Button>
-              )}
+              <Link
+                href="/product/checkout"
+                className="text-[#FFFFFF] py-1 px-5 text-[16px] font-poppins  font-medium bg-transparent hover:bg-transparent  rounded-full border border-green-custom inline-block"
+              >
+                <span>Apply</span>
+              </Link>
             </div>
           )}
         </div>
@@ -255,27 +126,33 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             <p className="font-poppins font-normal text-[18px] leading-[100%] tracking-[0%] align-middle text-[#FFFFFFB2]">
               Subtotal
             </p>
-            {/* <p className="font-semibold">{formatPrice(totalPrice)}</p> */}
-            <p className="font-semibold">{price.subTotal}</p>
+            <p className="font-semibold">${ringQuantity * basePrice}</p>
           </div>
 
           <div className="flex justify-between">
             <p className="text-sm-xs text-[#FFFFFFB2] font-normal font-poppins">
-              Discount ({`${discount === 0 ? 0 : -discount}%`})
+              Discount
             </p>
             <p
-              className={`text-sm-xs ${discount ? "text-[#25B021]" : "text-white"} font-bold font-poppins`}
+              className={`text-sm-xs ${
+                selectedOffer.PROMO_OFFER_1.length ||
+                selectedOffer.PROMO_OFFER_1.length
+                  ? "text-[#25B021]"
+                  : "text-white"
+              } font-bold font-poppins`}
             >
-              {/* {currencySymbol} {convertedDiscount.toFixed(2)} */}
-              {/* {formatPrice((totalPrice * discount) / 100)} */}
-              {(price.subTotal * discount) / 100}
+              {selectedOffer.PROMO_OFFER_1.length ||
+              (selectedOffer.PROMO_OFFER_1.length && freeRings) ? (
+                <>{freeRings} rings free</>
+              ) : (
+                "$0"
+              )}{" "}
             </p>
           </div>
 
           <hr className="border-[#FFFFFF33] my-2" />
 
           <div className="flex justify-between items-start text-[20px] text-white font-medium font-poppins ">
-            {/* Left section: Total + taxes */}
             <div className="flex flex-col xs:flex-row sm:items-center gap-1 flex-wrap">
               <span className="font-poppins font-normal text-[20px] leading-[100%] tracking-[0%]">
                 Total
@@ -284,81 +161,37 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 (inclusive of all taxes)
               </span>
             </div>
-            {/* Price */}
+
             <span className="text-[20px] font-bold font-poppins leading-[100%]">
-              {/* {formatPrice(finalPrice)} */}
-              {price.total}
+              $
+              {selectedOffer.PROMO_OFFER_1.length ||
+              selectedOffer.PROMO_OFFER_1.length
+                ? (ringQuantity - freeRings) * basePrice
+                : ringQuantity * basePrice}
             </span>
           </div>
 
           <div className="flex flex-col justify-center overflow-x-hidden">
-            {loggedIn ? (
-              <Link
-                href="/product/baai-zen-smart-rings/checkout-page"
-                className={`mx-auto mt-6 w-full md:w-[457px] h-[60px] rounded-full px-6 py-3 transition flex justify-center items-center gap-3 
-                  ${cartIsEmpty ? "bg-[#25B021]/50 cursor-not-allowed" : "bg-[#25B021] text-white"}`}
-                onClick={e => {
-                  if (cartIsEmpty) {
-                    e.preventDefault();
-                  }
-                }}
+            <Link
+              href="/product/baai-zen-smart-rings/checkout-page"
+              className={`mx-auto mt-6 w-full md:w-[457px] h-[60px] rounded-full px-6 py-3 transition flex justify-center items-center gap-3 
+                  ${ringQuantity > 0 ? "bg-[#25B021]/50 cursor-not-allowed" : "bg-[#25B021] text-white"}`}
+            >
+              <span
+                id="checkout-page-without-loggedIn"
+                className="font-medium mt-2 text-[18px] leading-[100%] tracking-normal font-poppins whitespace-nowrap"
+                style={{ width: "141px", height: "27px" }}
               >
-                <span
-                  id="checkout-page-without-loggedIn"
-                  className="font-medium mt-2 text-[18px] leading-[100%] tracking-normal font-poppins whitespace-nowrap"
-                  style={{ width: "141px", height: "27px" }}
-                >
-                  Go to Checkout
-                </span>
-                <Image
-                  width={18}
-                  height={18}
-                  src="/cartpage/arrows.svg"
-                  alt="arrow"
-                  className="w-[18px] h-[18px]"
-                />
-              </Link>
-            ) : (
-              <Button
-                onClick={() => {
-                  if (cartIsEmpty) {
-                    return;
-                  }
-                  handleAddPramas();
-                  setIsModalOpen(true);
-                }}
-                disabled={cartIsEmpty}
-                className={`mx-auto mt-6 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-[457px]
-                rounded-full px-6 p-7 flex justify-center items-center gap-3
-                ${
-                  cartIsEmpty
-                    ? "bg-[#25B021]/50  text-white cursor-not-allowed"
-                    : "bg-[#25B021] text-white cursor-pointer"
-                }
-              `}
-                style={{
-                  backgroundColor: cartIsEmpty
-                    ? "rgba(37, 176, 33, 0.5)"
-                    : "#25B021",
-                  cursor: cartIsEmpty ? "not-allowed" : "pointer",
-                }}
-              >
-                <span
-                  id="checkout-page"
-                  className="py-1 font-medium text-[18px] leading-[100%] tracking-normal font-poppins whitespace-nowrap"
-                  style={{ width: "141px", height: "27px" }}
-                >
-                  Go to Checkout
-                </span>
-                <Image
-                  width={18}
-                  height={18}
-                  src="/cartpage/arrows.svg"
-                  alt="arrow"
-                  className="w-[18px] h-[18px]"
-                />
-              </Button>
-            )}
+                Go to Checkout
+              </span>
+              <Image
+                width={18}
+                height={18}
+                src="/cartpage/arrows.svg"
+                alt="arrow"
+                className="w-[18px] h-[18px]"
+              />
+            </Link>
           </div>
         </div>
       </div>

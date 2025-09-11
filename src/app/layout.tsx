@@ -2,7 +2,6 @@ import React from "react";
 
 import Modals from "@/components/ConditionalModal";
 import Navbar from "@/components/Navbar/Navbar";
-import { AppProviders } from "@/context/AppProviders";
 
 import "./globals.css";
 
@@ -19,10 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AppProviders>
-          <Navbar />
-          {children}
-        </AppProviders>
+        <Navbar />
+        {children}
         <Modals />
       </body>
     </html>

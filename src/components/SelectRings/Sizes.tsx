@@ -55,7 +55,15 @@ const Sizes: React.FC<SizeProps> = ({
         setError("You cannot exceed more than 15 rings");
         return;
       }
-      setRingSizes(prev => [...prev, { size, quantity: 1, color: ringColor }]);
+      setRingSizes(prev => [
+        ...prev,
+        {
+          size,
+          quantity: 1,
+          color: ringColor,
+          img: `${ringColor === "black" ? "/cartpage/Black Ring.png" : ringColor === "silver" ? "/cartpage/silver ring.png" : "/cartpage/Rose Gold Ring.png"}`,
+        },
+      ]);
       setError("");
     }
   };
