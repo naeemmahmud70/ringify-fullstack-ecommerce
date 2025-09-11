@@ -1,10 +1,8 @@
 export const getSelectedOffer = () => {
   const stored = localStorage.getItem("selectedOffer");
-  console.log("parsed", stored);
   if (stored) {
     try {
       const parsedValue = JSON.parse(stored);
-      console.log("parsed", parsedValue);
       if (
         (parsedValue &&
           typeof parsedValue === "object" &&

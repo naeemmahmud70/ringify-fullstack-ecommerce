@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/context/CartContext";
+import { useSelectedRings } from "@/store/users";
+
+import { setSelectedRingDetails } from "../../../utils/selectedRingDetails";
 interface selectedRingProps {
   size: string;
   quantity: number;
@@ -24,7 +26,7 @@ const Continue: React.FC<priceProp> = ({
 }) => {
   const router = useRouter();
   const [totalPrice, setTotalPrice] = useState("0.00");
-  const { setCartQuantity } = useCart();
+  const { setSelectedRings } = useSelectedRings();
 
   const getTotalQuantity = () => {
     return ringSizes.reduce((sum, item) => sum + item.quantity, 0);
@@ -45,22 +47,9 @@ const Continue: React.FC<priceProp> = ({
     });
 
     if (ringSizes.length) {
-      localStorage.setItem(
-        "selectedRingDetails",
-        JSON.stringify(ringSizesWithPrice)
-      );
+      setSelectedRings(ringSizesWithPrice);
+      setSelectedRingDetails(ringSizesWithPrice);
       router.push("/product/smart-rings/cart");
-    }
-  };
-
-  const updateCart = () => {
-    const data = localStorage.getItem("selectedRingDetails");
-    if (data) {
-      const rings = JSON.parse(data);
-      const quantity = rings.reduce((acc: number, item: any) => {
-        return acc + item.quantity;
-      }, 0);
-      setCartQuantity(quantity);
     }
   };
 
@@ -95,7 +84,6 @@ const Continue: React.FC<priceProp> = ({
             id="cart-page"
             onClick={() => {
               handleSubmit();
-              updateCart();
             }}
           >
             Add to Cart

@@ -29,7 +29,6 @@ axiosInstance.interceptors.response.use(
   async error => {
     if (error.response && error.response.status === 401) {
       localStorage.clear();
-      console.log("401 response");
       redirectTo("/product/baai-zen-smart-rings");
     }
     return Promise.reject(error);

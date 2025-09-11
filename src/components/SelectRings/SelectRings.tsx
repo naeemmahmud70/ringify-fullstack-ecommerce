@@ -31,6 +31,7 @@ const SelectRing = () => {
   const { setUnlockOfferModal } = useModals();
   const [totalSelected, setTotalSelected] = useState(0);
   const prevTotalRef = useRef<number | null>(null);
+  const hasSeenRealTotal = useRef(false);
 
   const offer1 = process.env.NEXT_PUBLIC_PROMO_OFFER_1 ?? "";
   const offer2 = process.env.NEXT_PUBLIC_PROMO_OFFER_2 ?? "";
@@ -49,7 +50,7 @@ const SelectRing = () => {
   useEffect(() => {
     const selectedRings = getSelectedRingDetails();
     if (selectedRings) {
-      const parsedValue = JSON.parse(selectedRings ? selectedRings : "");
+      const parsedValue = selectedRings ? selectedRings : "";
       if (parsedValue.length) {
         setRingColor(parsedValue[0]?.color);
         setRingSizes(parsedValue);
@@ -70,9 +71,8 @@ const SelectRing = () => {
       }
     } else {
       const selectedRings = getSelectedRingDetails();
-      console.log("selectedRings", selectedRings);
       if (selectedRings) {
-        const parsedValue = JSON.parse(selectedRings || "[]");
+        const parsedValue = selectedRings || "[]";
         if (parsedValue.length) {
           setRingColor(parsedValue[0]?.color);
           setRingSizes(parsedValue);
@@ -89,10 +89,17 @@ const SelectRing = () => {
     const total = getTotalQuantity();
     setTotalSelected(total);
 
+    if (!hasSeenRealTotal.current) {
+      prevTotalRef.current = total;
+      if (total > 0) {
+        hasSeenRealTotal.current = true;
+      }
+      return;
+    }
+
     const prevTotal = prevTotalRef.current ?? 0;
     if (total > prevTotal) {
       if (total === offerOneThreshold) {
-        console.log("total", total);
         setUnlockOfferModal(OfferOneText);
       }
       if (total === offerTwoThreshold) {

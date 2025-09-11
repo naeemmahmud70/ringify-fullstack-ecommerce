@@ -73,7 +73,6 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
     const loggedInUser = localStorage.getItem("loggedInUser");
     if (loggedInUser) {
       const parsedValue = JSON.parse(loggedInUser);
-      console.log("parsedValue: ", parsedValue);
       setLoggedInUser(parsedValue);
     }
     const discount = localStorage.getItem("discountDetails");

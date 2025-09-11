@@ -38,11 +38,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (selectedOfferLocal) {
         const selectedOffer = JSON.parse(selectedOfferLocal);
-        console.log("selected offer CONTEXT: ", {
-          selectedOffer,
-          quantity,
-          basePrice,
-        });
         const offer1 = selectedOffer.PROMO_OFFER_1;
         const offer2 = selectedOffer.PROMO_OFFER_2;
         if (offer1 !== "" && offer2 === "") {

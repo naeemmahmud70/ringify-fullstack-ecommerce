@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 
-import { useCart } from "@/context/CartContext";
 import { useLoginModal } from "@/store/loginModal";
 
 import { Button } from "../ui/button";
@@ -19,7 +18,6 @@ const Navbar = () => {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const routePathname = usePathname();
-  const { setCartQuantity } = useCart();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -61,7 +59,6 @@ const Navbar = () => {
       localStorage.removeItem("loggedInUser");
       localStorage.clear();
       setLoggedIn("");
-      setCartQuantity(0);
     }
   };
 

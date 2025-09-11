@@ -16,7 +16,6 @@ import UnlockOfferModal from "../Modals/UnlockOfferModal";
 const Modals = () => {
   // const { isModalOpen, setIsModalOpen } = useLoginModal();
   const { unlockOfferModal } = useModals();
-  console.log("unlockOfferModal", unlockOfferModal);
   return (
     <div>
       {/* {isModalOpen && (

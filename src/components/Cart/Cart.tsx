@@ -5,40 +5,35 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useLoginModal } from "@/store/loginModal";
 import { useModals } from "@/store/modals";
-import { useRingOffer } from "@/store/users";
+import { useRingOffer, useSelectedRings } from "@/store/users";
+import { ringDetailsT } from "@/store/users";
 
 import config from "../../../config/config";
+import {
+  getSelectedRingDetails,
+  setSelectedRingDetails,
+} from "../../../utils/selectedRingDetails";
 
 import CartItems from "./CartItems";
 import OrderSummary from "./OrderSummary";
 import ringDetailsMap from "./ringDetailsMap";
-
-type CartItem = {
-  size: string;
-  color: string;
-  quantity: number;
-  basePrice?: number;
-  currencySymbol?: string;
-};
 
 const Cart = () => {
   const router = useRouter();
   const { isModalOpen } = useLoginModal();
   const [loggedIn, setLoggedIn] = useState("");
 
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<ringDetailsT[]>([]);
   const [discount, setDiscount] = useState<number>(0);
   const [discountApplied, setDiscountApplied] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
-  // const [finalPrice, setFinalPrice] = useState(0); // total price
-  // const [totalPrice, setTotalPrice] = useState(0); // subtotal price
-  const [promoArr, setPromoArr] = useState<CartItem[]>([]);
+  const [promoArr, setPromoArr] = useState<ringDetailsT[]>([]);
   const [hasLoadedStorage, setHasLoadedStorage] = useState(false);
 
   const { cartQuantity, setCartQuantity, price, setPrice } = useCart();
   const { setUnlockOfferModal } = useModals();
   const { setSelectedOffer } = useRingOffer();
-  // console.log("selectedOffer", selectedOffer);
+  const { setSelectedRings } = useSelectedRings();
 
   const basePrice = Number(config.BASE_PRICE);
 
@@ -51,9 +46,9 @@ const Cart = () => {
   }, [loggedIn, isModalOpen]);
 
   useEffect(() => {
-    const data = localStorage.getItem("selectedRingDetails");
+    const data = getSelectedRingDetails();
     if (data) {
-      setCartItems(JSON.parse(data));
+      setCartItems(data);
       setHasLoadedStorage(true);
       // const totalPr = JSON.parse(data).reduce((acc: any, item: any) => {
       //   return acc + (item.basePrice ?? 0) * item.quantity;
@@ -86,15 +81,8 @@ const Cart = () => {
       }))
     );
 
-    console.log("product cart: ", {
-      cartItems,
-      prev: cartQuantity,
-      curr: quantity,
-    });
-
     // changing quantity - show/trigger offers
     if (quantity >= 6 && quantity < 11) {
-      console.log("promo1");
       if (cartQuantity <= 5 && quantity === 6) {
         // show promo 1 and apply promo 1 - apply promo 1 means show promo1 UNLOCKED REWARDS SECTION and apply discount wiht promo1
         setUnlockOfferModal("Buy 6, Pay for Just 5!");
@@ -122,7 +110,6 @@ const Cart = () => {
         total: (quantity - 1) * basePrice,
       });
     } else if (quantity >= 11) {
-      console.log("promo2");
       if (cartQuantity <= 10 && quantity === 11) {
         // show promo 2 and apply promo 2 - show promo2 UNLOCKED REWARDS SECTION and apply discount with promo2
         setUnlockOfferModal("Buy 11, Pay for Just 9!");
@@ -195,19 +182,16 @@ const Cart = () => {
     const newQuantity = updatedItems[index].quantity + delta;
     updatedItems[index].quantity = Math.max(1, newQuantity);
     setCartItems(updatedItems);
-    localStorage.setItem("selectedRingDetails", JSON.stringify(updatedItems));
+    setSelectedRingDetails(updatedItems);
   };
 
   const handleDeleteItem = (index: number): void => {
     setCartItems(prevItems => {
       const updated = prevItems.filter((_, i) => i !== index);
-      localStorage.setItem("selectedRingDetails", JSON.stringify(updated));
+      // localStorage.setItem("selectedRingDetails", JSON.stringify(updated));
       return updated;
     });
   };
-
-  console.log("Price Cart Page: ", price);
-  // console.log("selected Offer: ", selectedOffer);
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-start">

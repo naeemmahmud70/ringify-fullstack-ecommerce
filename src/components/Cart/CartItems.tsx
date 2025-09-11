@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 
 import { useRingOffer } from "@/store/users";
 
+import { setSelectedRingDetails } from "../../../utils/selectedRingDetails";
+
 import ringDetailsMap from "./ringDetailsMap";
 
 type CartItem = {
@@ -97,10 +99,6 @@ const CartItems: React.FC<CartItemsProps> = ({
 
       setCartItems(updatedCart);
       updateLocalStorage(updatedCart);
-      console.log(
-        "Updated selectedRingDetails in localStorage:",
-        JSON.parse(localStorage.getItem("selectedRingDetails") || "[]")
-      );
       resetPrompt();
     }
   };
@@ -113,8 +111,9 @@ const CartItems: React.FC<CartItemsProps> = ({
   };
 
   const updateLocalStorage = (items: CartItem[]) => {
+    console.log("hit");
     if (typeof window !== "undefined") {
-      localStorage.setItem("selectedRingDetails", JSON.stringify(items));
+      setSelectedRingDetails(items);
     }
   };
 
