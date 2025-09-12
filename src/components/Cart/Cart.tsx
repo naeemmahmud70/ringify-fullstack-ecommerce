@@ -14,10 +14,12 @@ import {
 
 import CartItems, { CartItemT } from "./CartItems";
 import OrderSummary from "./OrderSummary";
+import { getSelectedOffer } from "../../../utils/selectedOffer";
 
 const Cart = () => {
   const router = useRouter();
   const { ringQuantity } = useSelectedRings();
+  const { selectedOffer, setSelectedOffer } = useRingOffer();
   const [cartItems, setCartItems] = useState<ringDetailsT[]>([]);
 
   const [paidRings, setPaidRings] = useState<CartItemT[]>([]);
@@ -30,7 +32,13 @@ const Cart = () => {
     if (data) {
       setCartItems(data);
     }
+    const offer = getSelectedOffer();
+    if (offer) {
+      setSelectedOffer(offer);
+    }
   }, []);
+
+  console.log("selectedOffer", selectedOffer);
 
   const handleQuantityChange = (index: number, delta: number) => {
     const updatedItems = [...cartItems];
@@ -38,18 +46,6 @@ const Cart = () => {
     updatedItems[index].quantity = Math.max(1, newQuantity);
     setCartItems(updatedItems);
     setSelectedRingDetails(updatedItems);
-  };
-
-  const handleDeleteItem = (index: number): void => {
-    setCartItems(prevItems => {
-      const updated = prevItems.filter((_, i) => i !== index);
-      return updated;
-    });
-  };
-
-  const price = {
-    total: 0,
-    subTotal: 0,
   };
 
   return (
@@ -66,18 +62,18 @@ const Cart = () => {
           <CartItems
             cartItems={cartItems}
             setCartItems={setCartItems}
-            handleDeleteItem={handleDeleteItem}
             handleQuantityChange={handleQuantityChange}
             paidRings={paidRings}
             freeRings={freeRings}
             setPaidRings={setPaidRings}
             setFreeRings={setFreeRings}
+            selectedOffer={selectedOffer}
           />
           <OrderSummary
             ringQuantity={ringQuantity}
             basePrice={basePrice}
-            paidRings={paidRings.length}
             freeRings={freeRings.length}
+            selectedOffer={selectedOffer}
           />
         </div>
       </div>

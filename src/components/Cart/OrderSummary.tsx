@@ -1,69 +1,37 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-
-import { useLoginModal } from "@/store/loginModal";
-import { useToastStore } from "@/store/toast";
-import { useRingOffer } from "@/store/users";
-
-import editIcon from "../../../public/products/editDiscountCode.svg";
-import { getSelectedOffer } from "../../../utils/selectedOffer";
 import { Button } from "../ui/button";
-import CircularLoader from "../ui/CircularLoader";
+import { OfferT } from "./CartItems";
 
-type CartItem = {
-  size: string;
-  color: string;
-  quantity: number;
-  basePrice: number;
-  img: string;
-};
-
-type Price = {
-  subTotal: number;
-  total: number;
-};
 interface OrderSummaryProps {
   ringQuantity: number;
   basePrice: number;
-  paidRings: number;
   freeRings: number;
+  selectedOffer: OfferT;
 }
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({
   ringQuantity,
   basePrice,
-  paidRings,
   freeRings,
+  selectedOffer,
 }) => {
-  const pathname = usePathname();
   const router = useRouter();
-  const { selectedOffer, setSelectedOffer } = useRingOffer();
 
-  useEffect(() => {
-    const offer = getSelectedOffer();
-    if (offer) {
-      setSelectedOffer(offer);
-    }
-  }, []);
-  console.log("paid", paidRings);
-
-  const handleAddPramas = () => {
-    const currentPath = pathname;
-    const searchParams = new URLSearchParams(window.location.search);
-    searchParams.set("checkout", "true");
-    router.push(`${currentPath}?${searchParams.toString()}`);
+  const handleCheckout = () => {
+    router.push("/product/baai-zen-smart-rings/checkout-page");
   };
 
+  console.log("selectedOffer", selectedOffer);
   return (
     <div className="w-full lg:w-2/5 space-y-6">
       <div className="w-full ">
         <div className="flex justify-between mb-5 border border-[#FFFFFF33] h-[74px] md:h-[88px] rounded-xl  ">
-          {selectedOffer.PROMO_OFFER_1.length ||
-          selectedOffer.PROMO_OFFER_2.length ? (
+          {(freeRings > 0 && selectedOffer.PROMO_OFFER_1) ||
+          selectedOffer.PROMO_OFFER_2 ? (
             <div className="flex justify-between items-center w-full max-w-[90%]  mx-auto mb-4  py-1 rounded-xl mt-4 origin-top">
               <div className="flex items-center gap-2">
                 <Image
@@ -81,7 +49,11 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
               </div>
 
               <Button
-                // disabled={loading || discountApplied || discountCode.length < 4}
+                disabled={
+                  selectedOffer.PROMO_OFFER_1 || selectedOffer.PROMO_OFFER_2
+                    ? true
+                    : false
+                }
                 style={{ width: "119px", height: "42px" }}
                 className="text-[#FFFFFF] text-[16px] font-poppins  font-medium bg-transparent hover:bg-transparent  rounded-full border border-green-custom inline-block"
               >
@@ -102,8 +74,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
               </div>
 
               <Link
-                href="/product/checkout"
-                className="text-[#FFFFFF] py-1 px-5 text-[16px] font-poppins  font-medium bg-transparent hover:bg-transparent  rounded-full border border-green-custom inline-block"
+                href="/product/smart-rings/checkout"
+                className="text-[#FFFFFF] py-1 px-5 text-[16px] font-poppins  font-medium bg-transparent hover:bg-transparent  rounded-full border border-[#25B021] inline-block"
               >
                 <span>Apply</span>
               </Link>
@@ -112,14 +84,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
         </div>
 
         <div className="space-y-5 mt-3 border border-white/20 rounded-xl p-4">
-          <p
-            className="text-[16px] font-medium mb-4 mt-5 font-poppins text-white leading-[30px] whitespace-nowrap"
-            style={{
-              width: "162px",
-              verticalAlign: "middle",
-              letterSpacing: "0",
-            }}
-          >
+          <p className="w-[161px] text-[16px] font-medium align-middle tracking-normal mb-4 mt-5 font-poppins text-white leading-[30px] whitespace-nowrap">
             Order Summary
           </p>
           <div className="flex justify-between text-sm-xs text-white font-medium font-poppins">
@@ -135,14 +100,14 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             </p>
             <p
               className={`text-sm-xs ${
-                selectedOffer.PROMO_OFFER_1.length ||
-                selectedOffer.PROMO_OFFER_1.length
+                (freeRings > 0 && selectedOffer.PROMO_OFFER_1.length) ||
+                selectedOffer.PROMO_OFFER_2.length
                   ? "text-[#25B021]"
                   : "text-white"
               } font-bold font-poppins`}
             >
-              {selectedOffer.PROMO_OFFER_1.length ||
-              (selectedOffer.PROMO_OFFER_1.length && freeRings) ? (
+              {(freeRings > 0 && selectedOffer.PROMO_OFFER_1.length) ||
+              selectedOffer.PROMO_OFFER_2.length ? (
                 <>{freeRings} rings free</>
               ) : (
                 "$0"
@@ -165,22 +130,22 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             <span className="text-[20px] font-bold font-poppins leading-[100%]">
               $
               {selectedOffer.PROMO_OFFER_1.length ||
-              selectedOffer.PROMO_OFFER_1.length
+              selectedOffer.PROMO_OFFER_2.length
                 ? (ringQuantity - freeRings) * basePrice
                 : ringQuantity * basePrice}
             </span>
           </div>
 
           <div className="flex flex-col justify-center overflow-x-hidden">
-            <Link
-              href="/product/baai-zen-smart-rings/checkout-page"
+            <Button
+              onClick={handleCheckout}
+              disabled={ringQuantity < 1}
               className={`mx-auto mt-6 w-full md:w-[457px] h-[60px] rounded-full px-6 py-3 transition flex justify-center items-center gap-3 
-                  ${ringQuantity > 0 ? "bg-[#25B021]/50 cursor-not-allowed" : "bg-[#25B021] text-white"}`}
+                  ${ringQuantity < 0 ? "bg-[#25B021]/50 cursor-not-allowed" : "bg-[#25B021] hover:bg-[#25B021] text-white"}`}
             >
               <span
                 id="checkout-page-without-loggedIn"
-                className="font-medium mt-2 text-[18px] leading-[100%] tracking-normal font-poppins whitespace-nowrap"
-                style={{ width: "141px", height: "27px" }}
+                className="w-[141px] h-[27px] font-medium mt-2 text-[18px] leading-[100%] tracking-normal font-poppins whitespace-nowrap"
               >
                 Go to Checkout
               </span>
@@ -191,7 +156,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 alt="arrow"
                 className="w-[18px] h-[18px]"
               />
-            </Link>
+            </Button>
           </div>
         </div>
       </div>

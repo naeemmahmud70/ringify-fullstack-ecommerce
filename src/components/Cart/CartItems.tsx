@@ -4,6 +4,11 @@ import { setSelectedRingDetails } from "../../../utils/selectedRingDetails";
 import Image from "next/image";
 import { formatColor, splitCartItems } from "../../../utils/cartItems";
 
+export type OfferT = {
+  PROMO_OFFER_1: string;
+  PROMO_OFFER_2: string;
+};
+
 export type CartItemT = {
   size: string;
   color: string;
@@ -14,23 +19,23 @@ export type CartItemT = {
 interface CartItemsProps {
   cartItems: CartItemT[];
   setCartItems: React.Dispatch<React.SetStateAction<CartItemT[]>>;
-  handleDeleteItem: (index: number) => void;
   handleQuantityChange: (index: number, delta: number) => void;
   paidRings: CartItemT[];
   freeRings: CartItemT[];
   setPaidRings: React.Dispatch<React.SetStateAction<CartItemT[]>>;
   setFreeRings: React.Dispatch<React.SetStateAction<CartItemT[]>>;
+  selectedOffer: OfferT;
 }
 
 const CartItems: React.FC<CartItemsProps> = ({
   cartItems,
   setCartItems,
-  handleDeleteItem,
   handleQuantityChange,
   paidRings,
   freeRings,
   setPaidRings,
   setFreeRings,
+  selectedOffer,
 }) => {
   const [pendingIndex, setPendingIndex] = useState<number | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -39,9 +44,14 @@ const CartItems: React.FC<CartItemsProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const { paid, free } = splitCartItems(cartItems);
-    setPaidRings(paid);
-    setFreeRings(free);
+    if (selectedOffer.PROMO_OFFER_1 || selectedOffer.PROMO_OFFER_2) {
+      const { paid, free } = splitCartItems(cartItems, selectedOffer);
+      setPaidRings(paid);
+      setFreeRings(free);
+    } else {
+      setPaidRings(cartItems);
+      setFreeRings([]);
+    }
   }, [cartItems]);
 
   const handlePlusClick = (index: number) => {
@@ -62,7 +72,7 @@ const CartItems: React.FC<CartItemsProps> = ({
 
   const confirmSameSize = (index: number) => {
     handleQuantityChange(index, 1);
-    updateLocalStorage(cartItems);
+    setSelectedRingDetails(cartItems);
     resetPrompt();
   };
 
@@ -91,7 +101,7 @@ const CartItems: React.FC<CartItemsProps> = ({
       }
 
       setCartItems(updatedCart);
-      updateLocalStorage(updatedCart);
+      setSelectedRingDetails(updatedCart);
       resetPrompt();
     }
   };
@@ -103,7 +113,31 @@ const CartItems: React.FC<CartItemsProps> = ({
     setSelectedSize(null);
   };
 
-  const updateLocalStorage = (items: CartItemT[]) => {
+  const handleRemoveItem = (index: number) => {
+    const updatedCart = cartItems.filter((_, i) => i !== index);
+    setCartItems(updatedCart);
+    handleDeleteItem(updatedCart);
+  };
+
+  const handleDecreaseQuantity = (index: number) => {
+    const item = cartItems[index];
+    if (item.quantity === 1) {
+      handleRemoveItem(index);
+    } else {
+      const updatedCart = cartItems.map((ci, i) =>
+        i === index ? { ...ci, quantity: ci.quantity - 1 } : ci
+      );
+      setCartItems(updatedCart);
+      handleDeleteItem(updatedCart);
+    }
+    setError(null);
+  };
+
+  const handleIncreaseQuantity = (index: number) => {
+    handlePlusClick(index); // you already have this
+  };
+
+  const handleDeleteItem = (items: CartItemT[]) => {
     if (typeof window !== "undefined") {
       setSelectedRingDetails(items);
     }
@@ -208,12 +242,7 @@ const CartItems: React.FC<CartItemsProps> = ({
                         <div className="flex items-center mb-14 justify-end gap-2 w-full">
                           <button
                             onClick={() => {
-                              handleDeleteItem(index);
-                              const updatedCart = cartItems.filter(
-                                (_, i) => i !== index
-                              );
-                              setCartItems(updatedCart);
-                              updateLocalStorage(updatedCart);
+                              handleRemoveItem(index);
                             }}
                             title="Remove item"
                           >
@@ -236,24 +265,7 @@ const CartItems: React.FC<CartItemsProps> = ({
                           >
                             <button
                               onClick={() => {
-                                if (item.quantity === 1) {
-                                  handleDeleteItem(index);
-                                  const updatedCart = cartItems.filter(
-                                    (_, i) => i !== index
-                                  );
-                                  setCartItems(updatedCart);
-                                  updateLocalStorage(updatedCart);
-                                } else {
-                                  const updatedCart = cartItems.map((ci, i) =>
-                                    i === index
-                                      ? { ...ci, quantity: ci.quantity - 1 }
-                                      : ci
-                                  );
-                                  setCartItems(updatedCart);
-                                  updateLocalStorage(updatedCart);
-                                }
-
-                                setError(null);
+                                handleDecreaseQuantity(index);
                               }}
                             >
                               <Image
@@ -267,7 +279,7 @@ const CartItems: React.FC<CartItemsProps> = ({
 
                             <span className="text-white">{item.quantity}</span>
                             <button
-                              onClick={() => handlePlusClick(index)}
+                              onClick={() => handleIncreaseQuantity(index)}
                               className="px-1"
                             >
                               <Image
