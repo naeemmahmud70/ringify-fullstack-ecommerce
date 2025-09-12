@@ -12,26 +12,35 @@ import ringImages from "@/data/ringsdata.json";
 import { useModals } from "@/store/modals";
 
 import { getMonthAfterTwoMonths } from "../../../utils/getCurrentDate";
-import { getSelectedRingDetails } from "../../../utils/selectedRingDetails";
+import {
+  getSelectedRingDetails,
+  getTotalQuantity,
+} from "../../../utils/selectedRingDetails";
+import {
+  handleSelectOfferOne,
+  handleSelectOfferTwo,
+} from "../../../utils/selectedOffer";
 
-interface selectedRingProps {
+export interface selectedRingPropsT {
   size: string;
   quantity: number;
   color: string;
+  basePrice?: number;
+  img: string;
 }
 const SelectRing = () => {
   const basePrice = Number(process.env.NEXT_PUBLIC_BASE_PRICE);
   const [selectedRing, setSelectedRing] = useState<number | null>(null);
   const [ringColor, setRingColor] = useState("");
-  const [ringSizes, setRingSizes] = useState<selectedRingProps[]>([]);
+  const [ringSizes, setRingSizes] = useState<selectedRingPropsT[]>([]);
   const [error, setError] = useState<string>("");
   const searchParams = useSearchParams();
   const paramsColor = searchParams.get("ring");
   const currentDate = getMonthAfterTwoMonths();
   const { setUnlockOfferModal } = useModals();
-  const [totalSelected, setTotalSelected] = useState(0);
   const prevTotalRef = useRef<number | null>(null);
   const hasSeenRealTotal = useRef(false);
+  const [localSelectedRings, setLocalSelectedRings] = useState(0);
 
   const offer1 = process.env.NEXT_PUBLIC_PROMO_OFFER_1 ?? "";
   const offer2 = process.env.NEXT_PUBLIC_PROMO_OFFER_2 ?? "";
@@ -81,13 +90,9 @@ const SelectRing = () => {
     }
   }, [paramsColor]);
 
-  const getTotalQuantity = () => {
-    return ringSizes.reduce((sum, item) => sum + item.quantity, 0);
-  };
-
   useEffect(() => {
-    const total = getTotalQuantity();
-    setTotalSelected(total);
+    const total = getTotalQuantity(ringSizes);
+    setLocalSelectedRings(total);
 
     if (!hasSeenRealTotal.current) {
       prevTotalRef.current = total;
@@ -101,9 +106,11 @@ const SelectRing = () => {
     if (total > prevTotal) {
       if (total === offerOneThreshold) {
         setUnlockOfferModal(OfferOneText);
+        handleSelectOfferOne(OfferOneText);
       }
       if (total === offerTwoThreshold) {
         setUnlockOfferModal(offerTwoText);
+        handleSelectOfferTwo(offerTwoText);
       }
     }
 
@@ -125,13 +132,13 @@ const SelectRing = () => {
             </div>
             <div className="flex flex-col gap-5">
               <UseOffer
-                total={totalSelected}
                 basePrice={Number(basePrice)}
                 currentDate={currentDate}
                 OfferOneText={OfferOneText}
                 offerTwoText={offerTwoText}
                 offerOneThreshold={offerOneThreshold}
                 offerTwoThreshold={offerTwoThreshold}
+                localSelectedRings={localSelectedRings}
               />
               <Finish
                 ringColor={ringColor}

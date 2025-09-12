@@ -1,17 +1,12 @@
 import { Button } from "@/components/ui/button";
-
-export interface selectedRingProps {
-  size: string;
-  quantity: number;
-  color: string;
-}
+import { selectedRingPropsT } from "./SelectRings";
 
 interface SizeProps {
-  ringSizes: selectedRingProps[];
+  ringSizes: selectedRingPropsT[];
   ringColor: string;
   error: string;
   setError: (value: string) => void;
-  setRingSizes: React.Dispatch<React.SetStateAction<selectedRingProps[]>>;
+  setRingSizes: React.Dispatch<React.SetStateAction<selectedRingPropsT[]>>;
 }
 
 const Sizes: React.FC<SizeProps> = ({

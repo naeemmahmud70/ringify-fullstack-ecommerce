@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 import { getSelectedRingDetails } from "../../utils/selectedRingDetails";
+import { selectedRingPropsT } from "@/components/SelectRings/SelectRings";
 
 interface userState {
   loggedInUser: boolean;
@@ -36,21 +37,13 @@ export const useRingOffer = create<offerState>(set => ({
     })),
 }));
 
-export interface ringDetailsT {
-  size: string;
-  quantity: number;
-  color: string;
-  basePrice?: number;
-  img: string;
-}
-
 interface SelectedRingState {
   ringQuantity: number;
-  selectedRings: ringDetailsT[];
-  setSelectedRings: (loading: ringDetailsT[]) => void;
+  selectedRings: selectedRingPropsT[];
+  setSelectedRings: (loading: selectedRingPropsT[]) => void;
 }
 
-const alreadySelected: ringDetailsT[] = getSelectedRingDetails();
+const alreadySelected: selectedRingPropsT[] = getSelectedRingDetails();
 console.log("alreadySelected", alreadySelected);
 
 export const useSelectedRings = create<SelectedRingState>(set => ({

@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useLoginModal } from "@/store/loginModal";
 import { useModals } from "@/store/modals";
 import { useRingOffer, useSelectedRings } from "@/store/users";
-import { ringDetailsT } from "@/store/users";
 
 import config from "../../../config/config";
 import {
@@ -20,7 +19,7 @@ const Cart = () => {
   const router = useRouter();
   const { ringQuantity } = useSelectedRings();
   const { selectedOffer, setSelectedOffer } = useRingOffer();
-  const [cartItems, setCartItems] = useState<ringDetailsT[]>([]);
+  const [cartItems, setCartItems] = useState<CartItemT[]>([]);
 
   const [paidRings, setPaidRings] = useState<CartItemT[]>([]);
   const [freeRings, setFreeRings] = useState<CartItemT[]>([]);

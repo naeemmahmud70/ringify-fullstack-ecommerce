@@ -91,7 +91,9 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             <p className="font-poppins font-normal text-[18px] leading-[100%] tracking-[0%] align-middle text-[#FFFFFFB2]">
               Subtotal
             </p>
-            <p className="font-semibold">${ringQuantity * basePrice}</p>
+            <p className="font-semibold">
+              ${(ringQuantity * basePrice).toFixed(2)}
+            </p>
           </div>
 
           <div className="flex justify-between">
@@ -131,8 +133,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
               $
               {selectedOffer.PROMO_OFFER_1.length ||
               selectedOffer.PROMO_OFFER_2.length
-                ? (ringQuantity - freeRings) * basePrice
-                : ringQuantity * basePrice}
+                ? ((ringQuantity - freeRings) * basePrice).toFixed(2)
+                : (ringQuantity * basePrice).toFixed(2)}
             </span>
           </div>
 

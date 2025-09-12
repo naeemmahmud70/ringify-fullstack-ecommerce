@@ -6,15 +6,12 @@ import { Button } from "@/components/ui/button";
 import { useSelectedRings } from "@/store/users";
 
 import { setSelectedRingDetails } from "../../../utils/selectedRingDetails";
-interface selectedRingProps {
-  size: string;
-  quantity: number;
-  color: string;
-}
+import { selectedRingPropsT } from "./SelectRings";
+
 interface priceProp {
   basePrice: number;
   ringColor: string;
-  ringSizes: selectedRingProps[];
+  ringSizes: selectedRingPropsT[];
   currentDate: string;
 }
 
@@ -69,9 +66,6 @@ const Continue: React.FC<priceProp> = ({
           <span className="text-white text-base-lg font-poppins font-semibold">
             {"$"}
             {ringColor && ringSizes ? totalPrice : 0}
-            {/* <span className="ml-2 mt-1 font-poppins font-normal text-[12px] leading-[120%] text-[#8F8F8F]">
-          (inclusive of all taxes)
-        </span> */}
           </span>
           <span className="block md:inline ml-0 md:ml-2 mt-1 font-poppins font-normal text-[12px] leading-[120%] text-[#8F8F8F] text-center md:text-start">
             (inclusive of all taxes)
