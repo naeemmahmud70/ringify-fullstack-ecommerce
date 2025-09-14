@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import ringImages from "@/data/ringsdata.json";
 
 import selectIcon from "../../../public/products/selected.svg";
-import { getSelectedRingDetails } from "../../../utils/selectedRingDetails";
+import { getSelectedRingDetails } from "../../utils/selectedRingDetails";
 
 import { selectedRingPropsT } from "./SelectRings";
 

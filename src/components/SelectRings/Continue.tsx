@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useSelectedRings } from "@/store/users";
 
-import { setSelectedRingDetails } from "../../../utils/selectedRingDetails";
+import { setSelectedRingDetails } from "../../utils/selectedRingDetails";
 
 import { selectedRingPropsT } from "./SelectRings";
 

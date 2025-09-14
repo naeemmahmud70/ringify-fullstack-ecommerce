@@ -10,7 +10,7 @@ import {
   getSelectedOffer,
   handleSelectOfferOne,
   handleSelectOfferTwo,
-} from "../../../utils/selectedOffer";
+} from "../../utils/selectedOffer";
 interface priceProp {
   basePrice: number;
   currentDate: string;

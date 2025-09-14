@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { useRingOffer, useSelectedRings } from "@/store/users";
 
 import config from "../../../config/config";
-import { getSelectedOffer } from "../../../utils/selectedOffer";
+import { getSelectedOffer } from "../../utils/selectedOffer";
 import {
   getSelectedRingDetails,
   setSelectedRingDetails,
-} from "../../../utils/selectedRingDetails";
+} from "../../utils/selectedRingDetails";
 
 import CartItems, { CartItemT } from "./CartItems";
 import OrderSummary from "./OrderSummary";

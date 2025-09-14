@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 import { selectedRingPropsT } from "@/components/SelectRings/SelectRings";
 
-import { getSelectedRingDetails } from "../../utils/selectedRingDetails";
+import { getSelectedRingDetails } from "../utils/selectedRingDetails";
 
 interface userState {
   loggedInUser: boolean;

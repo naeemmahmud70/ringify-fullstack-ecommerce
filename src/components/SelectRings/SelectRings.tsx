@@ -10,15 +10,15 @@ import UseOffer from "@/components/SelectRings/UseOffer";
 import ringImages from "@/data/ringsdata.json";
 import { useModals } from "@/store/modals";
 
-import { getMonthAfterTwoMonths } from "../../../utils/getCurrentDate";
+import { getMonthAfterTwoMonths } from "../../utils/getCurrentDate";
 import {
   handleSelectOfferOne,
   handleSelectOfferTwo,
-} from "../../../utils/selectedOffer";
+} from "../../utils/selectedOffer";
 import {
   getSelectedRingDetails,
   getTotalQuantity,
-} from "../../../utils/selectedRingDetails";
+} from "../../utils/selectedRingDetails";
 
 export interface selectedRingPropsT {
   size: string;

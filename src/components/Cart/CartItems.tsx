@@ -5,12 +5,12 @@ import Image from "next/image";
 import { useModals } from "@/store/modals";
 import { useSelectedRings } from "@/store/users";
 
-import { formatColor, splitCartItems } from "../../../utils/cartItems";
+import { formatColor, splitCartItems } from "../../utils/cartItems";
 import {
   handleSelectOfferOne,
   handleSelectOfferTwo,
-} from "../../../utils/selectedOffer";
-import { setSelectedRingDetails } from "../../../utils/selectedRingDetails";
+} from "../../utils/selectedOffer";
+import { setSelectedRingDetails } from "../../utils/selectedRingDetails";
 
 export type OfferT = {
   PROMO_OFFER_1: string;
