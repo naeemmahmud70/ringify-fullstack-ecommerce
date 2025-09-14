@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
-import { useRingOffer, useSelectedRings } from "@/store/users";
+import { useRingOffer } from "@/store/users";
 
 import selected from "../../../public/products/selected.svg";
 import {
@@ -31,9 +31,6 @@ const UseOffer: React.FC<priceProp> = ({
   localSelectedRings,
 }) => {
   const { selectedOffer, setSelectedOffer } = useRingOffer();
-  const { ringQuantity } = useSelectedRings();
-  console.log("localSelectedRings", localSelectedRings);
-  console.log("offers", offerOneThreshold, offerTwoThreshold);
 
   useEffect(() => {
     const offer = getSelectedOffer();

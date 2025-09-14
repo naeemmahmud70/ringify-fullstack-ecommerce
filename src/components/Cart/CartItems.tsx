@@ -1,14 +1,16 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { setSelectedRingDetails } from "../../../utils/selectedRingDetails";
 import Image from "next/image";
-import { formatColor, splitCartItems } from "../../../utils/cartItems";
+
+import { useModals } from "@/store/modals";
 import { useSelectedRings } from "@/store/users";
+
+import { formatColor, splitCartItems } from "../../../utils/cartItems";
 import {
   handleSelectOfferOne,
   handleSelectOfferTwo,
 } from "../../../utils/selectedOffer";
-import { useModals } from "@/store/modals";
+import { setSelectedRingDetails } from "../../../utils/selectedRingDetails";
 
 export type OfferT = {
   PROMO_OFFER_1: string;
@@ -82,7 +84,6 @@ const CartItems: React.FC<CartItemsProps> = ({
     if (ringQuantity >= offerTwoThreshold) {
       handleSelectOfferTwo(offerTwoText);
     }
-    console.log("hit");
   }, [cartItems]);
 
   useEffect(() => {
@@ -250,16 +251,18 @@ const CartItems: React.FC<CartItemsProps> = ({
           {/* selected ring section */}
           {paidRings.map((item, index) => {
             return (
-              <React.Fragment key={index}>
-                <div className=" w-full justify-center m-0">
+              <div key={index}>
+                <div className="w-full justify-center m-0">
                   <div className="min-h-min-[124px] flex flex-wrap gap-4 items-center p-2 md:p-2 rounded-xl w-full">
-                    <Image
-                      height={124}
-                      width={124}
-                      src={item.img}
-                      alt="Product"
-                      className="object-contain"
-                    />
+                    <div>
+                      <Image
+                        height={124}
+                        width={124}
+                        src={item.img}
+                        alt="Product"
+                        className="object-contain"
+                      />
+                    </div>
                     <div className="flex-1">
                       <h3 className="text-[20px] font-medium font-[Poppins]">
                         BAAI Zen
@@ -270,20 +273,22 @@ const CartItems: React.FC<CartItemsProps> = ({
                       <p className="text-[14px] text-white mt-1 capitalize">
                         Color: {formatColor(item.color)}
                       </p>
-                      <p className="text-base-lg font-semibold text-white font-poppins">
+                      <div className="flex gap-1 md:gap-2 flex-col md:flex-row items-baseline">
                         {item.basePrice !== undefined && (
                           <>
-                            <span>${item.basePrice.toFixed(2)}</span>
-                            <span className="ml-2 mb-4 text-[12px] font-normal leading-[120%] font-poppins text-[#8F8F8F]">
+                            <p className="text-base-lg font-semibold text-white font-poppins">
+                              ${item.basePrice.toFixed(2)}
+                            </p>
+                            <p className=" mb-4 text-[12px] font-normal leading-[120%] font-poppins text-[#8F8F8F]">
                               (inclusive of all the taxes)
-                            </span>
+                            </p>
                           </>
                         )}
-                      </p>
+                      </div>
                     </div>
 
-                    <div className="mt-auto justify-center gap-2">
-                      <div className="flex items-center mb-14 justify-end gap-2 w-full">
+                    <div className="flex md:flex-col flex-row-reverse w-full md:w-auto justify-between items-end h-auto md:h-[124px]">
+                      <div className="">
                         <button
                           onClick={() => {
                             handleRemoveItem(index);
@@ -298,42 +303,34 @@ const CartItems: React.FC<CartItemsProps> = ({
                           />
                         </button>
                       </div>
-                      <div className="mt-auto flex items-center gap-2">
-                        <div
-                          className="flex items-center gap-[13px] rounded-full  px-1 "
-                          style={{
-                            width: "91px",
-                            height: "32px",
-                            background: "#F0F0F04D",
+
+                      <div className="w-[91px] h-[32px] bg-[#F0F0F04D] flex items-center gap-[13px] rounded-full  px-1 ">
+                        <button
+                          onClick={() => {
+                            handleDecreaseQuantity(index);
                           }}
                         >
-                          <button
-                            onClick={() => {
-                              handleDecreaseQuantity(index);
-                            }}
-                          >
-                            <Image
-                              height={16}
-                              width={16}
-                              src="/cartpage/minus.svg"
-                              alt="Minus"
-                              className="w-4 h-4"
-                            />
-                          </button>
+                          <Image
+                            height={16}
+                            width={16}
+                            src="/cartpage/minus.svg"
+                            alt="Minus"
+                            className="w-4 h-4"
+                          />
+                        </button>
 
-                          <span className="text-white">{item.quantity}</span>
-                          <button
-                            onClick={() => handleIncreaseQuantity(index)}
-                            className="px-1"
-                          >
-                            <Image
-                              height={16}
-                              width={16}
-                              src="/cartpage/plus.svg"
-                              alt="Plus"
-                            />
-                          </button>
-                        </div>
+                        <span className="text-white">{item.quantity}</span>
+                        <button
+                          onClick={() => handleIncreaseQuantity(index)}
+                          className="px-1"
+                        >
+                          <Image
+                            height={16}
+                            width={16}
+                            src="/cartpage/plus.svg"
+                            alt="Plus"
+                          />
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -425,7 +422,7 @@ const CartItems: React.FC<CartItemsProps> = ({
                 {index !== cartItems.length - 1 && (
                   <hr className="border border-white/5 my-2" />
                 )}
-              </React.Fragment>
+              </div>
             );
           })}
         </>

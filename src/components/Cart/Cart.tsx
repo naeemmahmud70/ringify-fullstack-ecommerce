@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useLoginModal } from "@/store/loginModal";
-import { useModals } from "@/store/modals";
+
 import { useRingOffer, useSelectedRings } from "@/store/users";
 
 import config from "../../../config/config";
+import { getSelectedOffer } from "../../../utils/selectedOffer";
 import {
   getSelectedRingDetails,
   setSelectedRingDetails,
@@ -13,7 +13,6 @@ import {
 
 import CartItems, { CartItemT } from "./CartItems";
 import OrderSummary from "./OrderSummary";
-import { getSelectedOffer } from "../../../utils/selectedOffer";
 
 const Cart = () => {
   const router = useRouter();
@@ -24,7 +23,6 @@ const Cart = () => {
   const [paidRings, setPaidRings] = useState<CartItemT[]>([]);
   const [freeRings, setFreeRings] = useState<CartItemT[]>([]);
   const basePrice = Number(config.BASE_PRICE);
-  console.log("ringQuantity", ringQuantity);
 
   useEffect(() => {
     const data = getSelectedRingDetails();
@@ -36,8 +34,6 @@ const Cart = () => {
       setSelectedOffer(offer);
     }
   }, []);
-
-  console.log("selectedOffer", selectedOffer);
 
   const handleQuantityChange = (index: number, delta: number) => {
     const updatedItems = [...cartItems];

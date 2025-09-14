@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+
 import { selectedRingPropsT } from "./SelectRings";
 
 interface SizeProps {
@@ -92,7 +93,7 @@ const Sizes: React.FC<SizeProps> = ({
             }
             return r;
           })
-          .filter(Boolean) as selectedRingProps[]
+          .filter(Boolean) as selectedRingPropsT[]
     );
     setError("");
   };

@@ -3,7 +3,9 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import { Button } from "../ui/button";
+
 import { OfferT } from "./CartItems";
 
 interface OrderSummaryProps {
@@ -25,7 +27,6 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
     router.push("/product/baai-zen-smart-rings/checkout-page");
   };
 
-  console.log("selectedOffer", selectedOffer);
   return (
     <div className="w-full lg:w-2/5 space-y-6">
       <div className="w-full ">
@@ -41,7 +42,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                   alt="Discount Icon"
                   className="w-[24px] h-[24px] justify-self-start"
                 />
-                <p className="text-[18px] text-white font-poppins font-normal">
+                <p className="text-[16px] md:text-[18px] text-white font-poppins font-normal">
                   {selectedOffer.PROMO_OFFER_1
                     ? selectedOffer.PROMO_OFFER_1
                     : selectedOffer.PROMO_OFFER_2}
@@ -54,7 +55,6 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                     ? true
                     : false
                 }
-                style={{ width: "119px", height: "42px" }}
                 className="text-[#FFFFFF] text-[16px] font-poppins  font-medium bg-transparent hover:bg-transparent  rounded-full border border-green-custom inline-block"
               >
                 Applied
@@ -70,7 +70,9 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                   alt="Discount Icon"
                   className="w-[21px] h-[21px] justify-self-start"
                 />
-                <span>Have a discount code?</span>
+                <p className="text-[16px] md:text-[18px] text-white font-poppins font-normal">
+                  Have a discount code?
+                </p>
               </div>
 
               <Link

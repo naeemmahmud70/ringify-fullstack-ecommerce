@@ -1,7 +1,8 @@
 import { create } from "zustand";
 
-import { getSelectedRingDetails } from "../../utils/selectedRingDetails";
 import { selectedRingPropsT } from "@/components/SelectRings/SelectRings";
+
+import { getSelectedRingDetails } from "../../utils/selectedRingDetails";
 
 interface userState {
   loggedInUser: boolean;
@@ -44,7 +45,6 @@ interface SelectedRingState {
 }
 
 const alreadySelected: selectedRingPropsT[] = getSelectedRingDetails();
-console.log("alreadySelected", alreadySelected);
 
 export const useSelectedRings = create<SelectedRingState>(set => ({
   ringQuantity: alreadySelected

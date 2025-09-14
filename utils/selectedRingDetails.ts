@@ -2,9 +2,14 @@ import { selectedRingPropsT } from "@/components/SelectRings/SelectRings";
 import { useSelectedRings } from "@/store/users";
 
 export const getSelectedRingDetails = () => {
-  const selectedRings = localStorage.getItem("selectedRingDetails");
-  if (selectedRings) {
-    return JSON.parse(selectedRings ?? []);
+  try {
+    if (typeof window !== "undefined") {
+      const selectedRings = localStorage.getItem("selectedRingDetails");
+      return selectedRings ? JSON.parse(selectedRings) : null;
+    }
+    return null;
+  } catch {
+    return null;
   }
 };
 export const setSelectedRingDetails = (value: selectedRingPropsT[]) => {

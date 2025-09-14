@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 import Continue from "@/components/SelectRings/Continue";
 import Finish from "@/components/SelectRings/Finish";
@@ -13,13 +12,13 @@ import { useModals } from "@/store/modals";
 
 import { getMonthAfterTwoMonths } from "../../../utils/getCurrentDate";
 import {
-  getSelectedRingDetails,
-  getTotalQuantity,
-} from "../../../utils/selectedRingDetails";
-import {
   handleSelectOfferOne,
   handleSelectOfferTwo,
 } from "../../../utils/selectedOffer";
+import {
+  getSelectedRingDetails,
+  getTotalQuantity,
+} from "../../../utils/selectedRingDetails";
 
 export interface selectedRingPropsT {
   size: string;
@@ -34,8 +33,6 @@ const SelectRing = () => {
   const [ringColor, setRingColor] = useState("");
   const [ringSizes, setRingSizes] = useState<selectedRingPropsT[]>([]);
   const [error, setError] = useState<string>("");
-  const searchParams = useSearchParams();
-  const paramsColor = searchParams.get("ring");
   const currentDate = getMonthAfterTwoMonths();
   const { setUnlockOfferModal } = useModals();
   const prevTotalRef = useRef<number | null>(null);
@@ -66,29 +63,6 @@ const SelectRing = () => {
       }
     }
   }, []);
-
-  useEffect(() => {
-    if (paramsColor) {
-      setRingColor(paramsColor);
-
-      if (paramsColor === "black") {
-        setSelectedRing(1);
-      } else if (paramsColor === "silver") {
-        setSelectedRing(2);
-      } else if (paramsColor === "rosegold") {
-        setSelectedRing(3);
-      }
-    } else {
-      const selectedRings = getSelectedRingDetails();
-      if (selectedRings) {
-        const parsedValue = selectedRings || "[]";
-        if (parsedValue.length) {
-          setRingColor(parsedValue[0]?.color);
-          setRingSizes(parsedValue);
-        }
-      }
-    }
-  }, [paramsColor]);
 
   useEffect(() => {
     const total = getTotalQuantity(ringSizes);
@@ -140,12 +114,16 @@ const SelectRing = () => {
                 offerTwoThreshold={offerTwoThreshold}
                 localSelectedRings={localSelectedRings}
               />
-              <Finish
-                ringColor={ringColor}
-                setRingColor={setRingColor}
-                setError={setError}
-                setSelectedRing={setSelectedRing}
-              />
+              <Suspense fallback="">
+                <Finish
+                  ringColor={ringColor}
+                  setRingColor={setRingColor}
+                  setError={setError}
+                  setSelectedRing={setSelectedRing}
+                  setRingSizes={setRingSizes}
+                />
+              </Suspense>
+
               <Sizes
                 ringSizes={ringSizes}
                 setRingSizes={setRingSizes}

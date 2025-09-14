@@ -1,15 +1,9 @@
-import React, { Suspense } from "react";
+import React from "react";
 
 import SelectRing from "@/components/SelectRings/SelectRings";
 
 const page = () => {
-  return (
-    <div>
-      <Suspense fallback={<></>}>
-        <SelectRing />
-      </Suspense>
-    </div>
-  );
+  return <SelectRing />;
 };
 
 export default page;

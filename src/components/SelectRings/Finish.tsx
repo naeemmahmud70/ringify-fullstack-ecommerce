@@ -1,15 +1,21 @@
 "use client";
+import { useEffect } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 import ringImages from "@/data/ringsdata.json";
 
 import selectIcon from "../../../public/products/selected.svg";
+import { getSelectedRingDetails } from "../../../utils/selectedRingDetails";
+
+import { selectedRingPropsT } from "./SelectRings";
 
 interface RingProps {
   ringColor: string;
   setRingColor: (type: string) => void;
   setError: (value: string) => void;
   setSelectedRing: (id: number) => void;
+  setRingSizes: React.Dispatch<React.SetStateAction<selectedRingPropsT[]>>;
 }
 
 const Finish: React.FC<RingProps> = ({
@@ -17,7 +23,33 @@ const Finish: React.FC<RingProps> = ({
   setRingColor,
   setError,
   setSelectedRing,
+  setRingSizes,
 }) => {
+  const searchParams = useSearchParams();
+  const paramsColor = searchParams.get("ring");
+
+  useEffect(() => {
+    if (paramsColor) {
+      setRingColor(paramsColor);
+
+      if (paramsColor === "black") {
+        setSelectedRing(1);
+      } else if (paramsColor === "silver") {
+        setSelectedRing(2);
+      } else if (paramsColor === "rosegold") {
+        setSelectedRing(3);
+      }
+    } else {
+      const selectedRings = getSelectedRingDetails();
+      if (selectedRings) {
+        const parsedValue = selectedRings || "[]";
+        if (parsedValue.length) {
+          setRingColor(parsedValue[0]?.color);
+          setRingSizes(parsedValue);
+        }
+      }
+    }
+  }, [paramsColor]);
   return (
     <div className="bg-[#131313] p-[20px] lg:p-[30px] lg:max-w-[564px] md:w-full rounded-xl">
       <p className="text-[#FFFFFFB2] text-base font-poppins font-semibold">
