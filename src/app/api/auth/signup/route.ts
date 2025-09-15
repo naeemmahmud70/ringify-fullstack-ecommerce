@@ -3,18 +3,19 @@ import Otp from "@/models/Otp";
 import { sendEmail } from "@/lib/sendEmail";
 import connectMongo from "@/lib/connect-mongo";
 import { generateOtp } from "@/utils/generateOtp";
+import bcrypt from "bcryptjs";
 
 const OTP_EXPIRY_MINUTES = Number(process.env.OTP_EXPIRY_MINUTES || 5);
 
 export async function POST(req: Request) {
   try {
     await connectMongo();
-    const { name, email } = await req.json();
+    const { name, email, password } = await req.json();
 
     // Basic validation
-    if (!name || !email) {
+    if (!name || !email || !password) {
       return Response.json(
-        { error: "Name and email are required" },
+        { message: "Name, email, and password are required" },
         { status: 400 }
       );
     }
@@ -42,13 +43,22 @@ export async function POST(req: Request) {
       html
     );
 
-    return Response.json({ message: "OTP sent to email" }, { status: 200 });
+    // ✅ bcrypt hash the password before sending it back
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    return Response.json(
+      {
+        message: "OTP sent to email",
+        user: { name, email, password: hashedPassword },
+      },
+      { status: 200 }
+    );
   } catch (error: any) {
     console.error("Error sending OTP:", error);
 
     return Response.json(
       {
-        error: "Failed to send OTP",
+        message: error?.message || "Failed to send OTP",
         details: error?.message || "Unknown error",
       },
       { status: 500 }
