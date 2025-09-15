@@ -5,14 +5,15 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 
-import { useLoginModal } from "@/store/loginModal";
+import { useAuthModal } from "@/store/loginModal";
 
 import { Button } from "../ui/button";
 
 import AddedToCart from "./AddedToCart/AddedToCart";
 
 const Navbar = () => {
-  const { isModalOpen, setIsModalOpen } = useLoginModal();
+  const { isAuthModalOpen, setIsAuthModalOpen, setBackgroundPath } =
+    useAuthModal();
   const [isOpen, setIsOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState("");
   const [mounted, setMounted] = useState(false);
@@ -52,7 +53,7 @@ const Navbar = () => {
       const parsedValue = JSON.parse(loggedInUser);
       setLoggedIn(parsedValue?.email);
     }
-  }, [loggedIn, isModalOpen]);
+  }, [loggedIn, isAuthModalOpen]);
 
   const handleLogout = async () => {
     if (loggedIn) {
@@ -75,6 +76,7 @@ const Navbar = () => {
     return null;
   }
 
+  console.log("path", routePathname);
   return (
     <div className=" text-white absolute top-[-10px] w-full px-2 lg:px-8 z-50 bg-transparent lg:bg-transparent">
       <div className="max-w-7xl mx-auto sm:px-6 md:px-8 lg:px-0 ">
@@ -128,12 +130,17 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Button
-                  onClick={() => setIsModalOpen(true)}
+                <Link
+                  onClick={() => {
+                    setIsAuthModalOpen(true);
+                    setBackgroundPath(routePathname);
+                  }}
+                  href="/login"
+                  scroll={false}
                   className="w-[136px] h-[56px] bg-transparent hover:bg-transparent leading-[180%] tracking-[0px] px-[40px] py-[15px] border border-[#ffffff] rounded-[88px] text-[#ffffff] text-[16px] font-poppins"
                 >
                   Login
-                </Button>
+                </Link>
               </>
             )}
             <Link
@@ -240,8 +247,9 @@ const Navbar = () => {
                 <Button
                   onClick={(e: any) => {
                     e.stopPropagation();
-                    setIsModalOpen(true);
+                    setIsAuthModalOpen(true);
                     setIsOpen(false);
+                    setBackgroundPath(routePathname);
                   }}
                   className=" w-[136px] h-[56px] block border bg-transparent hover:bg-transparent text-center text-[16px] border-white text-white font-poppins font-medium px-4 py-2 mt-2 rounded-full"
                 >
