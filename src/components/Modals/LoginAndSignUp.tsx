@@ -25,6 +25,8 @@ import Congrats from "./Congrats";
 import ForgetPassword from "./ForgetPassword";
 import SentOtp from "./SentOtp";
 import Link from "next/link";
+import { sendOtp } from "@/services/auth";
+import { useToastStore } from "@/store/toast";
 
 const loginSchema = z.object({
   email: z
@@ -52,18 +54,37 @@ const loginSchema = z.object({
     })
     .regex(/[!@#$%^&*(),.?":{}|<>]/, {
       message: "Password must contain at least one special character",
-    })
-    .optional(),
+    }),
 });
 
 const signUpSchema = z.object({
+  name: z.string().min(4, { message: "Name should be atlest 4 character" }),
   email: z
     .string()
     .min(1, { message: "Please enter your email address" })
     .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
       message: "Invalid email address.",
     }),
-  telegram: z.string().optional(),
+  password: z
+    .string()
+    .min(8, {
+      message: "Password must be at least 8 characters long",
+    })
+    .max(15, {
+      message: "Password must be at most 15 characters long",
+    })
+    .regex(/[A-Z]/, {
+      message: "Password must contain at least one uppercase letter",
+    })
+    .regex(/[a-z]/, {
+      message: "Password must contain at least one lowercase letter",
+    })
+    .regex(/\d/, {
+      message: "Password must contain at least one number",
+    })
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, {
+      message: "Password must contain at least one special character",
+    }),
 });
 const LoginAndSignUp: React.FC<{
   isAuthModalOpen: boolean;
@@ -81,6 +102,12 @@ const LoginAndSignUp: React.FC<{
   const router = useRouter();
   const checkoutParams = searchParams.get("checkout");
   const pathname = usePathname();
+  const { SetToastStates } = useToastStore();
+  const [signUpdata, setSignUpData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   const schema = useMemo(() => {
     return authMode === "login" ? loginSchema : signUpSchema;
@@ -101,7 +128,6 @@ const LoginAndSignUp: React.FC<{
     defaultValues: {
       email: "",
       password: "",
-      telegram: "",
     },
   });
 
@@ -132,19 +158,32 @@ const LoginAndSignUp: React.FC<{
     // }
   };
   const handleSignUp = async (values: any) => {
-    console.log("signup", values);
-    // try {
-    //   setLoading(true);
-    //   const data = await sentOtp(values);
-
-    //   setLoading(false);
-    //   if (data?.status === 200) {
-    //     setOpenOtp(true);
-    //   }
-    // } catch (err) {
-    //   setLoading(false);
-    //   console.log("err", err);
-    // }
+  
+    try {
+      setLoading(true);
+      const data = await sendOtp(values);
+  console.log("data", data);
+      setLoading(false);
+      if (data?.status === 200) {
+        setSignUpData(data?.user);
+        setOpenOtp(true);
+      } else {
+        SetToastStates({
+          message: data?.message,
+          variant: "error",
+          triggerId: Date.now(),
+        });
+        console.log(data);
+      }
+    } catch (error: any) {
+      console.log("err", error);
+      setLoading(false);
+      SetToastStates({
+        message: error,
+        variant: "error",
+        triggerId: Date.now(),
+      });
+    }
   };
 
   const handleOpenForgetPass = () => {
@@ -152,11 +191,7 @@ const LoginAndSignUp: React.FC<{
   };
 
   useEffect(() => {
-    forms.reset({
-      email: "",
-      password: "",
-      telegram: "",
-    });
+    forms.reset();
   }, [authMode]);
 
   return (
@@ -198,8 +233,24 @@ const LoginAndSignUp: React.FC<{
             <Form {...forms}>
               <form autoComplete="off" onSubmit={forms.handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-5">
-                  <div className="mt-3">
-                    <Label className="text-xs text-[#FFFFFF7A] font-poppins font-normal pb-2 inline-block leading-[29px]">
+                  {authMode === "signUp" && (
+                    <div>
+                      <Label className="text-xs text-[#FFFFFF7A] font-poppins font-normal pb-2 inline-block [29px] mt-2">
+                        Name
+                      </Label>
+
+                      <InputBox
+                        name="name"
+                        placeholder="John Doe"
+                        autoComplete="off"
+                        className="bg-[#FFFFFF14] text-white w-full p-5 h-12 rounded-full border-[#FFFFFF66] text-xs font-poppins placeholder:text-xs pl-6"
+                        type="text"
+                        form={forms}
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <Label className="text-xs text-[#FFFFFF7A] font-poppins font-normal pb-2 inline-block ">
                       Email ID
                       {authMode === "signUp" && (
                         <span className="text-[#FF0909]">*</span>
@@ -213,47 +264,33 @@ const LoginAndSignUp: React.FC<{
                       form={forms}
                     />
                   </div>
-                  {authMode === "login" ? (
+                  <div>
+                    <Label className="text-xs text-[#FFFFFF7A] font-poppins font-normal pb-2 inline-block">
+                      Enter Password
+                    </Label>
+
+                    <InputBox
+                      name="password"
+                      placeholder="Password"
+                      autoComplete="off"
+                      className="bg-[#FFFFFF14] text-white w-full p-5 h-12 rounded-full border-[#FFFFFF66] text-xs font-poppins placeholder:text-xs pl-6"
+                      type="password"
+                      form={forms}
+                    />
+                  </div>
+
+                  {authMode === "login" && (
                     <div>
                       {" "}
-                      <div>
-                        <Label className="text-xs text-[#FFFFFF7A] font-poppins font-normal pb-2 inline-block [29px] mt-2">
-                          Enter Password
-                        </Label>
-
-                        <InputBox
-                          name="password"
-                          placeholder="Password"
-                          autoComplete="off"
-                          className="bg-[#FFFFFF14] text-white w-full p-5 h-12 rounded-full border-[#FFFFFF66] text-xs font-poppins placeholder:text-xs pl-6"
-                          type="password"
-                          form={forms}
-                        />
-                      </div>
                       <div className="flex justify-end">
                         <button
                           type="button"
                           onClick={handleOpenForgetPass}
-                          className="bg-transparent border-0 text-xs font-normal font-poppins text-white leading-8 mt-4"
+                          className="bg-transparent border-0 text-xs font-normal font-poppins text-white"
                         >
                           Forget Password?
                         </button>
                       </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <Label className="text-xs text-[#FFFFFF7A] font-poppins font-normal pb-2 inline-block [29px] mt-2">
-                        Telegram Handle
-                      </Label>
-
-                      <InputBox
-                        name="telegram"
-                        placeholder="Paste here"
-                        autoComplete="off"
-                        className="bg-[#FFFFFF14] text-white w-full p-5 h-12 rounded-full border-[#FFFFFF66] text-xs font-poppins placeholder:text-xs pl-6 mb-2"
-                        type="text"
-                        form={forms}
-                      />
                     </div>
                   )}
 
@@ -271,9 +308,8 @@ const LoginAndSignUp: React.FC<{
         )}
         {openOtp && !openCongrats && (
           <SentOtp
-            email={email}
             openOtp={openOtp}
-            telegram={telegram}
+            signUpdata={signUpdata}
             setOpenOtp={setOpenOtp}
             setIsAuthModalOpen={setIsAuthModalOpen}
             setOpenCongrats={setOpenCongrats}

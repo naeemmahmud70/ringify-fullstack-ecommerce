@@ -1,4 +1,4 @@
-export async function signUp(values: {
+export async function sendOtp(values: {
   name: string;
   email: string;
   password: string;

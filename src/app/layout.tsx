@@ -4,6 +4,7 @@ import Modals from "@/components/ConditionalModal";
 import Navbar from "@/components/Navbar/Navbar";
 
 import "./globals.css";
+import Toastify from "@/components/Toast/Toastify";
 
 export const metadata = {
   title: "Ringify",
@@ -24,6 +25,7 @@ export default function RootLayout({
         {children}
         {modal}
         <Modals />
+        <Toastify />
       </body>
     </html>
   );

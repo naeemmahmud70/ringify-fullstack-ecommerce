@@ -14,18 +14,23 @@ import {
 
 import { Button } from "../ui/button";
 import CircularLoader from "../ui/CircularLoader";
+import { sendOtp, verifyOtp } from "@/services/auth";
+
+export interface signUpUserT {
+  name: string;
+  email: string;
+  password: string;
+}
 
 const SentOtp: React.FC<{
-  email: string;
   openOtp: boolean;
-  telegram: string;
+  signUpdata: signUpUserT;
   setOpenOtp: (value: boolean) => void;
   setIsAuthModalOpen: (value: boolean) => void;
   setOpenCongrats: (value: boolean) => void;
 }> = ({
-  email,
   openOtp,
-  telegram,
+  signUpdata,
   setOpenOtp,
   setIsAuthModalOpen,
   setOpenCongrats,
@@ -33,13 +38,14 @@ const SentOtp: React.FC<{
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
   const [invalidOtp, setInvalidOtp] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(60);
   const [sentAgain, setSentAgain] = useState(false);
   const [restartTimer, setRestartTimer] = useState(false);
   const [successOtp, setSuccessOtp] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const checkoutParams = searchParams.get("checkout");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleClose = () => {
     setIsAuthModalOpen(false);
@@ -57,39 +63,40 @@ const SentOtp: React.FC<{
     submittingRef.current = true;
 
     const verifyPayload = {
-      email: email,
-      otp: otp.toString(),
+      name: signUpdata.name,
+      email: signUpdata.email,
+      password: signUpdata.password,
+      otp: otp,
     };
 
-    // try {
-    //   setLoading(true);
-    //   const data = await verifyOtp(verifyPayload);
-    //   console.log("signup page", data);
-    //   if (data?.email) {
-    //     setSuccessOtp(true);
-    //     localStorage.setItem(
-    //       "loggedInUser",
-    //       JSON.stringify({
-    //         email: data.email,
-    //         id: data.userId,
-    //         sessionToken: data.auth.token,
-    //         accountId: data.auth.accountId,
-    //       })
-    //     );
-    //     if (checkoutParams) {
-    //       router.push("/product/baai-zen-smart-rings/checkout-page");
-    //     }
-    //     setOpenCongrats(true);
-    //   } else {
-    //     setSuccessOtp(false);
-    //     setInvalidOtp(true);
-    //   }
-    // } catch (err) {
-    //   console.log("err", err);
-    // } finally {
-    //   setLoading(false);
-    //   submittingRef.current = false;
-    // }
+    try {
+      setLoading(true);
+      const data = await verifyOtp(verifyPayload);
+      console.log("signup page", data);
+      if (data?.status == 201) {
+        setSuccessOtp(true);
+        localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify({
+            name: data?.user?.name,
+            email: data?.user?.email,
+          })
+        );
+        // if (checkoutParams) {
+        //   router.push("/product/baai-zen-smart-rings/checkout-page");
+        // }
+        setOpenCongrats(true);
+      } else {
+        setSuccessOtp(false);
+        setInvalidOtp(true);
+        setErrorMessage(data.message);
+      }
+    } catch (err) {
+      console.log("err", err);
+    } finally {
+      setLoading(false);
+      submittingRef.current = false;
+    }
   };
 
   const handleResentOtp = async () => {
@@ -98,28 +105,29 @@ const SentOtp: React.FC<{
     setInvalidOtp(false);
     setOtp("");
     const payload = {
-      email: email,
-      telegram: telegram,
+      name: signUpdata.name,
+      email: signUpdata.email,
+      password: signUpdata.password,
     };
     console.log("payload", payload);
-    // try {
-    //   setLoading(true);
-    //   const data = await sentOtp(payload);
-    //   setLoading(false);
-    //   if (data?.status === 200) {
-    //     setOpenOtp(true);
-    //   }
-    // } catch (err) {
-    //   console.log("err", err);
-    //   setLoading(false);
-    // }
+    try {
+      setLoading(true);
+      const data = await sendOtp(payload);
+      setLoading(false);
+      if (data?.status === 200) {
+        setOpenOtp(true);
+      }
+    } catch (err) {
+      console.log("err", err);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
     if (openOtp) {
-      setTimeLeft(30); // Reset timer every time modal opens
+      setTimeLeft(60); // Reset timer every time modal opens
       timer = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
@@ -133,7 +141,7 @@ const SentOtp: React.FC<{
 
     return () => clearInterval(timer);
   }, [openOtp, restartTimer]);
-  console.log("otp loading", loading);
+
   return (
     <>
       <DialogContent className="bg-[#030D0D] max-w-[452px]  p-5 md:px-10 md:py-5 border-none rounded-3xl md:rounded-3xl max-h-[80vh] sm:max-h-[90vh]">
@@ -150,7 +158,7 @@ const SentOtp: React.FC<{
             className="text-[#FFFFFF73] text-xs font-poppins font-normal leading-[22px] text-center"
           >
             Enter the 6-digit OTP sent to <br />{" "}
-            <span className="text-white">{email}</span>
+            <span className="text-white">{signUpdata?.email}</span>
           </DialogDescription>
 
           <X
@@ -202,7 +210,7 @@ const SentOtp: React.FC<{
         />
         {invalidOtp && (
           <p className="text-[#D80A0A] text-[14px] font-poppins leading-5 -mt-2">
-            Invalid Code. Please retry.
+            {errorMessage}
           </p>
         )}
         <Button
@@ -233,7 +241,7 @@ const SentOtp: React.FC<{
                 disabled={loading}
                 onClick={() => {
                   handleResentOtp();
-                  setTimeLeft(30);
+                  setTimeLeft(60);
                 }}
                 className="bg-transparent hover:bg-transparent border-0 text-xs font-semibold font-poppins text-[#25B021] m-0 px-1 leading-[22px]"
               >

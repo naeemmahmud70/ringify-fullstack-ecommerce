@@ -1,4 +1,3 @@
-
 import User from "@/models/User";
 import Otp from "@/models/Otp";
 import bcrypt from "bcryptjs";
@@ -13,18 +12,19 @@ export async function POST(req: Request) {
 
     // ✅ Check OTP
     const record = await Otp.findOne({ email, otp });
+    console.log("record", record);
     if (!record) {
-      return new Response(JSON.stringify({ error: "Invalid OTP" }), { status: 400 });
+      return Response.json({ status: 400, message: "Invalid OTP!" });
     }
 
     if (record.expiresAt < new Date()) {
-      return new Response(JSON.stringify({ error: "OTP expired" }), { status: 400 });
+      return Response.json({ status: 400, message: "OTP expired!" });
     }
 
     // ✅ Check existing user
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return new Response(JSON.stringify({ error: "User already exists" }), { status: 400 });
+      return Response.json({ status: 400, message: "User already exists!" });
     }
 
     // ✅ Hash password
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
       password: hashedPassword,
       verified: true,
     });
-
+    console.log("below");
     // ✅ Remove OTP after success
     await Otp.deleteMany({ email });
 
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
     const token = jwt.sign(
       { id: newUser._id, email: newUser.email },
       process.env.JWT_SECRET as string,
-      { expiresIn: "7d" }
+      { expiresIn: "1d" }
     );
 
     // ✅ Set token in cookie
@@ -58,7 +58,8 @@ export async function POST(req: Request) {
 
     // ✅ Send response
     return Response.json({
-      message: "User verified, created, and logged in",
+      status: 201,
+      message: "User verified and created!",
       user: {
         id: newUser._id,
         name: newUser.name,
@@ -68,12 +69,10 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error("Error in OTP verification:", error);
 
-    return new Response(
-      JSON.stringify({
-        error: "Failed to verify OTP",
-        details: error?.message || "Unknown error",
-      }),
-      { status: 500 }
-    );
+    return Response.json({
+      status: 500,
+      message: "Failed to verify OTP!",
+      details: error?.message || "Unknown error",
+    });
   }
 }
