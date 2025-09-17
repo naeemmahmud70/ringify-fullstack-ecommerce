@@ -44,12 +44,12 @@ export async function POST(req: Request) {
     // );
 
     // ✅ bcrypt hash the password before sending it back
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // const hashedPassword = await bcrypt.hash(password, 10);
 
     return Response.json({
       status: 200,
       message: "OTP sent to email",
-      user: { name, email, password: hashedPassword },
+      user: { name, email, password: password },
     });
   } catch (error: any) {
     return Response.json({

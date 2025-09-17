@@ -25,7 +25,7 @@ import Congrats from "./Congrats";
 import ForgetPassword from "./ForgetPassword";
 import SentOtp from "./SentOtp";
 import Link from "next/link";
-import { sendOtp } from "@/services/auth";
+import { Login, sendOtp } from "@/services/auth";
 import { useToastStore } from "@/store/toast";
 
 const loginSchema = z.object({
@@ -141,28 +141,43 @@ const LoginAndSignUp: React.FC<{
   }
   const handleLogin = async (values: any) => {
     console.log("login", values);
-    // try {
-    //   setLoading(true);
-    //   const data = await userLogin(values);
-    //   setLoading(false);
-    //   if (data?.email) {
-    //     localStorage.setItem("loggedInUser", JSON.stringify(data));
-    //     if (checkoutParams) {
-    //       router.push("/product/baai-zen-smart-rings/checkout-page");
-    //     }
-    //     setIsAuthModalOpen(false);
-    //   }
-    // } catch (err) {
-    //   setLoading(false);
-    //   console.log("err", err);
-    // }
+    try {
+      setLoading(true);
+      const data = await Login(values);
+      console.log("login data", data);
+      setLoading(false);
+      if (data?.status == 200) {
+        localStorage.setItem("loggedInUser", JSON.stringify(data.user));
+        // if (checkoutParams) {
+        //   router.push("/product/baai-zen-smart-rings/checkout-page");
+        // }
+        SetToastStates({
+          message: data.message,
+          variant: "success",
+          triggerId: Date.now(),
+        });
+        setIsAuthModalOpen(false);
+      } else {
+        SetToastStates({
+          message: data.message,
+          variant: "error",
+          triggerId: Date.now(),
+        });
+      }
+    } catch (error: any) {
+      setLoading(false);
+      SetToastStates({
+        message: error.message || "Something went wrong!",
+        variant: "error",
+        triggerId: Date.now(),
+      });
+    }
   };
   const handleSignUp = async (values: any) => {
-  
     try {
       setLoading(true);
       const data = await sendOtp(values);
-  console.log("data", data);
+      console.log("data", data);
       setLoading(false);
       if (data?.status === 200) {
         setSignUpData(data?.user);
@@ -192,7 +207,7 @@ const LoginAndSignUp: React.FC<{
 
   useEffect(() => {
     forms.reset();
-  }, [authMode]);
+  }, [authMode, isAuthModalOpen]);
 
   return (
     <>

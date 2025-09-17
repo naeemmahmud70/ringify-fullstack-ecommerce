@@ -10,6 +10,7 @@ import { useAuthModal } from "@/store/loginModal";
 import { Button } from "../ui/button";
 
 import AddedToCart from "./AddedToCart/AddedToCart";
+import { cookies } from "next/headers";
 
 const Navbar = () => {
   const { isAuthModalOpen, setIsAuthModalOpen, setBackgroundPath } =
@@ -60,6 +61,7 @@ const Navbar = () => {
       localStorage.removeItem("loggedInUser");
       localStorage.clear();
       setLoggedIn("");
+      router.push("/");
     }
   };
 
@@ -121,7 +123,6 @@ const Navbar = () => {
                 <Button
                   onClick={() => {
                     handleLogout();
-                    router.replace("/product/baai-zen-smart-rings");
                   }}
                   className="w-[136px] h-[56px] bg-transparent hover:bg-transparent leading-[180%] tracking-[0px] px-[40px] py-[15px] border border-[#ffffff] rounded-[88px] text-[#ffffff] text-[16px] font-poppins"
                 >
@@ -237,7 +238,6 @@ const Navbar = () => {
                 <Button
                   onClick={() => {
                     handleLogout();
-                    router.replace("/product/baai-zen-smart-rings");
                   }}
                   className=" w-[136px] h-[56px] block border bg-transparent hover:bg-transparent text-center text-[16px] border-white text-white font-poppins font-medium px-4 py-2  mt-2 rounded-full"
                 >
