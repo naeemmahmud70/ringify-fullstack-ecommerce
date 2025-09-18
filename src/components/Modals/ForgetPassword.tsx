@@ -59,7 +59,6 @@ const ForgetPassword: React.FC<{
     try {
       setLoading(true);
       const data = await sendForgetPassOtp(values);
-      console.log("data", data);
       setLoading(false);
       if (data?.status === 200) {
         SetToastStates({

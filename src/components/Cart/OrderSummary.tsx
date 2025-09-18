@@ -30,12 +30,9 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
 
   const handleCheckout = () => {
     if (loggedInUser?.id) {
-      console.log("route");
       router.push("/product/smart-rings/checkout");
     } else {
-      console.log("modal");
       setIsAuthModalOpen(true);
-      console.log("routePathname", routePathname);
       setBackgroundPath(routePathname);
       router.push("/login");
     }

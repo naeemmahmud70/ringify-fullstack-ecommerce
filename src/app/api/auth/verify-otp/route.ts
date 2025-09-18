@@ -13,7 +13,6 @@ export async function POST(req: Request) {
 
     // ✅ Check OTP
     const record = await Otp.findOne({ email, otp });
-    console.log("record", record);
     if (!record) {
       return Response.json({ status: 400, message: "Invalid OTP!" });
     }
@@ -38,7 +37,6 @@ export async function POST(req: Request) {
       password: hashedPassword,
       verified: true,
     });
-    console.log("below");
     // ✅ Remove OTP after success
     await Otp.deleteMany({ email });
 

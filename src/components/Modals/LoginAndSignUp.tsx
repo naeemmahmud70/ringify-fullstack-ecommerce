@@ -196,10 +196,8 @@ const LoginAndSignUp: React.FC<{
           variant: "error",
           triggerId: Date.now(),
         });
-        console.log(data);
       }
     } catch (error: any) {
-      console.log("err", error);
       setLoading(false);
       SetToastStates({
         message: error,

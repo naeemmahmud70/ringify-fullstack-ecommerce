@@ -9,7 +9,6 @@ export async function POST(req: Request) {
   try {
     await connectMongo();
     const { email, password } = await req.json();
-    console.log("email, password", email, password);
 
     // ✅ Basic validation
     if (!email || !password) {
@@ -21,19 +20,15 @@ export async function POST(req: Request) {
 
     // ✅ Check if user exists
     const user = await User.findOne({ email });
-    console.log("below...........", user);
     if (!user) {
       return Response.json({ status: 404, message: "User not found!" });
     }
 
     // ✅ Validate password
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log("isMatch...........", isMatch);
     if (!isMatch) {
       return Response.json({ status: 401, message: "Invalid password!" });
     }
-
-    console.log("below...........");
 
     // ✅ Generate JWT token
     const token = jwt.sign(

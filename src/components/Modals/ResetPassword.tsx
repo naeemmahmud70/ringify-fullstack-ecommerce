@@ -104,9 +104,7 @@ const ResetPassword: React.FC<{
           triggerId: Date.now(),
         });
         setLoading(false);
-        console.log("err", err);
       }
-      console.log("resetPayload", resetPayload);
     }
   }
 

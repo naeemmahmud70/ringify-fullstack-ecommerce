@@ -76,7 +76,6 @@ const VerifyOtp: React.FC<{
     try {
       setLoading(true);
       const data = await verifyOtp(verifyPayload);
-      console.log("signup page", data);
       if (data?.status == 201) {
         setSuccessOtp(true);
         setLoggedInUser({
@@ -105,7 +104,6 @@ const VerifyOtp: React.FC<{
         setErrorMessage(data.message);
       }
     } catch (err) {
-      console.log("err", err);
     } finally {
       setLoading(false);
       submittingRef.current = false;
@@ -122,7 +120,6 @@ const VerifyOtp: React.FC<{
       email: signUpdata.email,
       password: signUpdata.password,
     };
-    console.log("payload", payload);
     try {
       setLoading(true);
       const data = await sendOtp(payload);
@@ -131,7 +128,6 @@ const VerifyOtp: React.FC<{
         setOpenOtp(true);
       }
     } catch (err) {
-      console.log("err", err);
       setLoading(false);
     }
   };
