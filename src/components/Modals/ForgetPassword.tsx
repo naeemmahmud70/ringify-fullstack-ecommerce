@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -10,7 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { sendForgetPassOtp } from "@/services/auth";
 import { useLoading } from "@/store/loading";
+import { useAuthModal } from "@/store/loginModal";
+import { useToastStore } from "@/store/toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "../ui/button";
@@ -29,9 +33,20 @@ const schema = z.object({
 });
 
 const ForgetPassword: React.FC<{
+  setResetEmail: (value: string) => void;
   setIsAuthModalOpen: (value: boolean) => void;
-}> = ({ setIsAuthModalOpen }) => {
+  setOpenResetPass: (value: boolean) => void;
+  setOpenForgetPass: (value: boolean) => void;
+}> = ({
+  setResetEmail,
+  setOpenResetPass,
+  setIsAuthModalOpen,
+  setOpenForgetPass,
+}) => {
   const { loading, setLoading } = useLoading.getState();
+  const { backgroundPath } = useAuthModal();
+  const router = useRouter();
+  const { SetToastStates } = useToastStore();
 
   const forms = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -41,21 +56,41 @@ const ForgetPassword: React.FC<{
   });
 
   async function onSubmit(values: z.infer<typeof schema>) {
-    // try {
-    //   setLoading(true);
-    //   const data = await forgetPassword(values);
-    //   setLoading(false);
-    //   if (data?.status === 200) {
-    //     setIsAuthModalOpen(false);
-    //   }
-    // } catch (err) {
-    //   setLoading(false);
-    //   console.log("err", err);
-    // }
+    try {
+      setLoading(true);
+      const data = await sendForgetPassOtp(values);
+      console.log("data", data);
+      setLoading(false);
+      if (data?.status === 200) {
+        SetToastStates({
+          message: "OTP sent to your email",
+          variant: "success",
+          triggerId: Date.now(),
+        });
+        setResetEmail(data?.email);
+        setOpenForgetPass(false);
+        setOpenResetPass(true);
+      } else {
+        SetToastStates({
+          message: data.message,
+          variant: "error",
+          triggerId: Date.now(),
+        });
+      }
+    } catch (err: any) {
+      setLoading(false);
+      SetToastStates({
+        message: err.message || "Something went wwwrong!",
+        variant: "error",
+        triggerId: Date.now(),
+      });
+    }
   }
 
   const handleClose = () => {
+    setOpenForgetPass(false);
     setIsAuthModalOpen(false);
+    router.push(backgroundPath);
   };
   return (
     <DialogContent className="bg-[#030D0D] max-w-[456px]  p-5 md:p-10 border-none rounded-3xl md:rounded-3xl max-h-[80vh] sm:max-h-[90vh]">
@@ -94,7 +129,7 @@ const ForgetPassword: React.FC<{
             type="submit"
             className="w-full bg-[#25B021] hover:bg-[#25B021] text-[14px] font-normal py-7 px-10 rounded-xl font-poppins h-11 mt-7"
           >
-            {loading ? <CircularLoader /> : "Reset Password"}
+            {loading ? <CircularLoader /> : "Send Otp"}
           </Button>
         </form>
       </Form>

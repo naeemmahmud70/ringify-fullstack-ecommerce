@@ -4,13 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import { useAuthModal } from "@/store/loginModal";
-import { Button } from "../ui/button";
-import AddedToCart from "./AddedToCart/AddedToCart";
-import { useLoggedInUser, useSelectedRings } from "@/store/users";
+
 import { navbarItems } from "@/Data/navbarItems";
-import { useToastStore } from "@/store/toast";
 import { logout } from "@/services/auth";
+import { useAuthModal } from "@/store/loginModal";
+import { useToastStore } from "@/store/toast";
+import { useLoggedInUser, useSelectedRings } from "@/store/users";
+
+import { Button } from "../ui/button";
+
+import AddedToCart from "./AddedToCart/AddedToCart";
 
 const Navbar = () => {
   const { setIsAuthModalOpen, setBackgroundPath } = useAuthModal();

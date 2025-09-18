@@ -1,4 +1,4 @@
-import { useRingOffer, useSelectedRings } from "@/store/users";
+import { useRingOffer } from "@/store/users";
 
 export const getSelectedOffer = () => {
   const stored = localStorage.getItem("selectedOffer");

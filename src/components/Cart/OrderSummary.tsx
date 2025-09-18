@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+
+import { useAuthModal } from "@/store/loginModal";
+import { useLoggedInUser } from "@/store/users";
 
 import { Button } from "../ui/button";
 
 import { OfferT } from "./CartItems";
-import { useLoggedInUser } from "@/store/users";
-import { useAuthModal } from "@/store/loginModal";
 
 interface OrderSummaryProps {
   ringQuantity: number;

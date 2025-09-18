@@ -3,7 +3,7 @@ export async function sendOtp(values: {
   email: string;
   password: string;
 }) {
-  const res = await fetch("/api/auth/signup", {
+  const res = await fetch("/api/auth/signup-otp", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(values),
@@ -58,6 +58,40 @@ export async function logout() {
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({}));
     throw new Error(errorData.message || "Logout failed. Please try again.");
+  }
+
+  return res.json();
+}
+
+export async function sendForgetPassOtp(values: { email: string }) {
+  const res = await fetch("/api/auth/forgot-password-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(values),
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Otp sending failed");
+  }
+
+  return res.json();
+}
+
+export async function resetPassword(values: {
+  otp: string;
+  email: string;
+  password: string;
+}) {
+  const res = await fetch("/api/auth/reset-password", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(values),
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Reset password failed!");
   }
 
   return res.json();

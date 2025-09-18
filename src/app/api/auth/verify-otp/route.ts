@@ -1,9 +1,10 @@
-import User from "@/models/User";
-import Otp from "@/models/Otp";
+import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
+
 import connectMongo from "@/lib/connect-mongo";
+import Otp from "@/models/Otp";
+import User from "@/models/User";
 
 export async function POST(req: Request) {
   try {

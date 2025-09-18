@@ -1,8 +1,9 @@
-import connectMongo from "@/lib/connect-mongo";
-import User from "@/models/User";
+import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
+
+import connectMongo from "@/lib/connect-mongo";
+import User from "@/models/User";
 
 export async function POST(req: Request) {
   try {

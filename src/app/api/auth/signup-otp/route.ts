@@ -1,9 +1,7 @@
-import User from "@/models/User";
-import Otp from "@/models/Otp";
-import { sendEmail } from "@/lib/sendEmail";
 import connectMongo from "@/lib/connect-mongo";
+import Otp from "@/models/Otp";
+import User from "@/models/User";
 import { generateOtp } from "@/utils/generateOtp";
-import bcrypt from "bcryptjs";
 
 const OTP_EXPIRY_MINUTES = Number(process.env.OTP_EXPIRY_MINUTES || 5);
 

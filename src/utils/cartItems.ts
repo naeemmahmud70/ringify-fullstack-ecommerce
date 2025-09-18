@@ -1,9 +1,6 @@
-import { CartItemT, OfferT } from "@/components/Cart/CartItems";
+import { CartItemT } from "@/components/Cart/CartItems";
 
-export const splitCartItems = (
-  cartItems: CartItemT[],
-  selectedOffer: OfferT
-) => {
+export const splitCartItems = (cartItems: CartItemT[]) => {
   const expanded = expandCartItems(cartItems);
 
   // If less than 6 items → all are selected, none free
@@ -15,9 +12,7 @@ export const splitCartItems = (
   }
 
   // Otherwise calculate free
-  const freeCount = Math.floor(
-    (expanded.length + 1) / 6
-  );
+  const freeCount = Math.floor((expanded.length + 1) / 6);
   const selectedCount = expanded.length - freeCount;
 
   const selectedExpanded = expanded.slice(0, selectedCount);

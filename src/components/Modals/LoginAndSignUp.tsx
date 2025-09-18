@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSearchParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,21 +14,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Form } from "@/components/ui/form";
+import InputBox from "@/components/ui/InputBox";
+import { Login, sendOtp } from "@/services/auth";
+import { useToastStore } from "@/store/toast";
+import { useLoggedInUser } from "@/store/users";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "../ui/button";
 import CircularLoader from "../ui/CircularLoader";
-import { Form } from "@/components/ui/form";
-import InputBox from "@/components/ui/InputBox";
 import { Label } from "../ui/label";
 
 import Congrats from "./Congrats";
 import ForgetPassword from "./ForgetPassword";
-import SentOtp from "./SentOtp";
-import Link from "next/link";
-import { Login, sendOtp } from "@/services/auth";
-import { useToastStore } from "@/store/toast";
-import { useLoggedInUser } from "@/store/users";
+import ResetPassword from "./ResetPassword";
+import VerifyOtp from "./VerifyOtp";
 
 const loginSchema = z.object({
   email: z
@@ -97,11 +98,9 @@ const LoginAndSignUp: React.FC<{
   const [authMode, setAuthMode] = useState("login");
   const [openForgetPass, setOpenForgetPass] = useState(false);
   const [openCongrats, setOpenCongrats] = useState(false);
-  const [email, setEmail] = useState("");
-  const [telegram, setTelegram] = useState("");
-  const searchParams = useSearchParams();
+  const [openResetPass, setOpenResetPass] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
   const router = useRouter();
-  const checkoutParams = searchParams.get("checkout");
   const pathname = usePathname();
   const { SetToastStates } = useToastStore();
   const { setLoggedInUser } = useLoggedInUser();
@@ -134,7 +133,6 @@ const LoginAndSignUp: React.FC<{
   });
 
   async function onSubmit(values: any) {
-    setEmail(values.email);
     if (authMode === "login") {
       handleLogin(values);
     } else {
@@ -188,7 +186,6 @@ const LoginAndSignUp: React.FC<{
     try {
       setLoading(true);
       const data = await sendOtp(values);
-      console.log("data", data);
       setLoading(false);
       if (data?.status === 200) {
         setSignUpData(data?.user);
@@ -223,7 +220,7 @@ const LoginAndSignUp: React.FC<{
   return (
     <>
       <Dialog open={isAuthModalOpen} onOpenChange={handleClose}>
-        {!openOtp && !openForgetPass && (
+        {!openOtp && !openForgetPass && !openResetPass && (
           <DialogContent className="bg-[#030D0D] max-w-[456px]  p-5 md:p-10 border-none rounded-3xl md:rounded-3xl ">
             <DialogHeader>
               <DialogTitle className="text-[28px] text-white font-mulish font-extrabold text-center tracking-wide leading-8">
@@ -306,17 +303,14 @@ const LoginAndSignUp: React.FC<{
                   </div>
 
                   {authMode === "login" && (
-                    <div>
-                      {" "}
-                      <div className="flex justify-end">
-                        <button
-                          type="button"
-                          onClick={handleOpenForgetPass}
-                          className="bg-transparent border-0 text-xs font-normal font-poppins text-white"
-                        >
-                          Forget Password?
-                        </button>
-                      </div>
+                    <div className="flex justify-end">
+                      <Link
+                        href="#"
+                        onClick={handleOpenForgetPass}
+                        className="bg-transparent border-0 text-xs font-normal font-poppins text-white"
+                      >
+                        Forget Password?
+                      </Link>
                     </div>
                   )}
 
@@ -333,7 +327,7 @@ const LoginAndSignUp: React.FC<{
           </DialogContent>
         )}
         {openOtp && !openCongrats && (
-          <SentOtp
+          <VerifyOtp
             openOtp={openOtp}
             signUpdata={signUpdata}
             setOpenOtp={setOpenOtp}
@@ -348,7 +342,19 @@ const LoginAndSignUp: React.FC<{
           />
         )}
         {openForgetPass && (
-          <ForgetPassword setIsAuthModalOpen={setIsAuthModalOpen} />
+          <ForgetPassword
+            setResetEmail={setResetEmail}
+            setOpenResetPass={setOpenResetPass}
+            setOpenForgetPass={setOpenForgetPass}
+            setIsAuthModalOpen={setIsAuthModalOpen}
+          />
+        )}
+        {openResetPass && (
+          <ResetPassword
+            resetEmail={resetEmail}
+            setOpenResetPass={setOpenResetPass}
+            setIsAuthModalOpen={setIsAuthModalOpen}
+          />
         )}
       </Dialog>
     </>

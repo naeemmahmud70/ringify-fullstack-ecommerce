@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, X } from "lucide-react";
 import OtpInput from "react-otp-input";
@@ -11,12 +10,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { sendOtp, verifyOtp } from "@/services/auth";
+import { useAuthModal } from "@/store/loginModal";
+import { useLoggedInUser } from "@/store/users";
 
 import { Button } from "../ui/button";
 import CircularLoader from "../ui/CircularLoader";
-import { sendOtp, verifyOtp } from "@/services/auth";
-import { useLoggedInUser } from "@/store/users";
-import { useAuthModal } from "@/store/loginModal";
 
 export interface signUpUserT {
   name: string;
@@ -24,7 +23,7 @@ export interface signUpUserT {
   password: string;
 }
 
-const SentOtp: React.FC<{
+const VerifyOtp: React.FC<{
   openOtp: boolean;
   signUpdata: signUpUserT;
   setOpenOtp: (value: boolean) => void;
@@ -44,16 +43,15 @@ const SentOtp: React.FC<{
   const [sentAgain, setSentAgain] = useState(false);
   const [restartTimer, setRestartTimer] = useState(false);
   const [successOtp, setSuccessOtp] = useState(false);
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const checkoutParams = searchParams.get("checkout");
   const [errorMessage, setErrorMessage] = useState("");
   const { setLoggedInUser } = useLoggedInUser();
   const { backgroundPath } = useAuthModal();
-  const pathname = usePathname();
 
   const handleClose = () => {
+    setOpenOtp(false);
     setIsAuthModalOpen(false);
+    router.push(backgroundPath);
   };
   const handleBack = () => {
     setOpenOtp(false);
@@ -270,4 +268,4 @@ const SentOtp: React.FC<{
   );
 };
 
-export default SentOtp;
+export default VerifyOtp;

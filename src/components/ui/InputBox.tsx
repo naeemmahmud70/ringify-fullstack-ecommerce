@@ -1,10 +1,11 @@
 import React from "react";
 import Image from "next/image";
 
-import { Input, InputProps } from "./input";
 import { alphanumericRegex } from "@/utils/regexPatterns";
 
 import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+
+import { Input, InputProps } from "./input";
 
 interface InputBoxI extends InputProps {
   className: string;

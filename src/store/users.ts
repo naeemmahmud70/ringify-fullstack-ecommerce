@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
 import { selectedRingPropsT } from "@/components/SelectRings/SelectRings";
+import { getLoggedInUser } from "@/utils/getLoggedInUser";
 
 import { getSelectedRingDetails } from "../utils/selectedRingDetails";
-import { getLoggedInUser } from "@/utils/getLoggedInUser";
 
 export interface loggedInUserT {
   name: string;
@@ -15,7 +15,6 @@ interface userState {
   setLoggedInUser: (loading: loggedInUserT) => void;
 }
 const user = getLoggedInUser();
-console.log("user", user);
 export const useLoggedInUser = create<userState>(set => ({
   loggedInUser: {
     name: user?.name ?? "",
