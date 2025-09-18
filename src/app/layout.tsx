@@ -1,7 +1,8 @@
 import React from "react";
 
+import Modals from "@/components/ConditionalModal";
 import Navbar from "@/components/Navbar/Navbar";
-import { AppProviders } from "@/context/AppProviders";
+import Toastify from "@/components/Toast/Toastify";
 
 import "./globals.css";
 
@@ -12,16 +13,19 @@ export const metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body>
-        <AppProviders>
-          <Navbar />
-          {children}
-        </AppProviders>
+        <Navbar />
+        {children}
+        {modal}
+        <Modals />
+        <Toastify />
       </body>
     </html>
   );

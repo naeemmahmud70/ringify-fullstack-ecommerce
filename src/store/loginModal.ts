@@ -1,11 +1,15 @@
 import { create } from "zustand";
 
 interface LoaderState {
-  isModalOpen: boolean;
-  setIsModalOpen: (isModalOpen: boolean) => void;
+  isAuthModalOpen: boolean;
+  backgroundPath: string;
+  setIsAuthModalOpen: (isAuthModalOpen: boolean) => void;
+  setBackgroundPath: (path: string) => void;
 }
 
-export const useLoginModal = create<LoaderState>(set => ({
-  isModalOpen: false,
-  setIsModalOpen: isModalOpen => set({ isModalOpen }),
+export const useAuthModal = create<LoaderState>(set => ({
+  isAuthModalOpen: false,
+  backgroundPath: "/",
+  setIsAuthModalOpen: isAuthModalOpen => set({ isAuthModalOpen }),
+  setBackgroundPath: (path: string) => set({ backgroundPath: path }),
 }));
