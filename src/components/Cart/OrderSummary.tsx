@@ -2,11 +2,13 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { Button } from "../ui/button";
 
 import { OfferT } from "./CartItems";
+import { useLoggedInUser } from "@/store/users";
+import { useAuthModal } from "@/store/loginModal";
 
 interface OrderSummaryProps {
   ringQuantity: number;
@@ -22,9 +24,21 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   selectedOffer,
 }) => {
   const router = useRouter();
+  const { loggedInUser } = useLoggedInUser();
+  const { setIsAuthModalOpen, setBackgroundPath } = useAuthModal();
+  const routePathname = usePathname();
 
   const handleCheckout = () => {
-    router.push("/product/baai-zen-smart-rings/checkout-page");
+    if (loggedInUser?.id) {
+      console.log("route");
+      router.push("/product/smart-rings/checkout");
+    } else {
+      console.log("modal");
+      setIsAuthModalOpen(true);
+      console.log("routePathname", routePathname);
+      setBackgroundPath(routePathname);
+      router.push("/login");
+    }
   };
 
   return (
@@ -75,12 +89,12 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 </p>
               </div>
 
-              <Link
-                href="/product/smart-rings/checkout"
+              <Button
+                onClick={handleCheckout}
                 className="text-[#FFFFFF] py-1 px-5 text-[16px] font-poppins  font-medium bg-transparent hover:bg-transparent  rounded-full border border-[#25B021] inline-block"
               >
                 <span>Apply</span>
-              </Link>
+              </Button>
             </div>
           )}
         </div>

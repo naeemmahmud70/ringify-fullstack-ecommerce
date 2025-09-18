@@ -12,7 +12,7 @@ const Toastify = () => {
   useEffect(() => {
     if (toastStates?.message && toastStates?.variant) {
       const toastFunc = toast[toastStates.variant] || toast;
-      toastFunc(toastStates.message, { autoClose: 4000 });
+      toastFunc(toastStates.message, { autoClose: 2000 });
     }
   }, [toastStates.triggerId]);
 

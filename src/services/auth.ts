@@ -51,3 +51,14 @@ export async function Login(values: { email: string; password: string }) {
 
   return res.json();
 }
+
+export async function logout() {
+  const res = await fetch("/api/auth/logout", { method: "POST" });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || "Logout failed. Please try again.");
+  }
+
+  return res.json();
+}

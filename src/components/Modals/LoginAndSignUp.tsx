@@ -27,6 +27,7 @@ import SentOtp from "./SentOtp";
 import Link from "next/link";
 import { Login, sendOtp } from "@/services/auth";
 import { useToastStore } from "@/store/toast";
+import { useLoggedInUser } from "@/store/users";
 
 const loginSchema = z.object({
   email: z
@@ -103,6 +104,7 @@ const LoginAndSignUp: React.FC<{
   const checkoutParams = searchParams.get("checkout");
   const pathname = usePathname();
   const { SetToastStates } = useToastStore();
+  const { setLoggedInUser } = useLoggedInUser();
   const [signUpdata, setSignUpData] = useState({
     name: "",
     email: "",
@@ -139,24 +141,33 @@ const LoginAndSignUp: React.FC<{
       handleSignUp(values);
     }
   }
+
+  const isCartRoute = backgroundPath?.includes("/cart");
+
   const handleLogin = async (values: any) => {
-    console.log("login", values);
     try {
       setLoading(true);
       const data = await Login(values);
-      console.log("login data", data);
       setLoading(false);
       if (data?.status == 200) {
+        setLoggedInUser({
+          name: data?.user?.name,
+          email: data?.user?.email,
+          id: data?.user?.id,
+        });
         localStorage.setItem("loggedInUser", JSON.stringify(data.user));
-        // if (checkoutParams) {
-        //   router.push("/product/baai-zen-smart-rings/checkout-page");
-        // }
+
         SetToastStates({
           message: data.message,
           variant: "success",
           triggerId: Date.now(),
         });
         setIsAuthModalOpen(false);
+        if (isCartRoute) {
+          router.push("/product/smart-rings/checkout");
+        } else {
+          router.push(backgroundPath);
+        }
       } else {
         SetToastStates({
           message: data.message,

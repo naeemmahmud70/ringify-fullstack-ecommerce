@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, X } from "lucide-react";
 import OtpInput from "react-otp-input";
@@ -15,6 +15,8 @@ import {
 import { Button } from "../ui/button";
 import CircularLoader from "../ui/CircularLoader";
 import { sendOtp, verifyOtp } from "@/services/auth";
+import { useLoggedInUser } from "@/store/users";
+import { useAuthModal } from "@/store/loginModal";
 
 export interface signUpUserT {
   name: string;
@@ -46,16 +48,20 @@ const SentOtp: React.FC<{
   const router = useRouter();
   const checkoutParams = searchParams.get("checkout");
   const [errorMessage, setErrorMessage] = useState("");
+  const { setLoggedInUser } = useLoggedInUser();
+  const { backgroundPath } = useAuthModal();
+  const pathname = usePathname();
 
   const handleClose = () => {
     setIsAuthModalOpen(false);
   };
-
   const handleBack = () => {
     setOpenOtp(false);
   };
 
   const submittingRef = React.useRef(false);
+  const isCartRoute = backgroundPath?.includes("/cart");
+
   const handleOtpSubmit = async () => {
     if (submittingRef.current) {
       return;
@@ -75,6 +81,12 @@ const SentOtp: React.FC<{
       console.log("signup page", data);
       if (data?.status == 201) {
         setSuccessOtp(true);
+        setLoggedInUser({
+          name: data?.user?.name,
+          email: data?.user?.email,
+          id: data?.user?.id,
+        });
+        localStorage.setItem("loggedInUser", JSON.stringify(data.user));
         localStorage.setItem(
           "loggedInUser",
           JSON.stringify({
@@ -82,10 +94,13 @@ const SentOtp: React.FC<{
             email: data?.user?.email,
           })
         );
-        // if (checkoutParams) {
-        //   router.push("/product/baai-zen-smart-rings/checkout-page");
-        // }
+
         setOpenCongrats(true);
+        if (isCartRoute) {
+          router.push("/product/smart-rings/checkout");
+        } else {
+          router.push(backgroundPath);
+        }
       } else {
         setSuccessOtp(false);
         setInvalidOtp(true);

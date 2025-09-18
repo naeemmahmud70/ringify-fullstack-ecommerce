@@ -4,65 +4,30 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-
 import { useAuthModal } from "@/store/loginModal";
-
 import { Button } from "../ui/button";
-
 import AddedToCart from "./AddedToCart/AddedToCart";
-import { cookies } from "next/headers";
+import { useLoggedInUser, useSelectedRings } from "@/store/users";
+import { navbarItems } from "@/Data/navbarItems";
+import { useToastStore } from "@/store/toast";
+import { logout } from "@/services/auth";
 
 const Navbar = () => {
-  const { isAuthModalOpen, setIsAuthModalOpen, setBackgroundPath } =
-    useAuthModal();
+  const { setIsAuthModalOpen, setBackgroundPath } = useAuthModal();
+  const { setSelectedRings } = useSelectedRings();
   const [isOpen, setIsOpen] = useState(false);
-  const [loggedIn, setLoggedIn] = useState("");
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const routePathname = usePathname();
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  type itemT = {
-    name: string;
-    link: string;
-    id: string;
-  };
-
-  const navbarItems: itemT[] = [
-    {
-      name: "Our Store",
-      link: "/product/smart-rings/ourstore",
-      id: "our-store",
-    },
-    {
-      name: "Blogs",
-      link: "/blog",
-      id: "blogs",
-    },
-  ];
+  const { loggedInUser, setLoggedInUser } = useLoggedInUser();
+  const { SetToastStates } = useToastStore();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem("loggedInUser");
-    if (loggedInUser) {
-      const parsedValue = JSON.parse(loggedInUser);
-      setLoggedIn(parsedValue?.email);
-    }
-  }, [loggedIn, isAuthModalOpen]);
-
-  const handleLogout = async () => {
-    if (loggedIn) {
-      localStorage.removeItem("loggedInUser");
-      localStorage.clear();
-      setLoggedIn("");
-      router.push("/");
-    }
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
   };
 
   useEffect(() => {
@@ -78,7 +43,29 @@ const Navbar = () => {
     return null;
   }
 
-  console.log("path", routePathname);
+  const handleLogout = async () => {
+    try {
+      const response = await logout();
+      if (loggedInUser && response.status == 200) {
+        localStorage.clear();
+        setLoggedInUser({ name: "", email: "", id: "" });
+        router.push("/");
+        setSelectedRings([]);
+        SetToastStates({
+          message: response?.message,
+          variant: "success",
+          triggerId: Date.now(),
+        });
+      }
+    } catch (error: any) {
+      SetToastStates({
+        message: "Something went wrong! Please try again.",
+        variant: "error",
+        triggerId: Date.now(),
+      });
+    }
+  };
+
   return (
     <div className=" text-white absolute top-[-10px] w-full px-2 lg:px-8 z-50 bg-transparent lg:bg-transparent">
       <div className="max-w-7xl mx-auto sm:px-6 md:px-8 lg:px-0 ">
@@ -118,12 +105,10 @@ const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex lg:gap-3 xl:gap-8 items-center">
-            {loggedIn ? (
+            {loggedInUser?.id ? (
               <>
                 <Button
-                  onClick={() => {
-                    handleLogout();
-                  }}
+                  onClick={() => handleLogout()}
                   className="w-[136px] h-[56px] bg-transparent hover:bg-transparent leading-[180%] tracking-[0px] px-[40px] py-[15px] border border-[#ffffff] rounded-[88px] text-[#ffffff] text-[16px] font-poppins"
                 >
                   Log Out
@@ -234,11 +219,9 @@ const Navbar = () => {
               className=" inline-block w-full"
               onClick={() => setIsOpen(false)}
             >
-              {loggedIn ? (
+              {loggedInUser?.id ? (
                 <Button
-                  onClick={() => {
-                    handleLogout();
-                  }}
+                  onClick={() => handleLogout()}
                   className=" w-[136px] h-[56px] block border bg-transparent hover:bg-transparent text-center text-[16px] border-white text-white font-poppins font-medium px-4 py-2  mt-2 rounded-full"
                 >
                   Log out

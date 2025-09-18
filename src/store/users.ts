@@ -3,14 +3,25 @@ import { create } from "zustand";
 import { selectedRingPropsT } from "@/components/SelectRings/SelectRings";
 
 import { getSelectedRingDetails } from "../utils/selectedRingDetails";
+import { getLoggedInUser } from "@/utils/getLoggedInUser";
 
-interface userState {
-  loggedInUser: boolean;
-  setLoggedInUser: (loading: boolean) => void;
+export interface loggedInUserT {
+  name: string;
+  email: string;
+  id: string;
 }
-
+interface userState {
+  loggedInUser: loggedInUserT;
+  setLoggedInUser: (loading: loggedInUserT) => void;
+}
+const user = getLoggedInUser();
+console.log("user", user);
 export const useLoggedInUser = create<userState>(set => ({
-  loggedInUser: false,
+  loggedInUser: {
+    name: user?.name ?? "",
+    email: user?.email ?? "",
+    id: user?.id ?? "",
+  },
   setLoggedInUser: loggedInUser => set({ loggedInUser }),
 }));
 
