@@ -13,6 +13,7 @@ import {
 
 import CartItems, { CartItemT } from "./CartItems";
 import OrderSummary from "./OrderSummary";
+import DiscountInput from "./DiscountInput";
 
 const Cart = () => {
   const router = useRouter();
@@ -64,12 +65,20 @@ const Cart = () => {
             setFreeRings={setFreeRings}
             selectedOffer={selectedOffer}
           />
-          <OrderSummary
-            ringQuantity={ringQuantity}
-            basePrice={basePrice}
-            freeRings={freeRings.length}
-            selectedOffer={selectedOffer}
-          />
+          <div className="w-full lg:w-2/5 space-y-6">
+            <div className="w-full">
+              <DiscountInput
+                freeRings={freeRings.length}
+                selectedOffer={selectedOffer}
+              />
+              <OrderSummary
+                ringQuantity={ringQuantity}
+                basePrice={basePrice}
+                freeRings={freeRings.length}
+                selectedOffer={selectedOffer}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

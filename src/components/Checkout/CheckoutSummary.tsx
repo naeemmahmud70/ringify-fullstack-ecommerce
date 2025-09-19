@@ -7,8 +7,7 @@ import { useAuthModal } from "@/store/loginModal";
 import { useLoggedInUser } from "@/store/users";
 
 import { Button } from "../ui/button";
-
-import { OfferT } from "./CartItems";
+import { OfferT } from "../Cart/CartItems";
 
 interface OrderSummaryProps {
   ringQuantity: number;
@@ -17,7 +16,7 @@ interface OrderSummaryProps {
   selectedOffer: OfferT;
 }
 
-const OrderSummary: React.FC<OrderSummaryProps> = ({
+const CheckoutSummary: React.FC<OrderSummaryProps> = ({
   ringQuantity,
   basePrice,
   freeRings,
@@ -40,10 +39,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
 
   return (
     <div className="w-full ">
-      <div className="space-y-5 mt-3 border border-white/20 rounded-xl p-4">
-        <p className="w-[161px] text-[16px] font-medium align-middle tracking-normal mb-4 mt-5 font-poppins text-white leading-[30px] whitespace-nowrap">
-          Order Summary
-        </p>
+      <div className="space-y-5 border border-white/20 rounded-xl p-4">
         <div className="flex justify-between text-sm-xs text-white font-medium font-poppins">
           <p className="font-poppins font-normal text-[18px] leading-[100%] tracking-[0%] align-middle text-[#FFFFFFB2]">
             Subtotal
@@ -106,7 +102,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
               id="checkout-page-without-loggedIn"
               className="w-[141px] h-[27px] font-medium mt-2 text-[18px] leading-[100%] tracking-normal font-poppins whitespace-nowrap"
             >
-              Go to Checkout
+              Proceed to Pay
             </span>
             <Image
               width={18}
@@ -122,4 +118,4 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   );
 };
 
-export default OrderSummary;
+export default CheckoutSummary;

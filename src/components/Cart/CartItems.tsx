@@ -71,7 +71,7 @@ const CartItems: React.FC<CartItemsProps> = ({
 
   useEffect(() => {
     if (selectedOffer.PROMO_OFFER_1 || selectedOffer.PROMO_OFFER_2) {
-      const { paid, free } = splitCartItems(cartItems, selectedOffer);
+      const { paid, free } = splitCartItems(cartItems);
       setPaidRings(paid);
       setFreeRings(free);
     } else {
