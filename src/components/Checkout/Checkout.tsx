@@ -14,24 +14,28 @@ const Checkout = () => {
   const { selectedOffer, setSelectedOffer } = useRingOffer();
   const [paidRings, setPaidRings] = useState<CartItemT[]>([]);
   const [freeRings, setFreeRings] = useState<CartItemT[]>([]);
+  const [discount, setDiscount] = useState(0);
   const basePrice = Number(config.BASE_PRICE);
 
   useEffect(() => {
     const offer = getSelectedOffer();
     if (offer) {
+      setDiscount(0);
       setSelectedOffer(offer);
     }
   }, []);
 
   useEffect(() => {
     if (selectedOffer.PROMO_OFFER_1 || selectedOffer.PROMO_OFFER_2) {
+      console.log("selectedRings", selectedRings);
       const { paid, free } = splitCartItems(selectedRings);
       setPaidRings(paid);
       setFreeRings(free);
     } else {
+      setPaidRings(selectedRings);
       setFreeRings([]);
     }
-  }, [selectedOffer]);
+  }, []);
   return (
     <div className="text-white lg:flex justify-between">
       <div className="border-[1px] border-[#FFFFFF33] rounded-xl p-[23px] w-full lg:w-[49%]">
@@ -49,7 +53,12 @@ const Checkout = () => {
           paidRings={paidRings}
           freeRings={freeRings}
         />
-        <Discount freeRings={freeRings.length} selectedOffer={selectedOffer} />
+        <Discount
+          discount={discount}
+          setDiscount={setDiscount}
+          freeRings={freeRings.length}
+          selectedOffer={selectedOffer}
+        />
         <CheckoutSummary
           ringQuantity={ringQuantity}
           basePrice={basePrice}

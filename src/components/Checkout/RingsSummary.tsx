@@ -17,9 +17,10 @@ const RingsSummary: React.FC<RingsSummaryProps> = ({
   freeRings,
 }) => {
   const basePrice = Number(config.BASE_PRICE);
+  console.log("paid", paidRings)
   return (
     <div className="w-full flex flex-col gap-4">
-      {freeRings.length === 0 ? (
+      {paidRings.length === 0 ? (
         <p className="text-[14px] font-poppins text-gray-300">
           Summary data is loading...
         </p>
