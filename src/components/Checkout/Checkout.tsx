@@ -57,7 +57,6 @@ const Checkout = () => {
           freeRings={freeRings}
         />
         <Discount
-          discount={discount}
           setDiscount={setDiscount}
           freeRings={freeRings.length}
           selectedOffer={selectedOffer}

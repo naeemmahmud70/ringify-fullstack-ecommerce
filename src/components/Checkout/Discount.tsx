@@ -22,7 +22,6 @@ const schema = z.object({
 });
 
 interface OrderSummaryProps {
-  discount: number;
   setDiscount: (value: number) => void;
   freeRings: number;
   selectedOffer: OfferT;
@@ -31,7 +30,7 @@ interface OrderSummaryProps {
 const Discount: React.FC<OrderSummaryProps> = ({
   freeRings,
   selectedOffer,
-  setDiscount,
+  setDiscount
 }) => {
   const { SetToastStates } = useToastStore();
   const { loading, setLoading } = useLoading.getState();
@@ -122,7 +121,7 @@ const Discount: React.FC<OrderSummaryProps> = ({
                   placeholder="Dicount code"
                   readOnly={edit ? true : false}
                   autoComplete="off"
-                  className="bg-transparent text-white  h-full rounded-full border-0 text-xs font-poppins font-normal placeholder:text-xs pl-6"
+                  className={`bg-transparent  ${edit ? " text-gray-400" : "text-white"} px-0 h-full rounded-full border-0 text-xs font-poppins font-normal placeholder:text-xs`}
                   form={forms}
                 />
 

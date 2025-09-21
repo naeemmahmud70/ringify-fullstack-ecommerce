@@ -60,9 +60,10 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
         </div>
 
         <div className="flex justify-between">
-          <p className="text-sm-xs text-[#FFFFFFB2] font-normal font-poppins">
-            Discount {discount + "%"}
-            {/* {discount && "%"} */}
+          <p
+            className={`text-sm-xs  ${discount > 0 ? "text-[#25B021]" : "text-[#FFFFFFB2]"} font-normal font-poppins`}
+          >
+            Discount {!freeRings && discount + "%"}
           </p>
           <p
             className={`text-sm-xs ${
@@ -76,7 +77,11 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
             selectedOffer.PROMO_OFFER_2.length ? (
               <>{freeRings} rings free</>
             ) : (
-              <>${discountAmount.toFixed(2)}</>
+              <span
+                className={`${discount > 0 ? "text-[#25B021]" : "text-[#FFFFFFB2]"}`}
+              >
+                ${discountAmount.toFixed(2)}
+              </span>
             )}{" "}
           </p>
         </div>
