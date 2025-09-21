@@ -1,13 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
 import { useAuthModal } from "@/store/loginModal";
 import { useLoggedInUser } from "@/store/users";
 
-import { Button } from "../ui/button";
 import { OfferT } from "../Cart/CartItems";
+import { Button } from "../ui/button";
 
 interface OrderSummaryProps {
   ringQuantity: number;
@@ -28,7 +28,6 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
   const { loggedInUser } = useLoggedInUser();
   const { setIsAuthModalOpen, setBackgroundPath } = useAuthModal();
   const routePathname = usePathname();
-  const [total, setTotal] = useState(0);
 
   const baseTotal =
     selectedOffer.PROMO_OFFER_1.length || selectedOffer.PROMO_OFFER_2.length

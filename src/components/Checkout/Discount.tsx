@@ -1,18 +1,19 @@
 import React, { useState } from "react";
-import { Button } from "../ui/button";
 import Image from "next/image";
-import { OfferT } from "../Cart/CartItems";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useToastStore } from "@/store/toast";
-import { useLoading } from "@/store/loading";
-import { applyDiscountCode } from "@/services/discount";
 
+import { applyDiscountCode } from "@/services/discount";
+import { useLoading } from "@/store/loading";
+import { useToastStore } from "@/store/toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import editIcon from "../../../public/products/editDiscountCode.svg";
+import { OfferT } from "../Cart/CartItems";
+import { Button } from "../ui/button";
 import CircularLoader from "../ui/CircularLoader";
 import { Form } from "../ui/form";
 import InputBox from "../ui/InputBox";
-import editIcon from "../../../public/products/editDiscountCode.svg";
 
 const schema = z.object({
   code: z

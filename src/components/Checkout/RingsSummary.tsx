@@ -1,11 +1,11 @@
 import React from "react";
-import { CartItemT } from "../Cart/CartItems";
 import Image from "next/image";
+
 import config from "../../../config/config";
-import editIcon from "../../../public/products/editDiscountCode.svg";
 import blackRing from "../../../public/products/summaryRings/black.png";
 import GoldRing from "../../../public/products/summaryRings/gold.png";
 import silverRing from "../../../public/products/summaryRings/silver.png";
+import { CartItemT } from "../Cart/CartItems";
 
 interface RingsSummaryProps {
   selectedRings: CartItemT[];

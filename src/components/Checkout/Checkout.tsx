@@ -1,12 +1,15 @@
 "use client";
-import { useRingOffer, useSelectedRings } from "@/store/users";
 import React, { useEffect, useState } from "react";
-import config from "../../../config/config";
+
+import { useRingOffer, useSelectedRings } from "@/store/users";
 import { splitCartItems } from "@/utils/cartItems";
+import { getSelectedOffer } from "@/utils/selectedOffer";
+
+import config from "../../../config/config";
 import { CartItemT } from "../Cart/CartItems";
+
 import CheckoutSummary from "./CheckoutSummary";
 import Discount from "./Discount";
-import { getSelectedOffer } from "@/utils/selectedOffer";
 import RingsSummary from "./RingsSummary";
 
 const Checkout = () => {

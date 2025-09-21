@@ -1,10 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
 import { useAuthModal } from "@/store/loginModal";
 import { useLoggedInUser } from "@/store/users";
+
 import { Button } from "../ui/button";
-import Image from "next/image";
+
 import { OfferT } from "./CartItems";
 
 interface OrderSummaryProps {

@@ -12,8 +12,8 @@ import {
 } from "../../utils/selectedRingDetails";
 
 import CartItems, { CartItemT } from "./CartItems";
-import OrderSummary from "./OrderSummary";
 import DiscountInput from "./DiscountInput";
+import OrderSummary from "./OrderSummary";
 
 const Cart = () => {
   const router = useRouter();
