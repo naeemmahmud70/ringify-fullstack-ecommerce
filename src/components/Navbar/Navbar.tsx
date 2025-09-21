@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 
 import { navbarItems } from "@/Data/navbarItems";
@@ -24,10 +24,25 @@ const Navbar = () => {
   const routePathname = usePathname();
   const { loggedInUser, setLoggedInUser } = useLoggedInUser();
   const { SetToastStates } = useToastStore();
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (error === "unauthorized") {
+      localStorage.clear();
+      setLoggedInUser({ name: "", email: "", id: "" });
+      setSelectedRings([]);
+      SetToastStates({
+        message: "Unauthorized! Please login.",
+        variant: "success",
+        triggerId: Date.now(),
+      });
+    }
+  }, [error]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
