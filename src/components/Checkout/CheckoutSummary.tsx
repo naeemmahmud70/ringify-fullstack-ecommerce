@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -14,6 +14,7 @@ interface OrderSummaryProps {
   basePrice: number;
   freeRings: number;
   selectedOffer: OfferT;
+  discount: number;
 }
 
 const CheckoutSummary: React.FC<OrderSummaryProps> = ({
@@ -21,11 +22,21 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
   basePrice,
   freeRings,
   selectedOffer,
+  discount,
 }) => {
   const router = useRouter();
   const { loggedInUser } = useLoggedInUser();
   const { setIsAuthModalOpen, setBackgroundPath } = useAuthModal();
   const routePathname = usePathname();
+  const [total, setTotal] = useState(0);
+
+  const baseTotal =
+    selectedOffer.PROMO_OFFER_1.length || selectedOffer.PROMO_OFFER_2.length
+      ? (ringQuantity - freeRings) * basePrice
+      : ringQuantity * basePrice;
+
+  const discountAmount = (baseTotal * discount) / 100;
+  const totalAfterDiscount = baseTotal - discountAmount;
 
   const handleCheckout = () => {
     if (loggedInUser?.id) {
@@ -51,7 +62,8 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
 
         <div className="flex justify-between">
           <p className="text-sm-xs text-[#FFFFFFB2] font-normal font-poppins">
-            Discount
+            Discount {discount + "%"}
+            {/* {discount && "%"} */}
           </p>
           <p
             className={`text-sm-xs ${
@@ -65,7 +77,7 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
             selectedOffer.PROMO_OFFER_2.length ? (
               <>{freeRings} rings free</>
             ) : (
-              "$0"
+              <>${discountAmount.toFixed(2)}</>
             )}{" "}
           </p>
         </div>
@@ -83,11 +95,7 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
           </div>
 
           <span className="text-[20px] font-bold font-poppins leading-[100%]">
-            $
-            {selectedOffer.PROMO_OFFER_1.length ||
-            selectedOffer.PROMO_OFFER_2.length
-              ? ((ringQuantity - freeRings) * basePrice).toFixed(2)
-              : (ringQuantity * basePrice).toFixed(2)}
+            ${totalAfterDiscount.toFixed(2)}
           </span>
         </div>
 

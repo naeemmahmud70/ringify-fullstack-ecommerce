@@ -64,6 +64,7 @@ const Checkout = () => {
           basePrice={basePrice}
           freeRings={freeRings.length}
           selectedOffer={selectedOffer}
+          discount={discount}
         />
       </div>
     </div>

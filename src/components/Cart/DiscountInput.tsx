@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 import { useAuthModal } from "@/store/loginModal";

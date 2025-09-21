@@ -1,8 +1,4 @@
-import React from "react";
-import { usePathname, useRouter } from "next/navigation";
-
-import { useAuthModal } from "@/store/loginModal";
-import { useLoggedInUser } from "@/store/users";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { OfferT } from "../Cart/CartItems";
@@ -16,7 +12,7 @@ import { applyDiscountCode } from "@/services/discount";
 import CircularLoader from "../ui/CircularLoader";
 import { Form } from "../ui/form";
 import InputBox from "../ui/InputBox";
-import { Label } from "../ui/label";
+import editIcon from "../../../public/products/editDiscountCode.svg";
 
 const schema = z.object({
   code: z
@@ -34,15 +30,11 @@ interface OrderSummaryProps {
 const Discount: React.FC<OrderSummaryProps> = ({
   freeRings,
   selectedOffer,
-  discount,
   setDiscount,
 }) => {
-  const router = useRouter();
-  const { loggedInUser } = useLoggedInUser();
-  const { setIsAuthModalOpen, setBackgroundPath } = useAuthModal();
-  const routePathname = usePathname();
   const { SetToastStates } = useToastStore();
   const { loading, setLoading } = useLoading.getState();
+  const [edit, setEdit] = useState(false);
 
   const forms = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -52,17 +44,22 @@ const Discount: React.FC<OrderSummaryProps> = ({
   });
 
   async function onSubmit(values: z.infer<typeof schema>) {
+    console.log("code", values);
     try {
       setLoading(true);
       const data = await applyDiscountCode(values);
       setLoading(false);
       if (data?.status === 200) {
+        console.log("data.discount", data.discount);
+        setDiscount(data.discount);
+        setEdit(true);
         SetToastStates({
           message: data.message,
           variant: "success",
           triggerId: Date.now(),
         });
       } else {
+        setDiscount(0);
         SetToastStates({
           message: data.message,
           variant: "error",
@@ -79,19 +76,9 @@ const Discount: React.FC<OrderSummaryProps> = ({
     }
   }
 
-  const handleCheckout = () => {
-    if (loggedInUser?.id) {
-      router.push("/product/smart-rings/checkout");
-    } else {
-      setIsAuthModalOpen(true);
-      setBackgroundPath(routePathname);
-      router.push("/login");
-    }
-  };
-  console.log("freeRings, selectedOffer", freeRings, selectedOffer);
   return (
     <div className="w-full">
-      <div className="flex justify-between border border-[#FFFFFF33] h-[74px] md:h-[88px] rounded-xl  ">
+      <div className="flex justify-between items-center border border-[#FFFFFF33] h-[74px] md:h-[88px] rounded-xl  ">
         {(freeRings > 0 && selectedOffer.PROMO_OFFER_1) ||
         selectedOffer.PROMO_OFFER_2 ? (
           <div className="flex justify-between items-center w-full max-w-[90%]  mx-auto mb-4  py-1 rounded-xl mt-4 origin-top">
@@ -122,7 +109,7 @@ const Discount: React.FC<OrderSummaryProps> = ({
             </Button>
           </div>
         ) : (
-          <div className=" w-full max-w-[90%]  mx-auto mb-4  py-1 rounded-xl mt-4 origin-top">
+          <div className=" w-full max-w-[90%]  mx-auto  py-1 rounded-xl origin-top">
             <Form {...forms}>
               <form
                 autoComplete="off"
@@ -132,18 +119,34 @@ const Discount: React.FC<OrderSummaryProps> = ({
                 <InputBox
                   name="code"
                   placeholder="Dicount code"
+                  readOnly={edit ? true : false}
                   autoComplete="off"
                   className="bg-transparent text-white  h-full rounded-full border-0 text-xs font-poppins font-normal placeholder:text-xs pl-6"
                   form={forms}
                 />
 
-                <Button
-                  disabled={loading}
-                  type="submit"
-                  className=" bg-[#25B021] hover:bg-[#25B021] text-[14px] font-normal py-2 px-4 rounded-xl font-poppins h-11"
-                >
-                  {loading ? <CircularLoader /> : "Apply"}
-                </Button>
+                {edit ? (
+                  <div
+                    onClick={() => setEdit(false)}
+                    className="flex gap-2 bg-[#25B021] hover:bg-[#25B021] text-[14px] font-normal py-[10px] px-4 rounded-xl font-poppins"
+                  >
+                    Edit{" "}
+                    <Image
+                      src={editIcon}
+                      height={12}
+                      width={12}
+                      alt="edit-icon"
+                    />
+                  </div>
+                ) : (
+                  <Button
+                    disabled={loading}
+                    type="submit"
+                    className=" bg-[#25B021] hover:bg-[#25B021] text-[14px] font-normal py-1 px-4 rounded-xl font-poppins"
+                  >
+                    {loading ? <CircularLoader /> : "Apply"}
+                  </Button>
+                )}
               </form>
             </Form>
           </div>

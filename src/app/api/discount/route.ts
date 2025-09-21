@@ -1,8 +1,10 @@
 export async function POST(req: Request) {
   try {
-    const { code } = await req.json();
+    // console.log("Incoming body:", req);
+    const { value } = await req.json();
+    console.log("code", value.code);
 
-    if (!code) {
+    if (!value?.code) {
       return Response.json({
         status: 400,
         message: "Discount code is required!",
@@ -14,7 +16,7 @@ export async function POST(req: Request) {
     const discountPercentage = Number(process.env.DISCOUNT_PERCENTAGE || 0);
 
     // ✅ Match code
-    if (code.toLowerCase() === validCode?.toLowerCase()) {
+    if (value?.code?.toLowerCase() === validCode?.toLowerCase()) {
       return Response.json({
         status: 200,
         message: "Discount applied!",
