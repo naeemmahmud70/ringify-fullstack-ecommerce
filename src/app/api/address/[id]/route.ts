@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import Address from "@/models/Address";
+
 import connectMongo from "@/lib/connect-mongo";
+import Address from "@/models/Address";
 
 // ✅ Update an address by ID
 export async function PUT(
@@ -41,6 +42,7 @@ export async function DELETE(
   req: Request,
   { params }: { params: { id: string } }
 ) {
+  console.log("req", req);
   try {
     await connectMongo();
     const { id } = params;

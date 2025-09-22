@@ -1,10 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-
-import { useAuthModal } from "@/store/loginModal";
-import { useLoggedInUser } from "@/store/users";
 
 import { CartItemT, OfferT } from "../Cart/CartItems";
 import { Button } from "../ui/button";

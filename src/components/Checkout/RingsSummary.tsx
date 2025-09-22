@@ -17,7 +17,6 @@ const RingsSummary: React.FC<RingsSummaryProps> = ({
   freeRings,
 }) => {
   const basePrice = Number(config.BASE_PRICE);
-  console.log("paid", paidRings);
   return (
     <div className="w-full flex flex-col gap-4">
       {paidRings.length === 0 ? (

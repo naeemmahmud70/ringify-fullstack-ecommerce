@@ -1,10 +1,12 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { City, Country, State } from "country-state-city";
 import { X } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import { z } from "zod";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,16 +14,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useModals } from "@/store/modals";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import PhoneInputField from "@/components/ui/PhoneInputField";
 import { Form } from "@/components/ui/form";
 import InputBox from "@/components/ui/InputBox";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
+import PhoneInputField from "@/components/ui/PhoneInputField";
 import { updateAddress } from "@/services/updatingAddress";
+import { useModals } from "@/store/modals";
 import { useToastStore } from "@/store/toast";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 // Schema definition
 const formSchema = (isOtherSelected: boolean) =>
@@ -88,7 +88,7 @@ const LABEL_CLASS =
   "text-xs text-[#2E2E2E] font-poppins font-normal leading-[19px]";
 
 const EditAddress = () => {
-  const { setEditAdressForm, editAddressForm, editFormValue } = useModals();
+  const { setEditAdressForm, editFormValue } = useModals();
 
   // State management
   const [countries, setCountries] = useState<
@@ -247,7 +247,6 @@ const EditAddress = () => {
       pincode: values.pincode.toString().trim(),
       isSelectedAddress: true,
     };
-    console.log("edit", payload);
 
     try {
       setDisableBtn(true);

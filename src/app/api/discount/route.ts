@@ -1,9 +1,6 @@
 export async function POST(req: Request) {
   try {
-    // console.log("Incoming body:", req);
     const { value } = await req.json();
-    console.log("code", value.code);
-
     if (!value?.code) {
       return Response.json({
         status: 400,

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import Address from "@/models/Address";
+
 import connectMongo from "@/lib/connect-mongo";
+import Address from "@/models/Address";
 
 // Create new address
 export async function POST(req: Request) {

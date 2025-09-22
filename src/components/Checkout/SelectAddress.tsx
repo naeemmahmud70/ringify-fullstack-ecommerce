@@ -1,18 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
+import { deleteAddress, getAddresses } from "@/services/addresses";
 import { useLoading } from "@/store/loading";
 import { useModals } from "@/store/modals";
+import { useToastStore } from "@/store/toast";
+import { useLoggedInUser } from "@/store/users";
 
 import edit from "../../../public/add-icon.png";
 import add from "../../../public/add-icon.svg";
 import delet from "../../../public/Close.svg";
-import Link from "next/link";
-import { deleteAddress, getAddresses } from "@/services/addresses";
-import { useLoggedInUser } from "@/store/users";
-import { useToastStore } from "@/store/toast";
 
 interface Item {
   _id: string;
@@ -38,9 +37,7 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
     setAddAddress,
     setEditAdressForm,
     setEditFormValue,
-    editFormValue,
   } = useModals();
-  const router = useRouter();
   const [data, setData] = useState<Item[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
     null
@@ -54,7 +51,6 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
     try {
       setLoading(true);
       const res = await getAddresses(loggedInUser?.email);
-      console.log("addressListData", res);
 
       if (res.status == 200) {
         setData(res.data);
@@ -75,7 +71,6 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
   }, [addAddressForm, editAddressForm, isDeleted]);
 
   useEffect(() => {
-    // Preselect the address marked as selected
     if (data?.length) {
       const preselectedAddress = data?.find(addr => addr.isSelectedAddress);
       if (preselectedAddress) {
@@ -84,8 +79,6 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
       }
     }
   }, [data]);
-
-  console.log("data", data);
 
   const handleAddressChange = (addr: Item) => {
     setSelectedAddressId(addr._id);
@@ -117,11 +110,6 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
       .replace(/,([^,]*)$/, " - $1");
   };
 
-  const handleClick = () => {
-    setAddAddress(true);
-    // router.push("/product/smart-rings/checkout/add-new-address");
-  };
-
   const handleDeleteAddress = async (id: string) => {
     try {
       const res = await deleteAddress(id);
@@ -147,7 +135,6 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
       });
     }
   };
-  console.log("editFormValue", editFormValue);
   return (
     <div className="flex flex-col justify-between  h-full">
       <div className="flex flex-col justify-between h-full">

@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { applyDiscountCode } from "@/services/discount";
-import { useLoading } from "@/store/loading";
 import { useToastStore } from "@/store/toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -44,13 +43,11 @@ const Discount: React.FC<OrderSummaryProps> = ({
   });
 
   async function onSubmit(values: z.infer<typeof schema>) {
-    console.log("code", values);
     try {
       setLoading(true);
       const data = await applyDiscountCode(values);
       setLoading(false);
       if (data?.status === 200) {
-        console.log("data.discount", data.discount);
         setDiscount(data.discount);
         setEdit(true);
         SetToastStates({

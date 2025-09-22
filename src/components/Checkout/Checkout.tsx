@@ -34,7 +34,6 @@ const Checkout = () => {
 
   useEffect(() => {
     if (selectedOffer.PROMO_OFFER_1 || selectedOffer.PROMO_OFFER_2) {
-      console.log("selectedRings", selectedRings);
       const { paid, free } = splitCartItems(selectedRings);
       setPaidRings(paid);
       setFreeRings(free);
