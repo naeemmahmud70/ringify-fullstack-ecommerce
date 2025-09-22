@@ -36,3 +36,33 @@ export async function PUT(
     });
   }
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    await connectMongo();
+    const { id } = params;
+    console.log("id", id);
+    const deletedAddress = await Address.findByIdAndDelete(id);
+
+    if (!deletedAddress) {
+      return NextResponse.json(
+        { message: "Address not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Address deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("Error deleting address:", error);
+    return NextResponse.json(
+      { message: error.message || "Something went wrong!" },
+      { status: 500 }
+    );
+  }
+}

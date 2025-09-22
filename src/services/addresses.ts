@@ -35,3 +35,20 @@ export async function getAddresses(email: string) {
 
   return res.json();
 }
+
+export const deleteAddress = async (id: string) => {
+  try {
+    const res = await fetch(`/api/address/${id}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.message || "Deleting address failed!");
+    }
+    const data = await res.json();
+    return { status: res.status, ...data };
+  } catch (error) {
+    console.error("Error deleting address:", error);
+    throw error;
+  }
+};

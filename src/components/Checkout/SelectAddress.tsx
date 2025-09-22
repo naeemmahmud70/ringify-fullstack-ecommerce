@@ -10,8 +10,9 @@ import edit from "../../../public/add-icon.png";
 import add from "../../../public/add-icon.svg";
 import delet from "../../../public/Close.svg";
 import Link from "next/link";
-import { getAddresses } from "@/services/addresses";
+import { deleteAddress, getAddresses } from "@/services/addresses";
 import { useLoggedInUser } from "@/store/users";
+import { useToastStore } from "@/store/toast";
 
 const { setLoading } = useLoading.getState();
 
@@ -48,6 +49,7 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
   );
   const [isDeleted, setIsdeleted] = useState(false);
   const { loggedInUser } = useLoggedInUser();
+  const { SetToastStates } = useToastStore();
 
   const getAddressListData = async () => {
     try {
@@ -88,7 +90,6 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
   const handleAddressChange = (addr: Item) => {
     setSelectedAddressId(addr._id);
     setSelectedAddress(getFullAddress(addr));
-    // router.push("/product/baai-zen-smart-rings/select-address");
   };
 
   const getAddressTitle = (address: Item) => {
@@ -123,12 +124,27 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
 
   const handleDeleteAddress = async (id: string) => {
     try {
-      // const data = await deleteAddress(JSON.stringify(id));
-      // if (data) {
-      //   setIsdeleted(isDeleted => !isDeleted);
-      // }
-    } catch (error) {
-      console.log("err", error);
+      const res = await deleteAddress(id);
+      if (res.status == 200) {
+        setIsdeleted(isDeleted => !isDeleted);
+        SetToastStates({
+          message: res.message,
+          variant: "success",
+          triggerId: Date.now(),
+        });
+      } else {
+        SetToastStates({
+          message: res.message,
+          variant: "error",
+          triggerId: Date.now(),
+        });
+      }
+    } catch (error: any) {
+      SetToastStates({
+        message: error.message || "Something went wrong!",
+        variant: "error",
+        triggerId: Date.now(),
+      });
     }
   };
   console.log("editFormValue", editFormValue);
