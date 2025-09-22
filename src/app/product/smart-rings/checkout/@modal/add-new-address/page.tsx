@@ -211,14 +211,14 @@ const AddAddress: React.FC = () => {
       } else {
         SetToastStates({
           message: result.message || "Failed to add address!",
-          variant: "success",
+          variant: "error",
           triggerId: Date.now(),
         });
       }
     } catch (error: any) {
       SetToastStates({
         message: error.message || "Failed to add address!",
-        variant: "success",
+        variant: "error",
         triggerId: Date.now(),
       });
     } finally {

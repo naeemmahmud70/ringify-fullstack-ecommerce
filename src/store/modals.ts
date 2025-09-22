@@ -33,7 +33,7 @@ export const useModals = create<modalStates>(set => ({
   addAddressForm: false,
   editAddressForm: false,
   editFormValue: {
-    id: 0,
+    id: "",
     firstName: "",
     lastName: "",
     addressLine1: "",

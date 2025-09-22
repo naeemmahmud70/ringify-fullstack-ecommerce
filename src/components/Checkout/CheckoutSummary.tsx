@@ -49,6 +49,7 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
     }
   };
 
+  console.log("selectedAddress", selectedAddress);
   return (
     <div className="w-full ">
       <div className="space-y-5 border border-white/20 rounded-xl p-4">

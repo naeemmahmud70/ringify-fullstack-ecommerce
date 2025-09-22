@@ -39,6 +39,7 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
     setAddAddress,
     setEditAdressForm,
     setEditFormValue,
+    editFormValue,
   } = useModals();
   const router = useRouter();
   const [data, setData] = useState<Item[]>([]);
@@ -101,14 +102,14 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
     return [
       address.firstName,
       address.lastName,
+      address.contactNumber,
       address.addressLine1,
       address.addressLine2,
       address.city,
+      address.pincode,
       address.state,
       address.country,
-      address.pincode,
-      // address.saveAs,
-      // address.contactNumber,
+      address.saveAs,
     ]
       .filter(Boolean)
       .join(", ")
@@ -130,6 +131,7 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
       console.log("err", error);
     }
   };
+  console.log("editFormValue", editFormValue);
   return (
     <div className="flex flex-col justify-between  h-full">
       <div className="flex flex-col justify-between h-full">
@@ -183,7 +185,8 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
                       </p>
                     </div>
                     <div className="flex flex-col-reverse gap-3 lg:flex-row lg:gap-6 lg:items-center">
-                      <button
+                      <Link
+                        href="/product/smart-rings/checkout/edit-address"
                         className=" w-[24px] h-[24px] mx-auto lg:mx-0"
                         onClick={() => {
                           setEditFormValue({
@@ -204,7 +207,7 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
                         }}
                       >
                         <Image src={edit} alt="edit-icon" className="w-[px]" />
-                      </button>
+                      </Link>
                       <button onClick={() => handleDeleteAddress(addr._id)}>
                         <Image
                           src={delet}
