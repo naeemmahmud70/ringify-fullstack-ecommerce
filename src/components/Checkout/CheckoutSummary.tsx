@@ -1,12 +1,12 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
 import { useAuthModal } from "@/store/loginModal";
 import { useLoggedInUser } from "@/store/users";
 
-import { OfferT } from "../Cart/CartItems";
+import { CartItemT, OfferT } from "../Cart/CartItems";
 import { Button } from "../ui/button";
 
 interface OrderSummaryProps {
@@ -16,6 +16,9 @@ interface OrderSummaryProps {
   selectedOffer: OfferT;
   discount: number;
   selectedAddress: string;
+  selectedRings: CartItemT[];
+  handleCheckout: () => void;
+  setTotalRingPrice: (value: number) => void;
 }
 
 const CheckoutSummary: React.FC<OrderSummaryProps> = ({
@@ -25,12 +28,9 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
   selectedOffer,
   discount,
   selectedAddress,
+  handleCheckout,
+  setTotalRingPrice,
 }) => {
-  const router = useRouter();
-  const { loggedInUser } = useLoggedInUser();
-  const { setIsAuthModalOpen, setBackgroundPath } = useAuthModal();
-  const routePathname = usePathname();
-
   const baseTotal =
     selectedOffer.PROMO_OFFER_1.length || selectedOffer.PROMO_OFFER_2.length
       ? (ringQuantity - freeRings) * basePrice
@@ -39,17 +39,10 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
   const discountAmount = (baseTotal * discount) / 100;
   const totalAfterDiscount = baseTotal - discountAmount;
 
-  const handleCheckout = () => {
-    if (loggedInUser?.id) {
-      router.push("/product/smart-rings/checkout");
-    } else {
-      setIsAuthModalOpen(true);
-      setBackgroundPath(routePathname);
-      router.push("/login");
-    }
-  };
+  useEffect(() => {
+    setTotalRingPrice(totalAfterDiscount);
+  }, [totalAfterDiscount]);
 
-  console.log("selectedAddress", selectedAddress);
   return (
     <div className="w-full ">
       <div className="space-y-5 border border-white/20 rounded-xl p-4">
@@ -109,7 +102,7 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
         <div className="flex flex-col justify-center overflow-x-hidden">
           <Button
             onClick={handleCheckout}
-            disabled={ringQuantity < 1}
+            disabled={ringQuantity > 1 && selectedAddress.length ? false : true}
             className={`mx-auto mt-6 w-full md:w-[457px] h-[60px] rounded-full px-6 py-3 transition flex justify-center items-center gap-3 
                   ${ringQuantity < 0 ? "bg-[#25B021]/50 cursor-not-allowed" : "bg-[#25B021] hover:bg-[#25B021] text-white"}`}
           >

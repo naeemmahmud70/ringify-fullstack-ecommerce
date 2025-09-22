@@ -14,8 +14,6 @@ import { deleteAddress, getAddresses } from "@/services/addresses";
 import { useLoggedInUser } from "@/store/users";
 import { useToastStore } from "@/store/toast";
 
-const { setLoading } = useLoading.getState();
-
 interface Item {
   _id: string;
   firstName: string;
@@ -50,6 +48,7 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
   const [isDeleted, setIsdeleted] = useState(false);
   const { loggedInUser } = useLoggedInUser();
   const { SetToastStates } = useToastStore();
+  const { loading, setLoading } = useLoading();
 
   const getAddressListData = async () => {
     try {
@@ -62,6 +61,7 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
         setSelectedAddressId(null);
         setSelectedAddress("");
       }
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
       setData([]);
@@ -151,7 +151,7 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
   return (
     <div className="flex flex-col justify-between  h-full">
       <div className="flex flex-col justify-between h-full">
-        <div className="space-y-5  h-fit">
+        <div className="space-y-5 ">
           {data?.length ? (
             <div>
               {" "}
@@ -187,7 +187,7 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
                       <div className="text-[18px] font-normal font-poppins leading-[24px] break-words whitespace-normal flex  items-start  sm:gap-6">
                         {getAddressTitle(addr)}
                         {addr.saveAs && (
-                          <span className=" w-[51px] h-[26px] bg-[#646667] rounded text-[12px] uppercase leading-[100%] font-medium px-2 py-1 font-poppins flex items-center mt-1 sm:mt-0">
+                          <span className=" w-fit h-[26px] bg-[#646667] rounded text-[12px] uppercase leading-[100%] font-medium px-2 py-1 font-poppins flex items-center mt-1 sm:mt-0">
                             {addr.saveAs}
                           </span>
                         )}
@@ -237,11 +237,17 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
               ))}
             </div>
           ) : (
-            <div>Add and select your address to complete your order.</div>
+            <div className="w-full h-full font-poppins text-center flex items-center justify-center mt-[35%]">
+              {loading ? (
+                <p>Address loading...</p>
+              ) : (
+                <p>Add and select your address to complete your order.</p>
+              )}
+            </div>
           )}
         </div>
 
-        <div className="w-full flex items-center gap-5 mt-10">
+        <div className="w-full flex items-center gap-5 my-10">
           <div className="w-full border-b border-white h-[2px]"></div>
           <div className="w-full flex flex-col items-center">
             <Link
@@ -253,7 +259,7 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
             </Link>
 
             <span className="text-[14px] text-[#CFFF65] font-poppins mt-2 font-normal leading-[16px] tracking-[0.00625em] block">
-              Add Addressxx
+              Add Address
             </span>
           </div>
           <div className="w-full h-[2px] border-b border-white"></div>
@@ -261,9 +267,8 @@ const AddressSelection: React.FC<AddressProps> = ({ setSelectedAddress }) => {
 
         {data?.length > 0 && (
           <div>
-            <p className="text-[#FFFFFFB2] text-[16px]  font-poppins font-normal mt-5">
-              Shipping for smart rings will begin in 2 months. Delivery charges
-              will be borne by the buyer.
+            <p className="text-[#FFFFFFB2] text-[16px] text-center  font-poppins font-normal mt-5">
+              Delivery charges will be borne by the buyer.
             </p>
           </div>
         )}

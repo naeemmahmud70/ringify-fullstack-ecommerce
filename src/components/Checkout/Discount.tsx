@@ -30,10 +30,10 @@ interface OrderSummaryProps {
 const Discount: React.FC<OrderSummaryProps> = ({
   freeRings,
   selectedOffer,
-  setDiscount
+  setDiscount,
 }) => {
   const { SetToastStates } = useToastStore();
-  const { loading, setLoading } = useLoading.getState();
+  const [loading, setLoading] = useState(false);
   const [edit, setEdit] = useState(false);
 
   const forms = useForm<z.infer<typeof schema>>({

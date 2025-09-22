@@ -334,7 +334,7 @@ const EditAddress = () => {
               <PhoneInputField
                 control={form.control}
                 name="contactNumber"
-                defaultCountry="in"
+                defaultCountry="bd"
                 error={form.formState.errors.contactNumber?.message}
                 placeholder="Enter Contact Number"
                 className={`${INPUT_CLASS.replace("px-5", "pr-5 pl-12")} border-[1px] bg-transparent outline-[0px] outline-[#D1D1D1]`}

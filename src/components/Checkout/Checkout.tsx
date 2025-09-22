@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import { useRingOffer, useSelectedRings } from "@/store/users";
+import { useLoggedInUser, useRingOffer, useSelectedRings } from "@/store/users";
 import { splitCartItems } from "@/utils/cartItems";
 import { getSelectedOffer } from "@/utils/selectedOffer";
 
@@ -21,6 +21,8 @@ const Checkout = () => {
   const [discount, setDiscount] = useState(0);
   const basePrice = Number(config.BASE_PRICE);
   const [selectedAddress, setSelectedAddress] = useState<string>("");
+  const { loggedInUser } = useLoggedInUser();
+  const [totalRingPrice, setTotalRingPrice] = useState(0);
 
   useEffect(() => {
     const offer = getSelectedOffer();
@@ -41,6 +43,18 @@ const Checkout = () => {
       setFreeRings([]);
     }
   }, []);
+
+  const handleCheckout = () => {
+    const orderPayload = {
+      user: loggedInUser,
+      paidRings: paidRings,
+      freeRings: freeRings,
+      ringQuantity: ringQuantity,
+      price: totalRingPrice.toFixed(2),
+      fullAddress: selectedAddress,
+    };
+    console.log("orderPayload", orderPayload);
+  };
   return (
     <div className="text-white lg:flex justify-between">
       <div className="border-[1px] border-[#FFFFFF33] rounded-xl p-[23px] w-full lg:w-[49%]">
@@ -67,9 +81,12 @@ const Checkout = () => {
           ringQuantity={ringQuantity}
           basePrice={basePrice}
           freeRings={freeRings.length}
+          selectedRings={selectedRings}
           selectedOffer={selectedOffer}
           discount={discount}
           selectedAddress={selectedAddress}
+          handleCheckout={handleCheckout}
+          setTotalRingPrice={setTotalRingPrice}
         />
       </div>
     </div>
