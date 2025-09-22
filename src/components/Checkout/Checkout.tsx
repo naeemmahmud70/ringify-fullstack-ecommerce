@@ -11,6 +11,7 @@ import { CartItemT } from "../Cart/CartItems";
 import CheckoutSummary from "./CheckoutSummary";
 import Discount from "./Discount";
 import RingsSummary from "./RingsSummary";
+import AddressSelection from "./SelectAddress";
 
 const Checkout = () => {
   const { ringQuantity, selectedRings } = useSelectedRings();
@@ -19,6 +20,7 @@ const Checkout = () => {
   const [freeRings, setFreeRings] = useState<CartItemT[]>([]);
   const [discount, setDiscount] = useState(0);
   const basePrice = Number(config.BASE_PRICE);
+  const [selectedAddress, setSelectedAddress] = useState<string>("");
 
   useEffect(() => {
     const offer = getSelectedOffer();
@@ -45,7 +47,7 @@ const Checkout = () => {
         <h1 className="text-[20px] text-white font-poppins font-semibold leading-[16px]">
           Select Address
         </h1>
-        {/* <AddressSelection setSelectedAddress={setSelectedAddress} /> */}
+        <AddressSelection setSelectedAddress={setSelectedAddress} />
       </div>
       <div className="flex flex-col gap-7 border-[1px] border-[#FFFFFF33] rounded-xl p-5 w-full lg:w-[49%] h-fit mt-5 lg:mt-0">
         <h1 className="text-[20px] text-white font-poppins font-semibold leading-[16px]">
@@ -67,6 +69,7 @@ const Checkout = () => {
           freeRings={freeRings.length}
           selectedOffer={selectedOffer}
           discount={discount}
+          selectedAddress={selectedAddress}
         />
       </div>
     </div>

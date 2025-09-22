@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export type addressEditT = {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   addressLine1: string;

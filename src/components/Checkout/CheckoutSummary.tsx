@@ -15,6 +15,7 @@ interface OrderSummaryProps {
   freeRings: number;
   selectedOffer: OfferT;
   discount: number;
+  selectedAddress: string;
 }
 
 const CheckoutSummary: React.FC<OrderSummaryProps> = ({
@@ -23,6 +24,7 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
   freeRings,
   selectedOffer,
   discount,
+  selectedAddress,
 }) => {
   const router = useRouter();
   const { loggedInUser } = useLoggedInUser();

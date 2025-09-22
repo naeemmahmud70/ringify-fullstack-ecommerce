@@ -1,5 +1,4 @@
 export async function applyDiscountCode(value: { code: string }) {
-  console.log("util", value);
   const res = await fetch("/api/discount", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

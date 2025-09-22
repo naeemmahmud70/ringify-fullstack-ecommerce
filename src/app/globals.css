@@ -37,11 +37,12 @@ body {
     background-color: transparent !important;
     border-bottom-left-radius: 88px !important;
     border-top-left-radius: 88px !important;
-    border: 1px solid #D1D1D1 !important;
+    border: 1px solid transparent !important;
     border-right: 0px !important;
 }
 
 .selected-flag {
+    margin-top: 2px;
     background-color: transparent !important;
 }
 
