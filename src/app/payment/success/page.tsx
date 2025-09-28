@@ -1,4 +1,5 @@
 // app/payment/success/page.tsx
+import { saveOrderToDB } from "@/actions/order";
 import BackHomeButton from "@/components/Home/BackToHome";
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
@@ -25,6 +26,14 @@ export default async function SuccessPage({ searchParams }: SuccessProps) {
 
   if (session.payment_status === "paid" && session.metadata?.order) {
     const orderPayload = JSON.parse(session.metadata.order);
+
+    // ✅ Save to DB via server action
+    await saveOrderToDB(
+      orderPayload,
+      session.id,
+      session.amount_total!,
+      session.currency!
+    );
 
     return (
       <div className="bg-black min-h-screen flex flex-col items-center justify-center text-white p-6">
@@ -64,7 +73,6 @@ export default async function SuccessPage({ searchParams }: SuccessProps) {
             <span className="font-bold">${orderPayload.price}</span>
           </div>
 
-          {/* Address */}
           <div>
             <h3 className="font-medium mt-4 mb-2">Shipping Address:</h3>
             <p className="bg-gray-700 p-4 rounded">

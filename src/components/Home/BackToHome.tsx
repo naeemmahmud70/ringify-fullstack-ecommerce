@@ -1,8 +1,15 @@
 "use client";
 
+import { useSelectedRings } from "@/store/users";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function BackHomeButton() {
+  const { setSelectedRings } = useSelectedRings();
+  useEffect(() => {
+    setSelectedRings([]);
+    localStorage.removeItem("selectedRingDetails");
+  }, []);
   return (
     <Link
       href="/product/smart-rings/select-rings"

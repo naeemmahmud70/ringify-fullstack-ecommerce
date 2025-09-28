@@ -1,4 +1,3 @@
-// app/actions/checkout.ts
 "use server";
 
 import { CartItemT } from "@/components/Cart/CartItems";
@@ -24,7 +23,7 @@ export async function createCheckoutSession(data: OrderPayloadT) {
     price: data?.price,
     fullAddress: data?.fullAddress,
   };
-  console.log("server payloadData", data);
+
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -36,15 +35,15 @@ export async function createCheckoutSession(data: OrderPayloadT) {
             product_data: {
               name: "Smart Ring",
             },
-            unit_amount: 14500,
+            unit_amount: Math.round(parseFloat(data.price) * 100),
           },
-          quantity: data.ringQuantity,
+          quantity: 1,
         },
       ],
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/product/smart-rings/checkout?status=cancel`,
       metadata: {
-        order: JSON.stringify(payloadData),
+        order: JSON.stringify(payloadData ?? {}),
       },
     });
 
