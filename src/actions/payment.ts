@@ -3,13 +3,19 @@
 import { CartItemT } from "@/components/Cart/CartItems";
 import Stripe from "stripe";
 
+export interface ringPayloadT {
+  size: string;
+  quantity: number;
+  color: string;
+}
+
 export interface OrderPayloadT {
   user: {};
-  paidRings: CartItemT[];
-  freeRings: CartItemT[];
-  ringQuantity: number;
+  paid: ringPayloadT[];
+  free: ringPayloadT[];
+  quantity: number;
   price: string;
-  fullAddress: string;
+  address: string;
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -17,13 +23,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 export async function createCheckoutSession(data: OrderPayloadT) {
   const payloadData = {
     user: data?.user,
-    paidRings: data?.paidRings?.length,
-    freeRings: data?.freeRings?.length,
-    ringQuantity: data?.ringQuantity,
+    paid: data?.paid,
+    free: data?.free,
+    quantity: data?.quantity,
     price: data?.price,
-    fullAddress: data?.fullAddress,
+    address: data?.address,
   };
-
+  console.log("stripe payloadData", payloadData);
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],

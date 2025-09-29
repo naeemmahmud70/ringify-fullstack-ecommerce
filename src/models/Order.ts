@@ -4,11 +4,11 @@ import mongoose, { Schema, model, models } from "mongoose";
 const OrderSchema = new Schema(
   {
     user: { type: Object, required: true },
-    paidRings: { type: Number, required: true },
-    freeRings: { type: Number, required: true },
-    ringQuantity: { type: Number, required: true },
+    paid: { type: Array, required: true },
+    free: { type: Array, required: true },
+    quantity: { type: Number, required: true },
     price: { type: String, required: true },
-    fullAddress: { type: String, required: true },
+    address: { type: String, required: true },
     stripeSessionId: { type: String, required: true },
     amount: { type: Number, required: true },
     currency: { type: String, required: true },

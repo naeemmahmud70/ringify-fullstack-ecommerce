@@ -44,7 +44,7 @@ export default async function SuccessPage({ searchParams }: SuccessProps) {
           <p className="text-5xl font-mulish">
             You paid{" "}
             <span className="font-semibold">
-              {session.amount_total! / 100} {session.currency?.toUpperCase()}
+              {session?.amount_total! / 100} {session?.currency?.toUpperCase()}
             </span>
           </p>
         </div>
@@ -54,30 +54,28 @@ export default async function SuccessPage({ searchParams }: SuccessProps) {
 
           <div className="flex justify-between">
             <span className="font-medium">User:</span>
-            <span>{orderPayload.user.email}</span>
+            <span>{orderPayload?.user?.email}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Paid Rings:</span>
-            <span>{orderPayload.paidRings}</span>
+            <span>{orderPayload?.paid?.length}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Free Rings:</span>
-            <span>{orderPayload.freeRings}</span>
+            <span>{orderPayload?.free?.length}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Total Quantity:</span>
-            <span>{orderPayload.ringQuantity}</span>
+            <span>{orderPayload?.quantity}</span>
           </div>
           <div className="flex justify-between ">
             <span className="font-medium">Total Price:</span>
-            <span className="font-bold">${orderPayload.price}</span>
+            <span className="font-bold">${orderPayload?.price}</span>
           </div>
 
           <div>
             <h3 className="font-medium mt-4 mb-2">Shipping Address:</h3>
-            <p className="bg-gray-700 p-4 rounded">
-              {orderPayload.fullAddress}
-            </p>
+            <p className="bg-gray-700 p-4 rounded">{orderPayload?.address}</p>
           </div>
           <div className="flex justify-center">
             <BackHomeButton />

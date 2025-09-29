@@ -4,14 +4,17 @@
 import connectMongo from "@/lib/connect-mongo";
 import Order from "@/models/Order";
 import { Resend } from "resend";
+import { ringPayloadT } from "./payment";
+import { sendOrderConfirmation } from "@/lib/sendOrderConfirmation";
+import { sendAdminNotification } from "@/lib/sendAdminNotification";
 
 export interface OrderPayloadT {
   user: { email: string; name?: string };
-  paidRings: number;
-  freeRings: number;
-  ringQuantity: number;
+  paid: ringPayloadT[];
+  free: ringPayloadT[];
+  quantity: number;
   price: string;
-  fullAddress: string;
+  address: string;
 }
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -23,6 +26,7 @@ export async function saveOrderToDB(
   currency: string
 ) {
   await connectMongo();
+  const { user, paid, free, quantity, price, address } = payload;
 
   // prevent duplicate insertion
   const existing = await Order.findOne({ stripeSessionId });
@@ -37,28 +41,19 @@ export async function saveOrderToDB(
   });
 
   // --- Send Email to User ---
-  await resend.emails.send({
-    from: "onboarding@resend.dev", // replace with your domain if verified
-    to: "naeemmahmud370@gmail.com",
-    subject: "Order Confirmation - Smart Ring",
-    html: `
-      <h2>Hi ${payload.user.name || ""},</h2>
-      <p>Your order was successful 🎉</p>
-      <p><b>Total Paid:</b> $${payload.price}</p>
-      <p>Thank you for shopping with us!</p>
-    `,
-  });
+  await sendOrderConfirmation(payload);
+  await sendAdminNotification(payload);
 
   // --- Send Email to Admin ---
-  await resend.emails.send({
-    from: "onboarding@resend.dev",
-    to: "naeemmahmud370@gmail.com",
-    subject: "New Order Received - Smart Ring",
-    html: `
-      <h2>New Order Received</h2>
-      <pre>${JSON.stringify(payload, null, 2)}</pre>
-    `,
-  });
+  // await resend.emails.send({
+  //   from: "onboarding@resend.dev",
+  //   to: "naeemmahmud370@gmail.com",
+  //   subject: "New Order Received - Smart Ring",
+  //   html: `
+  //     <h2>New Order Received</h2>
+  //     <pre>${JSON.stringify(payload, null, 2)}</pre>
+  //   `,
+  // });
 
   return newOrder;
 }

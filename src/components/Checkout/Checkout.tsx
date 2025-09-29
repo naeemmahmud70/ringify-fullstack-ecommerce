@@ -65,14 +65,28 @@ const Checkout = () => {
   }, [status]);
 
   const handleCheckout = async () => {
+    const { id, ...userData } = loggedInUser;
+    const cleanPaidRings = paidRings.map(({ size, quantity, color }) => ({
+      size,
+      quantity,
+      color,
+    }));
+
+    const cleanFreeRings = freeRings.map(({ size, quantity, color }) => ({
+      size,
+      quantity,
+      color,
+    }));
+
     const orderPayload = {
-      user: loggedInUser,
-      paidRings: paidRings,
-      freeRings: freeRings,
-      ringQuantity: ringQuantity,
+      user: userData,
+      paid: cleanPaidRings,
+      free: cleanFreeRings,
+      quantity: ringQuantity,
       price: totalRingPrice.toFixed(2),
-      fullAddress: selectedAddress,
+      address: selectedAddress,
     };
+
     console.log("orderPayload", orderPayload);
     const stripe = await stripePromise;
     if (!stripe) return;
