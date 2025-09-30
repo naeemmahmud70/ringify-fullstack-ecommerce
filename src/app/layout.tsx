@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 
 import Modals from "@/components/ConditionalModal";
 import Navbar from "@/components/Navbar/Navbar";
@@ -21,11 +21,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        {children}
-        {modal}
-        <Modals />
-        <Toastify />
+        <Suspense>
+          <Navbar />
+          {children}
+          {modal}
+          <Modals />
+          <Toastify />
+        </Suspense>
       </body>
     </html>
   );

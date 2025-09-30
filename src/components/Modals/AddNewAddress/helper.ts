@@ -80,3 +80,44 @@ export const createFormSchema = (isOtherSelected: boolean) =>
           .min(4, { message: "Address type must be at least 4 characters" })
       : z.string().nonempty({ message: "Address type is required" }),
   });
+
+//Edit Schema definition
+export const editformSchema = (isOtherSelected: boolean) =>
+  z.object({
+    firstName: z
+      .string()
+      .min(4, "First name must be at least 4 characters")
+      .max(15, "First name should not exceed 15 characters"),
+    lastName: z
+      .string()
+      .min(4, "Last name must be at least 4 characters")
+      .max(15, "Last name should not exceed 15 characters"),
+    addressLine1: z.string().min(2, "Please enter address"),
+    addressLine2: z.string().min(2, "Please enter address"),
+    pincode: z
+      .string()
+      .min(4, "Postal code must be atleast 4 digits")
+      .max(10, "Postal code cannot exceed 10 digits")
+      .regex(
+        /^[a-zA-Z0-9\s\-]+$/,
+        "Postal code must be alphanumeric or numeric"
+      ),
+    country: z.string().min(2, "Please select country name"),
+    state: z.string().min(2, "Please select state name"),
+    city: z.string().min(2, "Please select city name"),
+    contactNumber: z
+      .string()
+      .min(10, "Phone number must be at least 10 digits")
+      .max(15, "Phone number cannot exceed 15 digits")
+      .regex(/^\+\d{1,4}-\d{6,15}$/, "Enter a valid phone number"),
+    saveAs: isOtherSelected
+      ? z
+          .string()
+          .min(4, { message: "Address type must be at least 4 characters" })
+      : z.string().nonempty({ message: "Address type is required" }),
+  });
+
+export const INPUT_CLASS =
+  "w-full text-[#5D5D5D] text-xs font-poppins py-2 h-[48px] px-5 rounded-[88px] border-[#D1D1D1] mt-1";
+export const LABEL_CLASS =
+  "text-xs text-[#2E2E2E] font-poppins font-normal leading-[19px]";

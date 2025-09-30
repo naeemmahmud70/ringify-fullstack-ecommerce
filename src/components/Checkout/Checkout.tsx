@@ -83,6 +83,7 @@ const Checkout = () => {
       paid: cleanPaidRings,
       free: cleanFreeRings,
       quantity: ringQuantity,
+      unitPrice: basePrice - (basePrice * discount) / 100,
       price: totalRingPrice.toFixed(2),
       address: selectedAddress,
     };

@@ -13,6 +13,7 @@ export interface OrderPayloadT {
   paid: ringPayloadT[];
   free: ringPayloadT[];
   quantity: number;
+  unitPrice?: number;
   price: string;
   address: string;
 }
@@ -21,7 +22,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function createCheckoutSession(orderData: OrderPayloadT) {
   const pendingOrder = await createPendingOrder(orderData);
-  console.log("paid", orderData.paid);
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
@@ -31,7 +31,7 @@ export async function createCheckoutSession(orderData: OrderPayloadT) {
         product_data: {
           name: `Ring - ${item.color} - ${item.size}`,
         },
-        unit_amount: Number(item.basePrice) * 100,
+        unit_amount: Number(orderData.unitPrice) * 100,
       },
       quantity: item.quantity,
     })),
