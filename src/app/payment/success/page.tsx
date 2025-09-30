@@ -1,5 +1,5 @@
-// app/payment/success/page.tsx
-import { saveOrderToDB } from "@/actions/order";
+import { getOrderById } from "@/actions/getOrder";
+import { updateOrderAfterPayment } from "@/actions/order";
 import BackHomeButton from "@/components/Home/BackToHome";
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
@@ -20,20 +20,18 @@ export default async function SuccessPage({ searchParams }: SuccessProps) {
       `${process.env.NEXT_PUBLIC_BASE_URL}/product/smart-rings/checkout?status=failed`
     );
   }
+  console.log("session_id", session_id);
 
   const session: Stripe.Checkout.Session =
     await stripe.checkout.sessions.retrieve(session_id);
 
-  if (session.payment_status === "paid" && session.metadata?.order) {
-    const orderPayload = JSON.parse(session.metadata.order);
-
-    // ✅ Save to DB via server action
-    await saveOrderToDB(
-      orderPayload,
+  if (session.metadata?.orderId) {
+    await updateOrderAfterPayment(
       session.id,
       session.amount_total!,
       session.currency!
     );
+    const orderData = await getOrderById(session.metadata?.orderId);
 
     return (
       <div className="bg-black min-h-screen flex flex-col items-center justify-center text-white p-6">
@@ -54,28 +52,32 @@ export default async function SuccessPage({ searchParams }: SuccessProps) {
 
           <div className="flex justify-between">
             <span className="font-medium">User:</span>
-            <span>{orderPayload?.user?.email}</span>
+            <span>{orderData?.user?.email}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Paid Rings:</span>
-            <span>{orderPayload?.paid?.length}</span>
+            {orderData?.paid?.reduce(
+              (total: number, ring: { quantity: number }) =>
+                total + (ring.quantity || 0),
+              0
+            )}
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Free Rings:</span>
-            <span>{orderPayload?.free?.length}</span>
+            <span>{orderData?.free?.length}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Total Quantity:</span>
-            <span>{orderPayload?.quantity}</span>
+            <span>{orderData?.quantity}</span>
           </div>
           <div className="flex justify-between ">
             <span className="font-medium">Total Price:</span>
-            <span className="font-bold">${orderPayload?.price}</span>
+            <span className="font-bold">${orderData?.price}</span>
           </div>
 
           <div>
             <h3 className="font-medium mt-4 mb-2">Shipping Address:</h3>
-            <p className="bg-gray-700 p-4 rounded">{orderPayload?.address}</p>
+            <p className="bg-gray-700 p-4 rounded">{orderData?.address}</p>
           </div>
           <div className="flex justify-center">
             <BackHomeButton />

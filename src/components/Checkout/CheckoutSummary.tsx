@@ -98,7 +98,7 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
         <div className="flex flex-col justify-center overflow-x-hidden">
           <Button
             onClick={handleCheckout}
-            disabled={ringQuantity > 1 && selectedAddress.length ? false : true}
+            disabled={ringQuantity > 0 && selectedAddress.length ? false : true}
             className={`mx-auto mt-6 w-full md:w-[457px] h-[60px] rounded-full px-6 py-3 transition flex justify-center items-center gap-3 
                   ${ringQuantity < 0 ? "bg-[#25B021]/50 cursor-not-allowed" : "bg-[#25B021] hover:bg-[#25B021] text-white"}`}
           >

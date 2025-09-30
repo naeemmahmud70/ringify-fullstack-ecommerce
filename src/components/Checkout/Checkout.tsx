@@ -43,6 +43,7 @@ const Checkout = () => {
   useEffect(() => {
     if (selectedOffer.PROMO_OFFER_1 || selectedOffer.PROMO_OFFER_2) {
       const { paid, free } = splitCartItems(selectedRings);
+      console.log("free", free);
       setPaidRings(paid);
       setFreeRings(free);
     } else {
@@ -64,12 +65,15 @@ const Checkout = () => {
     }
   }, [status]);
 
+  console.log("paid", paidRings);
+  console.log("freee", freeRings);
   const handleCheckout = async () => {
     const { id, ...userData } = loggedInUser;
     const cleanPaidRings = paidRings.map(({ size, quantity, color }) => ({
       size,
       quantity,
       color,
+      basePrice,
     }));
 
     const cleanFreeRings = freeRings.map(({ size, quantity, color }) => ({
@@ -77,6 +81,8 @@ const Checkout = () => {
       quantity,
       color,
     }));
+
+    console.log("cleanFreeRings", cleanFreeRings);
 
     const orderPayload = {
       user: userData,
@@ -87,13 +93,37 @@ const Checkout = () => {
       address: selectedAddress,
     };
 
-    console.log("orderPayload", orderPayload);
-    const stripe = await stripePromise;
-    if (!stripe) return;
+    try {
+      const session = await createCheckoutSession(orderPayload);
 
-    const session = await createCheckoutSession(orderPayload);
-    await stripe.redirectToCheckout({ sessionId: session.id });
-    console.log("session", session);
+      const stripe = await stripePromise;
+      if (!stripe) {
+        SetToastStates({
+          message: "Stripe failed to load!",
+          variant: "error",
+          triggerId: Date.now(),
+        });
+        return;
+      }
+
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (error) {
+        SetToastStates({
+          message: "Failed to redirect to checkout.",
+          variant: "error",
+          triggerId: Date.now(),
+        });
+      }
+    } catch (err) {
+      SetToastStates({
+        message: "Something went wrong!",
+        variant: "error",
+        triggerId: Date.now(),
+      });
+    }
   };
   return (
     <div className="text-white lg:flex justify-between">

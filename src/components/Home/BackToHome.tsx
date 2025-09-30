@@ -1,11 +1,17 @@
 "use client";
 
-import { useSelectedRings } from "@/store/users";
+import { useLoggedInUser, useSelectedRings } from "@/store/users";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function BackHomeButton() {
+  const router = useRouter();
   const { setSelectedRings } = useSelectedRings();
+  const { loggedInUser } = useLoggedInUser();
+  if (!loggedInUser.email) {
+    router.push("/");
+  }
   useEffect(() => {
     setSelectedRings([]);
     localStorage.removeItem("selectedRingDetails");

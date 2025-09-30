@@ -12,7 +12,7 @@ export async function sendAdminNotification(orderPayload: any) {
     <h2>New Order Received 🎉</h2>
     <p><strong>Customer:</strong> ${user.name} (${user.email})</p>
     <p><strong>Quantity:</strong> ${quantity} rings</p>
-    <p><strong>Total:</strong> ${price} BDT</p>
+    <p><strong>Total:</strong> ${price} USD</p>
     <p><strong>Shipping Address:</strong><br/>${address}</p>
 
     <p><strong>${hasFreeRings ? "Paid Rings" : "Rings"}:</strong></p>

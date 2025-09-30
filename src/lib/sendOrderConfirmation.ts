@@ -14,7 +14,7 @@ export async function sendOrderConfirmation(orderPayload: any) {
     <p><strong>Order Summary</strong></p>
     <ul>
       <li><b>Quantity:</b> ${quantity} rings</li>
-      <li><b>Total:</b> ${price} BDT</li>
+      <li><b>Total:</b> ${price} USD</li>
     </ul>
     <p><strong>Shipping Address:</strong><br/>${address}</p>
 
