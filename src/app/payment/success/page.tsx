@@ -5,6 +5,10 @@ import { getOrderById } from "@/actions/getOrder";
 import { updateOrderAfterPayment } from "@/actions/order";
 import BackHomeButton from "@/components/Home/BackToHome";
 
+export const metadata = {
+  title: "Ringify | Order Success",
+};
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 interface SuccessProps {

@@ -3,23 +3,27 @@ import React from "react";
 import HeroBanner from "@/components/OurStore/HeroBanner";
 import RingCards from "@/components/OurStore/RingCards";
 
+export const metadata = {
+  title: "Ringify | Our Store",
+};
+
 const rings = [
   {
-    name: "BAAI Zen Smart Ring | Black",
+    name: "Smart Ring | Black",
     description:
       "Track 10+ bio-markers with AI insights, 8 days battery life, 5 ATM waterproof, plus blockchain-secured rewards.",
     price: "$145",
     type: "black",
   },
   {
-    name: "BAAI Zen Smart Ring | Rose gold",
+    name: "Smart Ring | Rose gold",
     description:
       "Track 10+ bio-markers with AI insights, 8 days battery life, 5 ATM waterproof, plus blockchain-secured rewards.",
     price: "$145",
     type: "rosegold",
   },
   {
-    name: "BAAI Zen Smart Ring | Silver",
+    name: "Smart Ring | Silver",
     description:
       "Track 10+ bio-markers with AI insights, 8 days battery life, 5 ATM waterproof, plus blockchain-secured rewards.",
     price: "$145",

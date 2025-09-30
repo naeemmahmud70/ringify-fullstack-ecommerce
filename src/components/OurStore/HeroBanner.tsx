@@ -14,7 +14,8 @@ const HeroBanner = () => {
         <p className=" text-[15.79px] lg:text-[15.79px] md:text-[12px] leading-[150%] font-[Poppins]">
           Crafted for all-day comfort with a sleek, & lightweight design. Made
           from durable titanium in three distinctive colors, offering timeless
-          style and advanced wellness tracking enhanced with the power of Smart Ring!
+          style and advanced wellness tracking enhanced with the power of Smart
+          Ring!
         </p>
 
         <div className="">

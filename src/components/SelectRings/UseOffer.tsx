@@ -53,7 +53,7 @@ const UseOffer: React.FC<priceProp> = ({
 
   return (
     <div className="bg-[#131313] p-[20px] lg:p-[30px] lg:max-w-[564px] md:w-full rounded-xl mt-5 md:mt-0">
-      <h1 className="text-white text-[48px] font-mulish font-bold leading-[120%] h-[58px] tracking-[-0.025em] w-[208px]">
+      <h1 className="text-white text-[48px] font-mulish font-bold leading-[120%] h-[58px] tracking-[-0.025em]">
         Smart Ring
       </h1>
       <div className="flex items-center text-white text-base-lg font-poppins font-normal leading-[29px] tracking-tight mt-2">
@@ -62,7 +62,7 @@ const UseOffer: React.FC<priceProp> = ({
           (inclusive of all taxes)
         </span>
       </div>
-    
+
       <div className="border-[1px] border-solid border-[#292929] mt-3"></div>
       <p className="text-[#8F8F8F] text-xs font-poppins font-normal tracking-tight mt-8 leading-[24px] w-[511px]">
         Dispatch by :{" "}

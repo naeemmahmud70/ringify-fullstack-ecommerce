@@ -16,8 +16,8 @@ const HeroBanner = () => {
           </p>
 
           <p className="font-poppins sm:w-[855px] text-[#FFFFFFCC] text-[16px] lg:text-[18px] sm:text-[18px] font-normal text-center px-2 sm:px-0 leading-[150%] sm:leading-[180%] tracking-[-0.025em]">
-            Stay on top of your health goals with smart ring! Get insights
-            into your{" "}
+            Stay on top of your health goals with smart ring! Get insights into
+            your{" "}
             <span className="text-[#FFFFFF] font-semibold sm:font-bold tracking-[-0.025em] leading-[150%] sm:leading-[180%] text-[16px] sm:text-[18px]">
               sleep, SPO2, heart rate,
               <br className="hidden sm:block" />

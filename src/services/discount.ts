@@ -10,5 +10,5 @@ export async function applyDiscountCode(value: { code: string }) {
     throw new Error(error.message || "Discount code validation failed");
   }
 
-  return res.json(); 
+  return res.json();
 }
