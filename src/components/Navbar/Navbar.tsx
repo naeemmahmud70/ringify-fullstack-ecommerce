@@ -57,7 +57,6 @@ const Navbar = () => {
   }, [isOpen]);
 
   if (!mounted) {
-    // Avoid rendering mismatched HTML during SSR
     return null;
   }
 
@@ -98,7 +97,7 @@ const Navbar = () => {
                 alt="BAAI Logo"
               />
               <h2 className="font-mulish text-[17px] sm:text-[24px]  font-bold  leading-[100%] tracking-[1px]">
-                BrainAlive AI
+                Ringify AI
               </h2>
             </Link>
           </div>
@@ -123,7 +122,7 @@ const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex lg:gap-3 xl:gap-8 items-center">
-            {loggedInUser?.id ? (
+            {loggedInUser?.email ? (
               <>
                 <Button
                   onClick={() => handleLogout()}
@@ -198,11 +197,11 @@ const Navbar = () => {
                   src="/baai-logo.svg"
                   width={40}
                   height={40}
-                  alt="BrainAlive Logo"
+                  alt="Ringify Logo"
                   quality={100}
                 />
                 <h2 className="font-mulish text-[17px]  font-bold  leading-[100%] ">
-                  BrainAlive AI
+                  Ringify AI
                 </h2>
               </Link>
             </div>
@@ -237,7 +236,7 @@ const Navbar = () => {
               className=" inline-block w-full"
               onClick={() => setIsOpen(false)}
             >
-              {loggedInUser?.id ? (
+              {loggedInUser?.email ? (
                 <Button
                   onClick={() => handleLogout()}
                   className=" w-[136px] h-[56px] block border bg-transparent hover:bg-transparent text-center text-[16px] border-white text-white font-poppins font-medium px-4 py-2  mt-2 rounded-full"

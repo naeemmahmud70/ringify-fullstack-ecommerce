@@ -1,9 +1,10 @@
 "use client";
 
-import { useLoggedInUser, useSelectedRings } from "@/store/users";
+import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+
+import { useLoggedInUser, useSelectedRings } from "@/store/users";
 
 export default function BackHomeButton() {
   const router = useRouter();

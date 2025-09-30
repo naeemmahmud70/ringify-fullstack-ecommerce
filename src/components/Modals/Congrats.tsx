@@ -15,7 +15,7 @@ const Congrats: React.FC<{
     let timer: NodeJS.Timeout;
 
     if (openCongrats) {
-      setTimeLeft(5); // Reset timer every time modal opens
+      setTimeLeft(5); 
       timer = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {

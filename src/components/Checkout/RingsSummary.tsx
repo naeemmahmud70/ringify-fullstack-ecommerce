@@ -49,7 +49,7 @@ const RingsSummary: React.FC<RingsSummaryProps> = ({
                         <div className="w-full flex justify-between items-center">
                           <div>
                             <h3 className="text-xs text-white font-poppins font-medium">
-                              BAAI Zen
+                              Smart Ring
                             </h3>
 
                             <p className="text-[14px] font-poppins text-white font-normal capitalize">
@@ -104,7 +104,7 @@ const RingsSummary: React.FC<RingsSummaryProps> = ({
                         <div className="w-full flex justify-between items-center">
                           <div>
                             <h3 className="text-xs text-white font-poppins font-medium">
-                              BAAI Zen
+                              Smart Ring
                             </h3>
 
                             <p className="text-[14px] font-poppins text-white font-normal capitalize">

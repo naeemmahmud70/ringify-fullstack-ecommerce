@@ -1,7 +1,4 @@
-import { Resend } from "resend";
 import { sendEmail } from "./sendEmail";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendOrderConfirmation(orderPayload: any) {
   const { user, paid, free, quantity, price, address } = orderPayload;

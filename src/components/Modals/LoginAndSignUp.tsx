@@ -6,7 +6,6 @@ import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-// import { sentOtp, userLogin } from "@/api/users";
 import {
   Dialog,
   DialogContent,

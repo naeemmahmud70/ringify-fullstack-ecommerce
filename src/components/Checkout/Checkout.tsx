@@ -2,9 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
+import { createCheckoutSession } from "@/actions/payment";
+import { useToastStore } from "@/store/toast";
 import { useLoggedInUser, useRingOffer, useSelectedRings } from "@/store/users";
 import { splitCartItems } from "@/utils/cartItems";
 import { getSelectedOffer } from "@/utils/selectedOffer";
+import { loadStripe } from "@stripe/stripe-js";
 
 import config from "../../../config/config";
 import { CartItemT } from "../Cart/CartItems";
@@ -13,9 +16,6 @@ import CheckoutSummary from "./CheckoutSummary";
 import Discount from "./Discount";
 import RingsSummary from "./RingsSummary";
 import AddressSelection from "./SelectAddress";
-import { loadStripe } from "@stripe/stripe-js";
-import { createCheckoutSession } from "@/actions/payment";
-import { useToastStore } from "@/store/toast";
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
@@ -43,7 +43,6 @@ const Checkout = () => {
   useEffect(() => {
     if (selectedOffer.PROMO_OFFER_1 || selectedOffer.PROMO_OFFER_2) {
       const { paid, free } = splitCartItems(selectedRings);
-      console.log("free", free);
       setPaidRings(paid);
       setFreeRings(free);
     } else {
@@ -65,10 +64,7 @@ const Checkout = () => {
     }
   }, [status]);
 
-  console.log("paid", paidRings);
-  console.log("freee", freeRings);
   const handleCheckout = async () => {
-    const { id, ...userData } = loggedInUser;
     const cleanPaidRings = paidRings.map(({ size, quantity, color }) => ({
       size,
       quantity,
@@ -82,10 +78,8 @@ const Checkout = () => {
       color,
     }));
 
-    console.log("cleanFreeRings", cleanFreeRings);
-
     const orderPayload = {
-      user: userData,
+      user: loggedInUser,
       paid: cleanPaidRings,
       free: cleanFreeRings,
       quantity: ringQuantity,

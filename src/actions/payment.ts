@@ -1,5 +1,6 @@
 "use server";
 import Stripe from "stripe";
+
 import { createPendingOrder } from "./order";
 export interface ringPayloadT {
   size: string;
@@ -8,7 +9,7 @@ export interface ringPayloadT {
   basePrice?: number;
 }
 export interface OrderPayloadT {
-  user: {};
+  user: object;
   paid: ringPayloadT[];
   free: ringPayloadT[];
   quantity: number;

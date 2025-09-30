@@ -1,8 +1,9 @@
+import { redirect } from "next/navigation";
+import Stripe from "stripe";
+
 import { getOrderById } from "@/actions/getOrder";
 import { updateOrderAfterPayment } from "@/actions/order";
 import BackHomeButton from "@/components/Home/BackToHome";
-import { redirect } from "next/navigation";
-import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -20,7 +21,6 @@ export default async function SuccessPage({ searchParams }: SuccessProps) {
       `${process.env.NEXT_PUBLIC_BASE_URL}/product/smart-rings/checkout?status=failed`
     );
   }
-  console.log("session_id", session_id);
 
   const session: Stripe.Checkout.Session =
     await stripe.checkout.sessions.retrieve(session_id);
@@ -42,7 +42,8 @@ export default async function SuccessPage({ searchParams }: SuccessProps) {
           <p className="text-5xl font-mulish">
             You paid{" "}
             <span className="font-semibold">
-              {session?.amount_total! / 100} {session?.currency?.toUpperCase()}
+              {(session?.amount_total ?? 0) / 100}{" "}
+              {session?.currency?.toUpperCase() ?? ""}
             </span>
           </p>
         </div>

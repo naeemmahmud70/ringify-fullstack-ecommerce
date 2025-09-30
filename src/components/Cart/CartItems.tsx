@@ -227,7 +227,7 @@ const CartItems: React.FC<CartItemsProps> = ({
                         />
                         <div className="flex-1">
                           <h3 className="text-[20px] font-medium font-[Poppins]">
-                            BAAI Zen
+                            Smart Ring
                           </h3>
                           <p className="text-[14px] text-white">
                             Size: {item.size}
@@ -265,7 +265,7 @@ const CartItems: React.FC<CartItemsProps> = ({
                     </div>
                     <div className="flex-1">
                       <h3 className="text-[20px] font-medium font-[Poppins]">
-                        BAAI Zen
+                        Smart Ring
                       </h3>
                       <p className="text-[14px] text-white">
                         Size: {item.size}

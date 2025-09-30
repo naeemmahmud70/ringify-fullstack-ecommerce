@@ -12,7 +12,7 @@ export const navbarItems: navItemT[] = [
   },
   {
     name: "Blogs",
-    link: "/blog",
+    link: "#",
     id: "blogs",
   },
 ];

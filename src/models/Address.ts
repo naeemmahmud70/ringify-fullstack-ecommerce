@@ -18,7 +18,6 @@ const AddressSchema = new Schema(
   { timestamps: true }
 );
 
-// Prevent model overwrite in dev/hot-reload
 const Address = models.Address || model("Address", AddressSchema);
 
 export default Address;

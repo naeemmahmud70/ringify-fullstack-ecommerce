@@ -3,8 +3,6 @@ import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-// import { forgetPassword } from "@/api/users";
 import {
   DialogContent,
   DialogDescription,

@@ -12,11 +12,11 @@ const HeroBanner = () => {
           <p className="text-white font-light sm:font-medium font-mulish text-[48px] xl:text-[72px] lg:text-[72px] sm:text-[48px] leading-[125%] sm:leading-[125%] tracking-[-0.025em] text-center">
             Empower your health with <br className="hidden xs:block" />
             <span className="sm:hidden"> </span>
-            <span className="text-green-custom">BAAI Zen Ring</span>
+            <span className="text-green-custom">Smart Ring</span>
           </p>
 
           <p className="font-poppins sm:w-[855px] text-[#FFFFFFCC] text-[16px] lg:text-[18px] sm:text-[18px] font-normal text-center px-2 sm:px-0 leading-[150%] sm:leading-[180%] tracking-[-0.025em]">
-            Stay on top of your health goals with BAAI Zen ring! Get insights
+            Stay on top of your health goals with smart ring! Get insights
             into your{" "}
             <span className="text-[#FFFFFF] font-semibold sm:font-bold tracking-[-0.025em] leading-[150%] sm:leading-[180%] text-[16px] sm:text-[18px]">
               sleep, SPO2, heart rate,
