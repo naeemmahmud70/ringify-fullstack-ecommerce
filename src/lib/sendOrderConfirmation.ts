@@ -49,7 +49,6 @@ export async function sendOrderConfirmation(orderPayload: any) {
       `🛒 New Order Received – ${user.name} placed an order`,
       htmlContent
     );
-    console.log("Order confirmation email sent!");
   } catch (error) {
     console.error("Email sending failed:", error);
   }

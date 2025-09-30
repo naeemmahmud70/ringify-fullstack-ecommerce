@@ -44,7 +44,6 @@ export async function sendAdminNotification(orderPayload: any) {
       `🛒 New Order Received – ${user.name} placed an order`,
       htmlContent
     );
-    console.log("Admin notification email sent!");
   } catch (error) {
     console.error("Admin email sending failed:", error);
   }
