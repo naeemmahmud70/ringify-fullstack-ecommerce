@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import HeroImage from "../../../public/home/Ring-Hero_Image.png";
+import HeroImage from "../../../public/Home/Ring-Hero_Image.png";
 
 const HeroBanner = () => {
   return (

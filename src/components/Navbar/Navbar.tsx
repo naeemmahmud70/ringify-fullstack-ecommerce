@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 
-import { navbarItems } from "@/Data/navbarItems";
+import { navbarItems } from "@/data/navbarItems";
 import { logout } from "@/services/auth";
 import { useAuthModal } from "@/store/loginModal";
 import { useToastStore } from "@/store/toast";
