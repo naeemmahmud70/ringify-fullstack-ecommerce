@@ -1,4 +1,5 @@
 import connectMongo from "@/lib/connect-mongo";
+import { sendEmail } from "@/lib/sendEmail";
 import Otp from "@/models/Otp";
 import User from "@/models/User";
 import { generateOtp } from "@/utils/generateOtp";
@@ -10,7 +11,6 @@ export async function POST(req: Request) {
     await connectMongo();
     const { name, email, password } = await req.json();
 
-    // Basic validation
     if (!name || !email || !password) {
       return Response.json({
         status: 400,
@@ -29,20 +29,17 @@ export async function POST(req: Request) {
     await Otp.deleteMany({ email });
     await Otp.create({ email, otp, expiresAt });
 
-    // const html = `
-    //   <p>Hello ${name},</p>
-    //   <p>Your OTP code is: <b>${otp}</b></p>
-    //   <p>This code will expire in ${OTP_EXPIRY_MINUTES} minutes.</p>
-    // `;
+    const html = `
+      <p>Hello ${name},</p>
+      <p>Your OTP code is: <b>${otp}</b></p>
+      <p>This code will expire in ${OTP_EXPIRY_MINUTES} minutes.</p>
+    `;
 
-    // await sendEmail(
-    //   email,
-    //   `Your Ringify verification code (expires in ${OTP_EXPIRY_MINUTES} minutes)`,
-    //   html
-    // );
-
-    // ✅ bcrypt hash the password before sending it back
-    // const hashedPassword = await bcrypt.hash(password, 10);
+    await sendEmail(
+      email,
+      `Your Ringify verification code (expires in ${OTP_EXPIRY_MINUTES} minutes)`,
+      html
+    );
 
     return Response.json({
       status: 200,

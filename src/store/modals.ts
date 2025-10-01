@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export type addressEditT = {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   addressLine1: string;
@@ -33,7 +33,7 @@ export const useModals = create<modalStates>(set => ({
   addAddressForm: false,
   editAddressForm: false,
   editFormValue: {
-    id: 0,
+    id: "",
     firstName: "",
     lastName: "",
     addressLine1: "",

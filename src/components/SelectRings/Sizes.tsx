@@ -42,7 +42,6 @@ const Sizes: React.FC<SizeProps> = ({
       r => r.size === size && r.color === ringColor
     );
 
-    // Remove only if both size and color match
     if (existsIndex !== -1) {
       setRingSizes(prev => prev.filter((__, i) => i !== existsIndex));
     } else {

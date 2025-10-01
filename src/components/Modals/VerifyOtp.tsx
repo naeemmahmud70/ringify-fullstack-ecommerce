@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, X } from "lucide-react";
 import OtpInput from "react-otp-input";
 
-// import { sentOtp, verifyOtp } from "@/api/users";
 import {
   DialogContent,
   DialogDescription,

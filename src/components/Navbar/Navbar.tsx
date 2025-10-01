@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 
 import { navbarItems } from "@/Data/navbarItems";
@@ -24,10 +24,25 @@ const Navbar = () => {
   const routePathname = usePathname();
   const { loggedInUser, setLoggedInUser } = useLoggedInUser();
   const { SetToastStates } = useToastStore();
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (error === "unauthorized") {
+      localStorage.clear();
+      setLoggedInUser({ name: "", email: "", id: "" });
+      setSelectedRings([]);
+      SetToastStates({
+        message: "Unauthorized! Please login.",
+        variant: "success",
+        triggerId: Date.now(),
+      });
+    }
+  }, [error]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -42,7 +57,6 @@ const Navbar = () => {
   }, [isOpen]);
 
   if (!mounted) {
-    // Avoid rendering mismatched HTML during SSR
     return null;
   }
 
@@ -83,7 +97,7 @@ const Navbar = () => {
                 alt="BAAI Logo"
               />
               <h2 className="font-mulish text-[17px] sm:text-[24px]  font-bold  leading-[100%] tracking-[1px]">
-                BrainAlive AI
+                Ringify AI
               </h2>
             </Link>
           </div>
@@ -108,7 +122,7 @@ const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex lg:gap-3 xl:gap-8 items-center">
-            {loggedInUser?.id ? (
+            {loggedInUser?.email ? (
               <>
                 <Button
                   onClick={() => handleLogout()}
@@ -183,11 +197,11 @@ const Navbar = () => {
                   src="/baai-logo.svg"
                   width={40}
                   height={40}
-                  alt="BrainAlive Logo"
+                  alt="Ringify Logo"
                   quality={100}
                 />
                 <h2 className="font-mulish text-[17px]  font-bold  leading-[100%] ">
-                  BrainAlive AI
+                  Ringify AI
                 </h2>
               </Link>
             </div>
@@ -222,7 +236,7 @@ const Navbar = () => {
               className=" inline-block w-full"
               onClick={() => setIsOpen(false)}
             >
-              {loggedInUser?.id ? (
+              {loggedInUser?.email ? (
                 <Button
                   onClick={() => handleLogout()}
                   className=" w-[136px] h-[56px] block border bg-transparent hover:bg-transparent text-center text-[16px] border-white text-white font-poppins font-medium px-4 py-2  mt-2 rounded-full"
