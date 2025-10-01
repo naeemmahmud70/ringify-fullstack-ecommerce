@@ -42,6 +42,7 @@ export async function DELETE(
   req: Request,
   { params }: { params: { id: string } }
 ) {
+  console.log("req", req);
   try {
     await connectMongo();
     const { id } = params;

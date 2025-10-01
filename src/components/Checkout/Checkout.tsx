@@ -34,14 +34,11 @@ const Checkout = () => {
 
   useEffect(() => {
     const offer = getSelectedOffer();
-    if (offer) {
-      setDiscount(0);
-      setSelectedOffer(offer);
-    }
-  }, []);
 
-  useEffect(() => {
-    if (selectedOffer.PROMO_OFFER_1 || selectedOffer.PROMO_OFFER_2) {
+    if (offer && (offer.PROMO_OFFER_1 || offer.PROMO_OFFER_2)) {
+      setSelectedOffer(offer);
+      setDiscount(0);
+      console.log("selectedOffer", selectedOffer);
       const { paid, free } = splitCartItems(selectedRings);
       setPaidRings(paid);
       setFreeRings(free);
@@ -49,7 +46,9 @@ const Checkout = () => {
       setPaidRings(selectedRings);
       setFreeRings([]);
     }
-  }, []);
+  }, [selectedRings]);
+
+  console.log("selectedOffer", selectedOffer);
 
   const searchParams = useSearchParams();
   const status = searchParams.get("status");

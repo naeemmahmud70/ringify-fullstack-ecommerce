@@ -115,10 +115,10 @@ const Discount: React.FC<OrderSummaryProps> = ({
               >
                 <InputBox
                   name="code"
-                  placeholder="Dicount code"
+                  placeholder="Use naeem10 as discount code"
                   readOnly={edit ? true : false}
                   autoComplete="off"
-                  className={`bg-transparent  ${edit ? " text-gray-400" : "text-white"} px-0 h-full rounded-full border-0 text-xs font-poppins font-normal placeholder:text-xs`}
+                  className={`bg-transparent min-w-[300px]  ${edit ? " text-gray-400" : "text-white"} px-0 h-full rounded-full border-0 text-xs font-poppins font-normal placeholder:text-xs`}
                   form={forms}
                 />
 
