@@ -1,9 +1,9 @@
+import { redirect } from "next/navigation";
 import Stripe from "stripe";
 
 import { getOrderById } from "@/actions/getOrder";
 import { updateOrderAfterPayment } from "@/actions/order";
 import BackHomeButton from "@/components/Home/BackToHome";
-import { redirect } from "next/navigation";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
