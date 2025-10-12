@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import Stripe from "stripe";
 
 import { getOrderById } from "@/actions/getOrder";
@@ -17,6 +18,11 @@ export default async function SuccessContent({
     await stripe.checkout.sessions.retrieve(session_id);
 
   if (session.metadata?.orderId) {
+    if (session.payment_status !== "paid") {
+      redirect(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/product/smart-rings/checkout?status=failed`
+      );
+    }
     await updateOrderAfterPayment(
       session.id,
       session.amount_total!,
