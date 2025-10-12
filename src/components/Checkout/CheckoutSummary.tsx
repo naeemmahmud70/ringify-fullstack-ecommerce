@@ -96,6 +96,17 @@ const CheckoutSummary: React.FC<OrderSummaryProps> = ({
         </div>
 
         <div className="flex flex-col justify-center overflow-x-hidden">
+          <div className="mt-4 p-4 bg-[#25B021]/25 border font-sans border-[#25B021] rounded-md">
+            <p className="text-xs text-[#25B021]">
+              <strong>Test Mode:</strong> You&apos;ll be redirected to
+              Stripe&apos;s secure checkout page.
+              <br />
+              Use test card:{" "}
+              <code className="bg-slate-300 px-2 py-1 rounded">
+                4242 4242 4242 4242
+              </code>
+            </p>
+          </div>
           <Button
             onClick={handleCheckout}
             disabled={ringQuantity > 0 && selectedAddress.length ? false : true}
