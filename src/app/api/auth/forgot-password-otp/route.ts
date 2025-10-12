@@ -1,4 +1,5 @@
-import connectMongo from "@/lib/connect-mongo";
+import connectMongo from "@/database/connect-mongo";
+import { sendEmail } from "@/lib/sendEmail";
 import Otp from "@/models/Otp";
 import User from "@/models/User";
 import { generateOtp } from "@/utils/generateOtp";
@@ -27,7 +28,11 @@ export async function POST(req: Request) {
     await Otp.deleteMany({ email });
     await Otp.create({ email, otp, expiresAt });
 
-    // await sendEmail(email, `Reset Password OTP`, `<p>Your OTP is <b>${otp}</b></p>`);
+    await sendEmail(
+      email,
+      `Reset Password OTP`,
+      `<p>Your OTP is <b>${otp}</b></p>`
+    );
 
     return Response.json({
       status: 200,

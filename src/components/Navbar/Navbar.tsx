@@ -11,8 +11,8 @@ import { useAuthModal } from "@/store/loginModal";
 import { useToastStore } from "@/store/toast";
 import { useLoggedInUser, useSelectedRings } from "@/store/users";
 
-import { Button } from "../ui/button";
 import brandLogo from "../../../public/brand-logo.png";
+import { Button } from "../ui/button";
 
 import AddedToCart from "./AddedToCart/AddedToCart";
 

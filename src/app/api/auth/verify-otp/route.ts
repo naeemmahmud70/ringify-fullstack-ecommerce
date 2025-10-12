@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import connectMongo from "@/lib/connect-mongo";
+import connectMongo from "@/database/connect-mongo";
 import Otp from "@/models/Otp";
 import User from "@/models/User";
 

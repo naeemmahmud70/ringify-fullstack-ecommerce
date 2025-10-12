@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import connectMongo from "@/lib/connect-mongo";
+import connectMongo from "@/database/connect-mongo";
 import Order from "@/models/Order";
 
 export async function getOrderById(orderId: string) {
