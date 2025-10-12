@@ -26,14 +26,12 @@ Built with Next.js, TailwindCSS, and shadcn/ui, Ringify offers a highly responsi
 **💳 Stripe-Powered Checkout Flow** – Integrated Stripe.js Hosted Checkout, ensuring fast, secure, and transparent payment processing with live invoice generation.
 
 **📧 Automated Email Notifications** –
-
 - Customers receive detailed order confirmations and invoices.
 - Admins are instantly notified of new orders and payments for operational tracking.
 
 **📱 Modern, Responsive UI/UX** – Built with TailwindCSS and shadcn/ui, providing a sleek, adaptive, and premium design that aligns with the smart-tech brand identity.
 
-⚙️ **Robust Full-Stack Architecture** –
-
+**⚙️ Full-Stack Architecture** –
 - Frontend & Backend: Next.js  
 - Database: MongoDB (Mongoose ODM)  
 - Payment Gateway: Stripe.js  
