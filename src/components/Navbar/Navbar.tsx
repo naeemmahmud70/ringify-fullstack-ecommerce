@@ -10,6 +10,7 @@ import { useLoginModal } from "@/store/loginModal";
 
 import AddedToCart from "./AddedToCart/AddedToCart";
 import { Button } from "../ui/button";
+import brandLogo from "../../../public/brand-logo.png";
 
 const Navbar = () => {
   const { isModalOpen, setIsModalOpen } = useLoginModal();
@@ -74,15 +75,11 @@ const Navbar = () => {
           <div className="w-[217px] h-[68px]">
             <Link href="/" className="flex items-center gap-3">
               <Image
-                src="/baai-logo.svg"
-                width={38}
-                height={68}
+                className="w-[150px] lg:w-[200px]"
+                src={brandLogo}
                 quality={100}
                 alt="BAAI Logo"
               />
-              <h2 className="font-mulish text-[17px] sm:text-[24px]  font-bold  leading-[100%] tracking-[1px]">
-                BrainAlive AI
-              </h2>
             </Link>
           </div>
 
