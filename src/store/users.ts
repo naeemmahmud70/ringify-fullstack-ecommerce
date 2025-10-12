@@ -1,12 +1,26 @@
 import { create } from "zustand";
 
-interface userState {
-  loggedInUser: boolean;
-  setLoggedInUser: (loading: boolean) => void;
-}
+import { selectedRingPropsT } from "@/components/SelectRings/SelectRings";
+import { getLoggedInUser } from "@/utils/getLoggedInUser";
 
+import { getSelectedRingDetails } from "../utils/selectedRingDetails";
+
+export interface loggedInUserT {
+  name: string;
+  email: string;
+  id: string;
+}
+interface userState {
+  loggedInUser: loggedInUserT;
+  setLoggedInUser: (loading: loggedInUserT) => void;
+}
+const user = getLoggedInUser();
 export const useLoggedInUser = create<userState>(set => ({
-  loggedInUser: false,
+  loggedInUser: {
+    name: user?.name ?? "",
+    email: user?.email ?? "",
+    id: user?.id ?? "",
+  },
   setLoggedInUser: loggedInUser => set({ loggedInUser }),
 }));
 
@@ -32,4 +46,30 @@ export const useRingOffer = create<offerState>(set => ({
       selectedOffer:
         typeof updater === "function" ? updater(state.selectedOffer) : updater,
     })),
+}));
+
+interface SelectedRingState {
+  ringQuantity: number;
+  selectedRings: selectedRingPropsT[];
+  setSelectedRings: (loading: selectedRingPropsT[]) => void;
+}
+
+const alreadySelected: selectedRingPropsT[] = getSelectedRingDetails();
+
+export const useSelectedRings = create<SelectedRingState>(set => ({
+  ringQuantity: alreadySelected
+    ? alreadySelected.reduce((acc, curr) => acc + curr.quantity, 0)
+    : 0,
+  selectedRings: alreadySelected ?? [
+    { size: "", quantity: 0, color: "", basePrice: 0 },
+  ],
+
+  setSelectedRings: value => {
+    const totalQuantity = value.reduce((acc, curr) => acc + curr.quantity, 0);
+
+    set({
+      selectedRings: value,
+      ringQuantity: totalQuantity,
+    });
+  },
 }));

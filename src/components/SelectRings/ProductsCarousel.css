@@ -1,0 +1,25 @@
+.slider-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.slick-slide img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.slick-prev,
+.slick-next {
+  z-index: 1;
+}
+
+.slick-dots {
+  bottom: -30px;
+}
+
+.slick-dots li button:before {
+  color: blue;
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "url": "/products/ring/black/black-1.png",
+    "alt": "black",
+    "type": "black",
+    "title": "Black",
+    "additionalUrls": [
+      "/products/ring/black/black-2.png",
+      "/products/ring/black/black-4.png",
+      "/products/ring/common/common-1.png",
+      "/products/ring/black/black-1.png",
+      "/products/ring/common/accurate-finger.png",
+      "/products/ring/common/common-2.png",
+      "/products/ring/black/black-3.png"
+    ]
+  },
+  {
+    "id": 2,
+    "url": "/products/ring/silver/silver-1.png",
+    "alt": "silver",
+    "type": "silver",
+    "title": "Silver",
+    "additionalUrls": [
+      "/products/ring/silver/silver-2.png",
+      "/products/ring/silver/silver-4.png",
+      "/products/ring/common/common-1.png",
+      "/products/ring/silver/silver-1.png",
+      "/products/ring/common/accurate-finger.png",
+      "/products/ring/common/common-2.png",
+      "/products/ring/silver/silver-3.png"
+    ]
+  },
+  {
+    "id": 3,
+    "url": "/products/ring/rosegold/rosegold-1.png",
+    "alt": "rose-gold",
+    "type": "rosegold",
+    "title": "Rose Gold",
+    "additionalUrls": [
+      "/products/ring/rosegold/rosegold-2.png",
+      "/products/ring/rosegold/rosegold-4.png",
+      "/products/ring/common/common-1.png",
+      "/products/ring/rosegold/rosegold-1.png",
+      "/products/ring/common/accurate-finger.png",
+      "/products/ring/common/common-2.png",
+      "/products/ring/rosegold/rosegold-3.png"
+    ]
+  }
+]

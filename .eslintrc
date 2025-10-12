@@ -4,8 +4,17 @@
     "node": true,
     "browser": false,
   },
-  "extends": ["next", "next/core-web-vitals", "next/typescript", "prettier"],
-  "plugins": ["prettier", "simple-import-sort", "unused-imports"],
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "next/typescript",
+    "prettier"
+  ],
+  "plugins": [
+    "prettier",
+    "simple-import-sort",
+    "unused-imports"
+  ],
   "rules": {
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
@@ -14,6 +23,7 @@
         "vars": "all",
         "args": "all",
         "ignoreRestSiblings": false,
+        "argsIgnorePattern": "^_"
       },
     ],
     "curly": "warn",
@@ -30,26 +40,50 @@
   },
   "overrides": [
     {
-      "files": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+      "files": [
+        "**/*.js",
+        "**/*.jsx",
+        "**/*.ts",
+        "**/*.tsx"
+      ],
       "rules": {
         "simple-import-sort/imports": [
           "error",
           {
             "groups": [
               // `react` first, `next` second, then packages starting with a character
-              ["^react$", "^next", "^[a-z]"],
+              [
+                "^react$",
+                "^next",
+                "^[a-z]"
+              ],
               // Packages starting with `@`
-              ["^@"],
+              [
+                "^@"
+              ],
               // Packages starting with `~`
-              ["^~"],
+              [
+                "^~"
+              ],
               // Imports starting with `../`
-              ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+              [
+                "^\\.\\.(?!/?$)",
+                "^\\.\\./?$"
+              ],
               // Imports starting with `./`
-              ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+              [
+                "^\\./(?=.*/)(?!/?$)",
+                "^\\.(?!/?$)",
+                "^\\./?$"
+              ],
               // Style imports
-              ["^.+\\.s?css$"],
+              [
+                "^.+\\.s?css$"
+              ],
               // Side effect imports
-              ["^\\u0000"],
+              [
+                "^\\u0000"
+              ],
             ],
           },
         ],
@@ -57,4 +91,3 @@
     },
   ],
 }
-

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export type addressEditT = {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   addressLine1: string;
@@ -16,12 +16,12 @@ export type addressEditT = {
 };
 
 interface modalStates {
-  isModalOpen: boolean;
+  isAuthModalOpen: boolean;
   addAddressForm: boolean;
   editAddressForm: boolean;
   editFormValue: addressEditT;
   unlockOfferModal: string;
-  setIsModalOpen: (isModalOpen: boolean) => void;
+  setIsAuthModalOpen: (isAuthModalOpen: boolean) => void;
   setAddAddress: (show: boolean) => void;
   setEditAdressForm: (show: boolean) => void;
   setEditFormValue: (value: addressEditT) => void;
@@ -29,11 +29,11 @@ interface modalStates {
 }
 
 export const useModals = create<modalStates>(set => ({
-  isModalOpen: false,
+  isAuthModalOpen: false,
   addAddressForm: false,
   editAddressForm: false,
   editFormValue: {
-    id: 0,
+    id: "",
     firstName: "",
     lastName: "",
     addressLine1: "",
@@ -47,7 +47,7 @@ export const useModals = create<modalStates>(set => ({
     isSelectedAddress: false, // Optional, but setting a default value
   },
   unlockOfferModal: "",
-  setIsModalOpen: isModalOpen => set({ isModalOpen }),
+  setIsAuthModalOpen: isAuthModalOpen => set({ isAuthModalOpen }),
   setAddAddress: show =>
     set({
       addAddressForm: show,

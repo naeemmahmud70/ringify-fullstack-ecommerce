@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import HeroImage from "../../../public/home/Ring-Hero_Image.png";
+import HeroImage from "../../../public/Home/Ring-Hero_Image.png";
 
 const HeroBanner = () => {
   return (
@@ -12,12 +12,12 @@ const HeroBanner = () => {
           <p className="text-white font-light sm:font-medium font-mulish text-[48px] xl:text-[72px] lg:text-[72px] sm:text-[48px] leading-[125%] sm:leading-[125%] tracking-[-0.025em] text-center">
             Empower your health with <br className="hidden xs:block" />
             <span className="sm:hidden"> </span>
-            <span className="text-green-custom">BAAI Zen Ring</span>
+            <span className="text-green-custom">Smart Ring</span>
           </p>
 
           <p className="font-poppins sm:w-[855px] text-[#FFFFFFCC] text-[16px] lg:text-[18px] sm:text-[18px] font-normal text-center px-2 sm:px-0 leading-[150%] sm:leading-[180%] tracking-[-0.025em]">
-            Stay on top of your health goals with BAAI Zen ring! Get insights
-            into your{" "}
+            Stay on top of your health goals with smart ring! Get insights into
+            your{" "}
             <span className="text-[#FFFFFF] font-semibold sm:font-bold tracking-[-0.025em] leading-[150%] sm:leading-[180%] text-[16px] sm:text-[18px]">
               sleep, SPO2, heart rate,
               <br className="hidden sm:block" />
@@ -32,7 +32,7 @@ const HeroBanner = () => {
 
           <div className="my-1 z-[100] sm:w-[350px] xs:w-[350px] lg:w-[152px] h-[56px] bg-[#25b021] text-white text-[16px] pt-5 px-6 py-3 rounded-full font-poppins font-medium leading-[100%] tracking-wide text-center">
             <Link
-              href="/product/baai-zen-smart-rings/buy-now"
+              href="/product/smart-rings/select-rings"
               id="buy-now"
               className="block w-full h-full relative bottom-[3px] md:bottom-[0px]"
             >

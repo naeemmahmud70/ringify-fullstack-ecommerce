@@ -2,62 +2,51 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 
-import { useCart } from "@/context/CartContext";
-import { useLoginModal } from "@/store/loginModal";
+import { navbarItems } from "@/data/navbarItems";
+import { logout } from "@/services/auth";
+import { useAuthModal } from "@/store/loginModal";
+import { useToastStore } from "@/store/toast";
+import { useLoggedInUser, useSelectedRings } from "@/store/users";
 
-import AddedToCart from "./AddedToCart/AddedToCart";
 import { Button } from "../ui/button";
 import brandLogo from "../../../public/brand-logo.png";
 
+import AddedToCart from "./AddedToCart/AddedToCart";
+
 const Navbar = () => {
-  const { isModalOpen, setIsModalOpen } = useLoginModal();
+  const { setIsAuthModalOpen, setBackgroundPath } = useAuthModal();
+  const { setSelectedRings } = useSelectedRings();
   const [isOpen, setIsOpen] = useState(false);
-  const [loggedIn, setLoggedIn] = useState("");
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const routePathname = usePathname();
-  const { setCartQuantity } = useCart();
+  const { loggedInUser, setLoggedInUser } = useLoggedInUser();
+  const { SetToastStates } = useToastStore();
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (error === "unauthorized") {
+      localStorage.clear();
+      setLoggedInUser({ name: "", email: "", id: "" });
+      setSelectedRings([]);
+      SetToastStates({
+        message: "Unauthorized! Please login.",
+        variant: "success",
+        triggerId: Date.now(),
+      });
+    }
+  }, [error]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-  };
-
-  type itemT = {
-    name: string;
-    link: string;
-    id: string;
-  };
-
-  const navbarItems: itemT[] = [
-    {
-      name: "Our Store",
-      link: "/product/smart-rings/ourstore",
-      id: "our-store",
-    },
-    {
-      name: "Blogs",
-      link: "/blog",
-      id: "blogs",
-    },
-  ];
-
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem("loggedInUser");
-    if (loggedInUser) {
-      const parsedValue = JSON.parse(loggedInUser);
-      setLoggedIn(parsedValue?.email);
-    }
-  }, [loggedIn, isModalOpen]);
-
-  const handleLogout = async () => {
-    if (loggedIn) {
-      localStorage.removeItem("loggedInUser");
-      localStorage.clear();
-      setLoggedIn("");
-      setCartQuantity(0);
-    }
   };
 
   useEffect(() => {
@@ -67,6 +56,33 @@ const Navbar = () => {
       return () => window.removeEventListener("scroll", handleScroll);
     }
   }, [isOpen]);
+
+  if (!mounted) {
+    return null;
+  }
+
+  const handleLogout = async () => {
+    try {
+      const response = await logout();
+      if (loggedInUser && response.status == 200) {
+        localStorage.clear();
+        setLoggedInUser({ name: "", email: "", id: "" });
+        router.push("/");
+        setSelectedRings([]);
+        SetToastStates({
+          message: response?.message,
+          variant: "success",
+          triggerId: Date.now(),
+        });
+      }
+    } catch (error: any) {
+      SetToastStates({
+        message: "Something went wrong! Please try again.",
+        variant: "error",
+        triggerId: Date.now(),
+      });
+    }
+  };
 
   return (
     <div className=" text-white absolute top-[-10px] w-full px-2 lg:px-8 z-50 bg-transparent lg:bg-transparent">
@@ -103,13 +119,10 @@ const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex lg:gap-3 xl:gap-8 items-center">
-            {loggedIn ? (
+            {loggedInUser?.email ? (
               <>
                 <Button
-                  onClick={() => {
-                    handleLogout();
-                    router.replace("/product/baai-zen-smart-rings");
-                  }}
+                  onClick={() => handleLogout()}
                   className="w-[136px] h-[56px] bg-transparent hover:bg-transparent leading-[180%] tracking-[0px] px-[40px] py-[15px] border border-[#ffffff] rounded-[88px] text-[#ffffff] text-[16px] font-poppins"
                 >
                   Log Out
@@ -117,22 +130,27 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Button
-                  onClick={() => setIsModalOpen(true)}
+                <Link
+                  onClick={() => {
+                    setIsAuthModalOpen(true);
+                    setBackgroundPath(routePathname);
+                  }}
+                  href="/login"
+                  scroll={false}
                   className="w-[136px] h-[56px] bg-transparent hover:bg-transparent leading-[180%] tracking-[0px] px-[40px] py-[15px] border border-[#ffffff] rounded-[88px] text-[#ffffff] text-[16px] font-poppins"
                 >
                   Login
-                </Button>
+                </Link>
               </>
             )}
             <Link
-              href="/product/smart-rings/buy-ring"
+              href="/product/smart-rings/select-rings"
               id="buy-ring"
               className="w-[194px] h-[56px] bg-[#25b021] text-[#ffffff] text-[16px] px-14 py-4 rounded-[88px] font-poppins font-medium leading-[180%] tracking-[0px]"
             >
               Buy Ring
             </Link>
-            {routePathname !== "/product/baai-zen-smart-rings/cart-page" && (
+            {routePathname !== "/product/smart-rings/cart-page" && (
               <AddedToCart />
             )}
           </div>
@@ -142,17 +160,19 @@ const Navbar = () => {
               <AddedToCart />
             )}
 
-            <button
-              type="button"
-              onClick={toggleMenu}
-              className="text-white hover:text-gray-400 focus:outline-none"
-            >
-              {isOpen ? (
-                <AiOutlineClose size={24} />
-              ) : (
-                <AiOutlineMenu size={24} />
-              )}
-            </button>
+            <div>
+              <button
+                type="button"
+                onClick={toggleMenu}
+                className="text-white hover:text-gray-400 focus:outline-none"
+              >
+                {isOpen ? (
+                  <AiOutlineClose size={24} />
+                ) : (
+                  <AiOutlineMenu size={24} />
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -174,24 +194,26 @@ const Navbar = () => {
                   src="/baai-logo.svg"
                   width={40}
                   height={40}
-                  alt="BrainAlive Logo"
+                  alt="Ringify Logo"
                   quality={100}
                 />
                 <h2 className="font-mulish text-[17px]  font-bold  leading-[100%] ">
-                  BrainAlive AI
+                  Ringify AI
                 </h2>
               </Link>
             </div>
 
             <div className="lg:hidden flex flex-row gap-5 justify-end items-center">
               <AddedToCart />
-              <button
-                onClick={() => setIsOpen(false)}
-                aria-label="Close Menu"
-                className="text-[#ffffff]"
-              >
-                <AiOutlineClose size={30} />
-              </button>
+              <div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  aria-label="Close Menu"
+                  className="text-[#ffffff]"
+                >
+                  <AiOutlineClose size={30} />
+                </button>
+              </div>
             </div>
           </div>
           {/* Menu content */}
@@ -211,12 +233,9 @@ const Navbar = () => {
               className=" inline-block w-full"
               onClick={() => setIsOpen(false)}
             >
-              {loggedIn ? (
+              {loggedInUser?.email ? (
                 <Button
-                  onClick={() => {
-                    handleLogout();
-                    router.replace("/product/baai-zen-smart-rings");
-                  }}
+                  onClick={() => handleLogout()}
                   className=" w-[136px] h-[56px] block border bg-transparent hover:bg-transparent text-center text-[16px] border-white text-white font-poppins font-medium px-4 py-2  mt-2 rounded-full"
                 >
                   Log out
@@ -225,8 +244,9 @@ const Navbar = () => {
                 <Button
                   onClick={(e: any) => {
                     e.stopPropagation();
-                    setIsModalOpen(true);
+                    setIsAuthModalOpen(true);
                     setIsOpen(false);
+                    setBackgroundPath(routePathname);
                   }}
                   className=" w-[136px] h-[56px] block border bg-transparent hover:bg-transparent text-center text-[16px] border-white text-white font-poppins font-medium px-4 py-2 mt-2 rounded-full"
                 >
@@ -235,7 +255,7 @@ const Navbar = () => {
               )}
 
               <Link
-                href="/product/smart-rings/buy-ring"
+                href="/product/smart-rings/select-rings"
                 onClick={() => setIsOpen(false)}
                 id="buy-ring-navbar"
                 className="w-[194px] h-[56px] pt-3 block text-center text-[16px] font-poppins font-medium bg-green-custom text-white  mt-5 rounded-full leading-[180%]"
