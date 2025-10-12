@@ -1,4 +1,4 @@
-import connectMongo from "@/lib/connect-mongo";
+import connectMongo from "@/database/connect-mongo";
 import { sendEmail } from "@/lib/sendEmail";
 import Otp from "@/models/Otp";
 import User from "@/models/User";

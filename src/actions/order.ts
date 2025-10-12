@@ -1,6 +1,6 @@
 "use server";
 
-import connectMongo from "@/lib/connect-mongo";
+import connectMongo from "@/database/connect-mongo";
 import { sendAdminNotification } from "@/lib/sendAdminNotification";
 import { sendOrderConfirmation } from "@/lib/sendOrderConfirmation";
 import Order from "@/models/Order";

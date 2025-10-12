@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import connectMongo from "@/lib/connect-mongo";
+import connectMongo from "@/database/connect-mongo";
 import Address from "@/models/Address";
 
 // ✅ Update an address by ID

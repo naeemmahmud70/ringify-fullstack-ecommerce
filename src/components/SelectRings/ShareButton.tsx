@@ -13,7 +13,7 @@ const ShareButton = () => {
   useEffect(() => {
     setIsMobileShareSupported(true);
     if (typeof window !== "undefined") {
-      setFullUrl(window.location.href);
+      setFullUrl(window?.location?.href);
     }
   }, []);
 
